@@ -1,0 +1,11 @@
+/.vs
+/Library
+/Logs
+/obj
+/output
+/Packages
+/Temp
+/Assembly-CSharp.csproj
+/Assembly-CSharp-Editor.csproj
+/DoomSRP.sln
+/Unity.RenderPipelines.Core.ShaderLibrary.csproj
