@@ -53,14 +53,14 @@ uint ComputeClusterIndex1D (uint3 clusterCoordinate)
 
 uint GetLightClusterIndex(float2 tc, float z_in)
 {
-#if UNITY_REVERSED_Z
+//#if UNITY_REVERSED_Z
+//	float z = z_in;
+//#else
+//	float z = -z_in;
+//#endif
 	float z = z_in;
-#else
-	float z = -z_in;
-#endif
-	//float z = z_in;
 #if defined(SHADER_API_D3D11) || defined(SHADER_API_D3D12) || defined(SHADER_API_D3D11_9X) || defined(SHADER_API_XBOXONE) || defined(SHADER_API_PSSL)
-	tc.y = _IFScreenSize.y - tc.y;//HLSL y 方向反的...
+	tc.y = _IFScreenSize.y - tc.y - 1;//HLSL y 方向反的...
 #endif
 	uint3 clusterCoordinate = ComputeClusterIndex3D(tc, z);
 	return ComputeClusterIndex1D(clusterCoordinate);

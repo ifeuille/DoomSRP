@@ -82,7 +82,7 @@ lightingInput_t PipeLighting (lightingInput_t inputs, uint lightsMin, uint light
 		//public bool lightParms_SkipSkipModel;//是否允许忽略模型忽略 64
 		//public bool lightParams_IsArea;//48=32+16 夹角接近超过90°是否还计算, 也就是是否是区域光,如果是则继续判断,因为区域光的lightPos要偏移
 		//public bool lightParams_NoDiffuse;//256，将diffuse light color置为0
-		projTC_1.z = 0.5;
+		//projTC_1.z = 0.5;
 		uint light_parms = lightParms.lightParms;
 		uint light_flags = 0;
 		//light_flags |= 64u;
@@ -155,7 +155,7 @@ lightingInput_t PipeLighting (lightingInput_t inputs, uint lightsMin, uint light
 		{
 			//inputs.debugColor = half3(0, 1, 0); break;
 			continue;
-		}		
+		}
 		//inputs.debugColor = half3(1, 0, 0); break;
 		// 区域光还要做偏移
 		float4 falloffScaleBias = unpackR15G15B15A15 (lightParms.scaleBias.xy);
@@ -165,7 +165,7 @@ lightingInput_t PipeLighting (lightingInput_t inputs, uint lightsMin, uint light
 		float projFilter = tex2Dlod (_lightsatlasmap, lightaltasuv).x;
 		lightaltasuv = float4 ((float2 (projTC_1.z, 0.5) * falloffScaleBias.xy) + falloffScaleBias.zw, 0.0, 0.0);
 		float falloff = tex2Dlod (_lightsatlasmap, lightaltasuv).x;
-		inputs.debugColor = float3(lightParms.scaleBias.xy, 0); break;
+		//inputs.debugColor = float3(lightParms.scaleBias.xy, 0); break;
 		float light_attenuation = (falloff * falloff) * (projFilter * projFilter);
 		// 太弱了
 		if (light_attenuation <= (clip_min_1 / 256.0))

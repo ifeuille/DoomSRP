@@ -217,7 +217,7 @@ namespace DoomSRP
             projectSettings.projectMatrixW = projectSettings.projection.GetRow(3);
             gpumatrix = GL.GetGPUProjectionMatrix(projectSettings.clipping, false);
             //projectSettings.falloffR = projectSettings.clipping.GetRow(2);//z/w
-            projectSettings.falloffR = gpumatrix.GetColumn(2);//z/w
+            projectSettings.falloffR = gpumatrix.GetRow(2);//z/w
             return projectSettings;
         }
 

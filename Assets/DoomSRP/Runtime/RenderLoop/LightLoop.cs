@@ -111,7 +111,7 @@ namespace DoomSRP
 
 
             culsterDataGenerator.Run(cameraData, pipelineSettings,this);
-            //lightLoopLightsData.LightsDatasBuf.SetData(LightsManager.Instance.LightsDataList);
+            lightLoopLightsData.LightsDatasBuf.SetData(LightsDataList);
             tileAndClusterData.itemsIDListBuf.SetData(culsterDataGenerator.ResultItemsIDList);
             tileAndClusterData.clusterNumItemsBuf.SetData(culsterDataGenerator.ResultClusterNumItems);
 #if UNITY_EDITOR

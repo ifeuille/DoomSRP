@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.1729073, g: 0.21608347, b: 0.29804835, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -129,7 +129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &170076734
 Light:
   m_ObjectHideFlags: 0
@@ -175,13 +175,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170076733}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.64911175, y: -0.21074049, z: 0.19412549, w: 0.7046686}
+  m_LocalPosition: {x: 586, y: 646, z: -142}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2021157034}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 85.3, y: -33.3, z: 0}
 --- !u!114 &170076736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,12 +238,12 @@ MonoBehaviour:
     paddingBottom: 0
   temperature: 6500
   useTemperature: 0
-  intensity: 3.14
+  intensity: 1.09
   specMultiplier: 1
   shadowBleedReduce: 0
-  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  lightColor: {r: 1, g: 0, b: 0, a: 1}
   lightParms_Shadow: 0
-  lightParms_Rect: 1
+  lightParms_Rect: 0
   lightParms_Circle: 0
   lightParms_SkipSkipModel: 1
   lightParams_NoDiffuse: 0
@@ -325,13 +325,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -12.45}
+  m_LocalRotation: {x: 0.1294488, y: -0.1534161, z: 0.020287389, w: 0.979436}
+  m_LocalPosition: {x: 2.6, y: 4.8, z: 9.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15.058001, y: -17.804, z: 0.001}
 --- !u!1 &571112799
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +356,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 571112799}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 18.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 639148790}
@@ -455,6 +455,144 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639148789}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &802373885
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 802373886}
+  - component: {fileID: 802373888}
+  - component: {fileID: 802373887}
+  m_Layer: 0
+  m_Name: GameObject (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &802373886
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802373885}
+  m_LocalRotation: {x: 0.6148551, y: -0.36437032, z: -0.08213208, w: 0.6945803}
+  m_LocalPosition: {x: 0.98, y: 6.88, z: 18.96}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2021157034}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 52.587, y: -92.04, z: -67.713005}
+--- !u!114 &802373887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802373885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 364cae91bcd584a409af7e4809a2e088, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light: {fileID: 802373888}
+  cacheTransform: {fileID: 802373886}
+  iFPipelineProjector:
+    nearClipPlane: 0.1
+    farClipPlane: 22.6
+    fieldOfView: 60
+    aspectRatio: 1
+    orthographic: 0
+    orthoGraphicSize: 10
+    transform: {fileID: 802373886}
+  spritesAtlas: {fileID: 2648330423490070309, guid: decbefb509d91df40a2b3966cf652eb8,
+    type: 3}
+  mprojSpriteName: lightatlas_r_06
+  projSpriteData:
+    name: lightatlas_r_06
+    x: 578
+    y: 260
+    width: 124
+    height: 116
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  mfalloffSpriteName: lightatlas_r_20
+  falloffSpriteData:
+    name: lightatlas_r_20
+    x: 696
+    y: 368
+    width: 104
+    height: 110
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  temperature: 6500
+  useTemperature: 0
+  intensity: 7.15
+  specMultiplier: 1
+  shadowBleedReduce: 0
+  lightColor: {r: 0.63545865, g: 0.5250534, b: 0.6509434, a: 1}
+  lightParms_Shadow: 0
+  lightParms_Rect: 0
+  lightParms_Circle: 0
+  lightParms_SkipSkipModel: 1
+  lightParams_NoDiffuse: 0
+  area_width: 9.55
+  area_height: 10
+  area_falloff: 1
+--- !u!108 &802373888
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802373885}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &1510067099
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,7 +719,7 @@ MonoBehaviour:
   cacheTransform: {fileID: 1847955889}
   iFPipelineProjector:
     nearClipPlane: 0.1
-    farClipPlane: 100
+    farClipPlane: 22.6
     fieldOfView: 60
     aspectRatio: 1
     orthographic: 0
@@ -589,13 +727,13 @@ MonoBehaviour:
     transform: {fileID: 1847955889}
   spritesAtlas: {fileID: 2648330423490070309, guid: decbefb509d91df40a2b3966cf652eb8,
     type: 3}
-  mprojSpriteName: lightatlas_r_01
+  mprojSpriteName: lightatlas_r_06
   projSpriteData:
-    name: lightatlas_r_01
-    x: 2
-    y: 2
-    width: 488
-    height: 500
+    name: lightatlas_r_06
+    x: 578
+    y: 260
+    width: 124
+    height: 116
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -604,13 +742,13 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  mfalloffSpriteName: lightatlas_r_01
+  mfalloffSpriteName: lightatlas_r_20
   falloffSpriteData:
-    name: lightatlas_r_01
-    x: 2
-    y: 2
-    width: 488
-    height: 500
+    name: lightatlas_r_20
+    x: 696
+    y: 368
+    width: 104
+    height: 110
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -621,16 +759,16 @@ MonoBehaviour:
     paddingBottom: 0
   temperature: 6500
   useTemperature: 0
-  intensity: 10.84
+  intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
-  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  lightColor: {r: 0, g: 1, b: 0, a: 1}
   lightParms_Shadow: 0
-  lightParms_Rect: 1
+  lightParms_Rect: 0
   lightParms_Circle: 0
   lightParms_SkipSkipModel: 1
   lightParams_NoDiffuse: 0
-  area_width: 10
+  area_width: 9.55
   area_height: 10
   area_falloff: 1
 --- !u!108 &1847955888
@@ -678,13 +816,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1847955886}
-  m_LocalRotation: {x: -0.031413365, y: -0.43539575, z: 0.8995624, w: 0.015204329}
-  m_LocalPosition: {x: 5.7, y: 38.9, z: -38.2}
+  m_LocalRotation: {x: 0.6148551, y: -0.36437032, z: -0.08213208, w: 0.6945803}
+  m_LocalPosition: {x: 7.25, y: 6.88, z: 18.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2021157034}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 51.479004, y: 353.569, z: -185.04}
+  m_LocalEulerAnglesHint: {x: 52.587, y: -92.04, z: -67.713005}
 --- !u!1 &2021157033
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,6 +852,7 @@ Transform:
   m_Children:
   - {fileID: 170076735}
   - {fileID: 1847955889}
+  - {fileID: 802373886}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

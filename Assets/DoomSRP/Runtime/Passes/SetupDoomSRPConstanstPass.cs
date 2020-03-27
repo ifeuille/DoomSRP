@@ -71,6 +71,7 @@ namespace DoomSRP
                 settings.NumClusterY,
                 settings.NumClusterZ,
                 settings.MaxItemsPerCluster));
+
             cmd.SetGlobalVector(LightConstantBuffer._IFScreenSize, cameraData.screenSize);
             cmd.SetGlobalVector(LightConstantBuffer._ClusterLighting, cameraData.ClusterdLighting);
             cmd.SetGlobalVector(LightConstantBuffer._ClusterCB_Size, cameraData._ClusterCB_Size);
