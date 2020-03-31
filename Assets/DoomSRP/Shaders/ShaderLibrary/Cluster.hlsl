@@ -19,6 +19,7 @@ float4 _ClusterCB_Size;
 float4 _ItemsIDListTexSize;//xy _ItemsIDListTex;zw _ClusterNumItemsTex
 float4 _ClusterNumItemsTexSize;
 float4 _LightParamsTexSize;//灯光参数纹理换成的尺寸信息
+float4 _CameraClipDistance;
 CBUFFER_END
 
 
@@ -54,15 +55,24 @@ uint ComputeClusterIndex1D (uint3 clusterCoordinate)
 uint GetLightClusterIndex(float2 tc, float z_in)
 {
 //#if UNITY_REVERSED_Z
-//	float z = z_in;
-//#else
 //	float z = -z_in;
+//#else
+//	float z = z_in;
 //#endif
 	float z = z_in;
-#if defined(SHADER_API_D3D11) || defined(SHADER_API_D3D12) || defined(SHADER_API_D3D11_9X) || defined(SHADER_API_XBOXONE) || defined(SHADER_API_PSSL)
-	tc.y = _IFScreenSize.y - tc.y - 1;//HLSL y 方向反的...
-#endif
-	uint3 clusterCoordinate = ComputeClusterIndex3D(tc, z);
+//#if defined(SHADER_API_D3D11) || defined(SHADER_API_D3D12) || defined(SHADER_API_D3D11_9X) || defined(SHADER_API_XBOXONE) || defined(SHADER_API_PSSL)
+//	tc.y = _IFScreenSize.y - tc.y - 1;//HLSL y 方向反的...
+//#else
+//	tc.y = _IFScreenSize.y - tc.y - 1;//HLSL y 方向反的...
+//#endif
+	//tc.y = 1 - tc.y;
+	//tc.x = tc.x * _IFScreenSize.x;
+	//tc.y = _IFScreenSize.y - tc.y * _IFScreenSize.y - 1;
+	uint3 clusterCoordinate;
+	clusterCoordinate.x = uint(tc.x * float(_ClusterInfo.x));
+	clusterCoordinate.y = uint((1 - tc.y) * float(_ClusterInfo.y));
+	clusterCoordinate.z = GetClusterIndexZ(z_in);
+	//clusterCoordinate = ComputeClusterIndex3D(tc, z_in);
 	return ComputeClusterIndex1D(clusterCoordinate);
 }
 

@@ -45,7 +45,7 @@ namespace DoomSRP
 
             CommandBuffer cmd = CommandBufferPool.Get("Debug Cluster");
             cmd.SetRenderTarget(colorAttachmentHandle.Identifier(), depthAttachmentHandle.Identifier());
-            cmd.DrawProcedural(Matrix4x4.identity, material,0, MeshTopology.LineStrip, LightDefins.NumClusterX * LightDefins.NumClusterY * LightDefins.NumClusterZ);
+            cmd.DrawProcedural(Matrix4x4.identity, material,0, MeshTopology.Points, LightDefins.NumClusterX * LightDefins.NumClusterY * LightDefins.NumClusterZ);
 
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);

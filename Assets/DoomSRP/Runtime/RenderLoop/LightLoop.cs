@@ -22,7 +22,7 @@ namespace DoomSRP
         //unused
         public NativeArray<LightData> LightsDataList { get { return NativeLightsDataList; } }
 
-        CulsterDataGenerator culsterDataGenerator;// = new CulsterDataGenerator();
+        public CulsterDataGenerator culsterDataGenerator;// = new CulsterDataGenerator();
         [HideInInspector]
         public TileAndClusterData tileAndClusterData;// = new TileAndClusterData();
         [HideInInspector]

@@ -20,10 +20,11 @@ struct IFVertex2Fragment
 {
 	float4 positionSS : SV_POSITION;
 	float4 uv : TEXCOORD0;
+	float3 screenUV:TEXCOORD1;
 	// [3x3:tangentToWorld | 1x3:viewDirForParallax or worldPos]
-	half4 tangentToWorldAndPackedData[3] : TEXCOORD1;
-	half3 eyeVec : TEXCOORD4;
-	UNITY_FOG_COORDS (5)
+	half4 tangentToWorldAndPackedData[3] : TEXCOORD2;
+	half3 eyeVec : TEXCOORD5;
+	UNITY_FOG_COORDS (6)
 };
 
 half3x3 CreateTangentToWorldPerVertex(half3 normal, half3 tangent, half tangentSign)
@@ -63,9 +64,12 @@ IFVertex2Fragment LitPassVertex(IFVertexInput v)
 {
 	IFVertex2Fragment o;
 	ZERO_INITIALIZE(IFVertex2Fragment, o);
-	o.positionSS = UnityObjectToClipPos (v.vertex);
+	o.positionSS = UnityObjectToClipPos(v.vertex);
 	o.uv = TexCoords (v.uv0);
-	float3 posWS = mul(unity_ObjectToWorld, v.vertex);
+	float4 posWS = mul(unity_ObjectToWorld, v.vertex);
+	float4 posVPS = mul(UNITY_MATRIX_VP, posWS);
+	o.positionSS = posVPS;
+	o.screenUV = ComputeScreenPos(o.positionSS).xyw;
 	half3 normalWorld = UnityObjectToWorldNormal (v.normal);
 	float4 tangentWorld = float4(UnityObjectToWorldDir(v.tangent.xyz), v.tangent.w);
 	float3x3 tangentToWorld = CreateTangentToWorldPerVertex(normalWorld, tangentWorld.xyz, tangentWorld.w);
@@ -134,8 +138,16 @@ float4 LitPassFragment(IFVertex2Fragment i) : SV_Target
 	}
 	
 	SetupAmbientLighting(inputs.ambient_lighting, inputs.diffuse_lighting_packed, inputs);
+	/*
+	d3d _IFScreenSize.y - i.positionSS.y > 0
+	d3d _IFScreenSize.y - i.positionSS.y > 0
+	*/
+	float2 screenUV = i.screenUV.xy / i.screenUV.z;
 
-	uint clusterOffset = GetLightClusterIndex(i.positionSS.xy, posInput.linearDepth);
+	//return float4(screenUV.xy, 0, 1);
+	uint clusterOffset = GetLightClusterIndex(screenUV, posInput.linearDepth);
+	//uint clusterOffset = GetLightClusterIndex(i.screenUV, posInput.linearDepth);
+	//uint clusterOffset = GetLightClusterIndex(i.positionSS.xy, posInput.linearDepth);
 	ClusterData clusterData = GetClusterData (clusterOffset);
 	/*if (clusterData.lightsMax - clusterData.lightsMin > 1)
 	{

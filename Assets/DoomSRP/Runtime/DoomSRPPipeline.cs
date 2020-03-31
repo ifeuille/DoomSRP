@@ -143,7 +143,13 @@ namespace DoomSRP
         CameraData cameraData;
         private static IRendererSetup s_DefaultRendererSetup;
 
-        LightLoop lightLoop = new LightLoop();
+        public LightLoop lightLoop = new LightLoop();
+        public static DoomSRPPipeline doomSRPPipeline;
+        public LightLoop GetLightLoop()
+        {
+            if(doomSRPPipeline != null) { return doomSRPPipeline.lightLoop; }
+            return null;
+        }
 
         private static IRendererSetup defaultRendererSetup
         {
@@ -163,6 +169,7 @@ namespace DoomSRP
             Shader.globalRenderPipeline = "DoomSRP";
             renderer = new ScriptableRenderer(asset);
             lightLoop.Initilize(settings);
+            doomSRPPipeline = this;
         }
 
         public override void Render(ScriptableRenderContext context, Camera[] cameras)
@@ -203,7 +210,7 @@ namespace DoomSRP
                 CameraData cameraData;
                 PipelineSettings settings = pipelineInstance.settings;
                 ScriptableRenderer renderer = pipelineInstance.renderer;
-                LightLoop lightloop = pipelineInstance.lightLoop;
+                LightLoop lightloop = pipelineInstance.GetLightLoop();
                 InitializeCameraData(pipelineInstance.settings, camera, out cameraData);
                 SetupPerCameraShaderConstants(cameraData);
 
@@ -220,7 +227,7 @@ namespace DoomSRP
 
                 RenderingData renderingData;
                 InitializeRenderingData(settings, ref cameraData, ref cullResults, ref lightloop, out renderingData);
-                pipelineInstance.lightLoop.RebuildLightsList(cullResults.visibleLights, cameraData, settings);
+                pipelineInstance.GetLightLoop().RebuildLightsList(cullResults.visibleLights, cameraData, settings);
 
                 var setupToUse = setup;
                 if (setupToUse == null)

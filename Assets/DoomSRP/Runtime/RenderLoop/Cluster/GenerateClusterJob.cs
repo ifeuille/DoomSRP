@@ -46,7 +46,7 @@ namespace DoomSRP
             //z_i = Mathf.Min(FarZ, z_i);
             //z_ip1 = Mathf.Min(FarZ, z_ip1);
 
-            //Plane nearPlane = new Plane(new Vector3(0, 0, 1), z_i);
+            Plane nearPlane = new Plane(new Vector3(0, 0, 1), z_i);
             Plane farPlane = new Plane(new Vector3(0, 0, 1), z_ip1);
 
             // The top-left point of cluster K in screen space.
@@ -64,24 +64,27 @@ namespace DoomSRP
 
 
             // Find the min and max points on the near and far planes.
-            //Vector3 nearMin, nearMax;
+        
             Vector3 farMin, farMax;
+#if false
+            Vector3 nearMin, nearMax;
             // Origin (camera eye position)
-            //Vector3 eye = Vector3.zero;
-            //IntersectLinePlane0(eye, new Vector3(pMin.x, pMin.y, pMin.z), nearPlane, out nearMin);
-            //IntersectLinePlane0(eye, new Vector3(pMax.x, pMax.y, pMax.z), nearPlane, out nearMax);
-            //IntersectLinePlane0(eye, new Vector3(pMin.x, pMin.y, pMin.z), farPlane, out farMin);
-            //IntersectLinePlane0(eye, new Vector3(pMax.x, pMax.y, pMax.z), farPlane, out farMax);
-            //IntersectLinePlane(new Vector3(pMin.x, pMin.y, pMin.z), nearPlane, out nearMin);
-            //IntersectLinePlane(new Vector3(pMax.x, pMax.y, pMax.z), nearPlane, out nearMax);
-            IntersectLinePlane( new Vector3(pMin.x, pMin.y, pMin.z), farPlane, out farMin);
-            IntersectLinePlane( new Vector3(pMax.x, pMax.y, pMax.z), farPlane, out farMax);
+            Vector3 eye = Vector3.zero;
+            IntersectLinePlane0(eye, new Vector3(pMin.x, pMin.y, pMin.z), nearPlane, out nearMin);
+            IntersectLinePlane0(eye, new Vector3(pMax.x, pMax.y, pMax.z), nearPlane, out nearMax);
+            IntersectLinePlane0(eye, new Vector3(pMin.x, pMin.y, pMin.z), farPlane, out farMin);
+            IntersectLinePlane0(eye, new Vector3(pMax.x, pMax.y, pMax.z), farPlane, out farMax);
 
-            //Vector3 aabbMin = Vector3.Min(nearMin, Vector3.Min(nearMax, Vector3.Min(farMin, farMax)));
-            //Vector3 aabbMax = Vector3.Max(nearMin, Vector3.Max(nearMax, Vector3.Max(farMin, farMax)));
+            Vector3 aabbMin = Vector3.Min(nearMin, Vector3.Min(nearMax, Vector3.Min(farMin, farMax)));
+            Vector3 aabbMax = Vector3.Max(nearMin, Vector3.Max(nearMax, Vector3.Max(farMin, farMax)));
+#else
+            IntersectLinePlane(new Vector3(pMin.x, pMin.y, pMin.z), farPlane, out farMin);
+            IntersectLinePlane(new Vector3(pMax.x, pMax.y, pMax.z), farPlane, out farMax);
+
             Vector3 aabbMin = new Vector3(farMin.x, farMin.y, z_i);
             Vector3 aabbMax = new Vector3(farMax.x, farMax.y, farPlane.distance);
-
+#endif
+            
             AABB aabb = new AABB();
             aabb.Min = new Vector4(aabbMin.x, aabbMin.y, aabbMin.z, 1.0f);
             aabb.Max = new Vector4(aabbMax.x, aabbMax.y, aabbMax.z, 1.0f);
@@ -89,7 +92,7 @@ namespace DoomSRP
             ResultClusterAABBS[i] = aabb;
         }
 
-        #region utils
+#region utils
         Vector3Int ComputeClusterIndex3D(int clusterIndex1D)
         {
             int i = clusterIndex1D % ClusterCB_GridDimX;
@@ -123,9 +126,9 @@ namespace DoomSRP
         }
         bool IntersectLinePlane( Vector3 b, Plane p, out Vector3 q)
         {
-            //Vector3 ab = b ;
-            //float t = p.distance  / Vector3.Dot(p.normal, ab);
-            ////t = Mathf.Clamp01(t);
+            //Vector3 ab = b;
+            //float t = p.distance / Vector3.Dot(p.normal, ab);
+            //t = Mathf.Clamp01(t);
             //q = t * ab;
             float rate = p.distance / Mathf.Abs(b.z);
             q = new Vector3(b.x * rate, b.y * rate, p.distance);
@@ -169,10 +172,10 @@ namespace DoomSRP
             return _CameraWorldMatrix.MultiplyPoint(viewPos);
         }
 
-        #endregion
+#endregion
 
 
-        #region utils for 
+#region utils for 
         float GetZ0(int slice)
         {
             return ClusterCB_ViewNear * Mathf.Pow(Mathf.Abs(ClusterCB_NearK), slice);
@@ -185,6 +188,6 @@ namespace DoomSRP
         {
             return ClusterdLighting.x * Mathf.Pow(2, ClusterdLighting.y * slice);
         }
-        #endregion
+#endregion
     }
 }
