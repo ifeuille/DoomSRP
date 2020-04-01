@@ -26,7 +26,7 @@ namespace DoomSRP
 
         public void Run(int count)
         {
-            for(int i = 0; i < count; ++i)
+            for (int i = 0; i < count; ++i)
             {
                 Execute(i);
             }

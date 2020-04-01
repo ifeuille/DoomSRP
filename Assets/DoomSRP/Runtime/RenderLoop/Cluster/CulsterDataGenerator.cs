@@ -12,6 +12,9 @@ namespace DoomSRP
     {
 
         public NativeArray<AABB> ClustersAABBs;
+#if UNITY_EDITOR
+        public NativeArray<AABB> ClustersAABBsCache;
+#endif
         public NativeArray<clusternumlights_t> ResultClusterNumItems;
         public NativeArray<uint> ResultItemsIDList;
 
@@ -29,6 +32,9 @@ namespace DoomSRP
 
             //CleanUp();
             ClustersAABBs = new NativeArray<AABB>(settings.NumClusters, Allocator.Persistent);
+#if UNITY_EDITOR
+            ClustersAABBsCache = new NativeArray<AABB>(settings.NumClusters, Allocator.Persistent);
+#endif
             ResultClusterNumItems = new NativeArray<clusternumlights_t>(settings.NumClusters, Allocator.Persistent);
             ResultItemsIDList = new NativeArray<uint>(settings.MaxItemsPerCluster * settings.NumClusters, Allocator.Persistent);
 
@@ -62,12 +68,18 @@ namespace DoomSRP
             generateClusterJob.FarZ = cameraData.zFar;
             generateClusterJob.ClusterCG_ZDIV = cameraData.ClusterdLighting.z;
             generateClusterJob.ClusterdLighting = cameraData.ClusterdLighting;
+            generateClusterJob.ResultClusterAABBS = ClustersAABBs;
 
             pointLightListGenJobSingleLine.NumClusters = pipelineSettings.NumClusters;
             pointLightListGenJobSingleLine.VisibleLightsCount = lightLoop.VisibleLight;
             pointLightListGenJobSingleLine.LightBounds = lightLoop.LigtsBoundList;
             pointLightListGenJobSingleLine.IsClusterEditorHelper = pipelineSettings.IsClusterEditorHelper;
             pointLightListGenJobSingleLine._CameraWorldMatrix = cameraData._CameraWorldMatrix;
+            pointLightListGenJobSingleLine.NumItemsPerCluster = LightDefins.MaxItemsPerCluster;
+            pointLightListGenJobSingleLine.InputClusterAABBS = ClustersAABBs;
+            pointLightListGenJobSingleLine.ResultClusterNumItems = ResultClusterNumItems;
+            pointLightListGenJobSingleLine.ResultItemsIDList = ResultItemsIDList;
+
         }
 
         public void CleanUp()
@@ -78,24 +90,29 @@ namespace DoomSRP
                 ResultClusterNumItems.Dispose();
             if (/*ResultItemsIDList != null &&*/ ResultItemsIDList.IsCreated)
                 ResultItemsIDList.Dispose();
+#if UNITY_EDITOR
+            if (ClustersAABBsCache.IsCreated)
+                ClustersAABBsCache.Dispose();
+#endif
         }
 
         public void Run(/*Camera camera*/CameraData cameraData, PipelineSettings pipelineSettings, LightLoop lightLoop)
         {
             Set(cameraData, pipelineSettings, lightLoop);
-            generateClusterJob.ResultClusterAABBS = ClustersAABBs;
             // Schedule the job with one Execute per index in the results array and only 1 item per processing batch
             generateClusterJob.Run(pipelineSettings.NumClusters);
-//#if UNITY_EDITOR
-//            generateClusterJob.Run(pipelineSettings.NumClusters);
-//#else
-//            JobHandle generateClusterJobHandle = generateClusterJob.Schedule(pipelineSettings.NumClusters, 1);
-//            generateClusterJobHandle.Complete();
-//#endif
-            pointLightListGenJobSingleLine.InputClusterAABBS = ClustersAABBs;
-            pointLightListGenJobSingleLine.ResultClusterNumItems = ResultClusterNumItems;
-            pointLightListGenJobSingleLine.ResultItemsIDList = ResultItemsIDList;
+            //JobHandle generateClusterJobHandle = generateClusterJob.Schedule(pipelineSettings.NumClusters, 1);
+
             pointLightListGenJobSingleLine.Run(pipelineSettings.NumClusters);
+
+            //JobHandle pointLightListGenJobSingleLineHandle = pointLightListGenJobSingleLine.Schedule(pipelineSettings.NumClusters, 1, generateClusterJobHandle);
+            //pointLightListGenJobSingleLineHandle.Complete();
+#if UNITY_EDITOR
+            if (ClusterDebug.selectCamera == cameraData.camera)
+            {
+                ClustersAABBsCache.CopyFrom(ClustersAABBs);
+            }
+#endif
         }
 
         public void ClearNumItems(PipelineSettings pipelineSettings)

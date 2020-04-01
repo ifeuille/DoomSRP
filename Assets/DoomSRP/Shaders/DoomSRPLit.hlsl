@@ -149,11 +149,11 @@ float4 LitPassFragment(IFVertex2Fragment i) : SV_Target
 	//uint clusterOffset = GetLightClusterIndex(i.screenUV, posInput.linearDepth);
 	//uint clusterOffset = GetLightClusterIndex(i.positionSS.xy, posInput.linearDepth);
 	ClusterData clusterData = GetClusterData (clusterOffset);
-	/*if (clusterData.lightsMax - clusterData.lightsMin > 1)
-	{
-		return float4(1, 0, 0, 1);
-	}
-	return float4(0, 1, 0, 1);*/
+	//if (clusterData.lightsMax - clusterData.lightsMin > 1)
+	//{
+	//	return float4(1, 0, 0, 1);
+	//}
+	//return float4(0, 1, 0, 1);
 	inputs = PipeLighting(inputs, clusterData.lightsMin, clusterData.lightsMax);
 	half4 col;
 	col.rgb = inputs.output_lighting;
@@ -161,7 +161,7 @@ float4 LitPassFragment(IFVertex2Fragment i) : SV_Target
 	// Other output :normal .... 
 	// apply fog
 	UNITY_APPLY_FOG(i.fogCoord, col);
-	//col.rgb = inputs.debugColor;
+	col.rgb = inputs.debugColor;
 	//col.rgb = inputs.diffuse_lighting;// +inputs.specular_lighting;// color
 	return col;
 }

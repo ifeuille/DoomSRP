@@ -94,7 +94,7 @@ namespace DoomSRP
 
             ClusterdLighting.x = zNear;
             ClusterdLighting.y = Mathf.Log(zFar / zNear, 2) / (float)pipelineSettings.NumClusterZ;
-
+            //ClusterdLighting.y = zFar;
             WorldToCameraSpace = camera.worldToCameraMatrix;
 
             ClusterCameraParam.x = camera.farClipPlane;

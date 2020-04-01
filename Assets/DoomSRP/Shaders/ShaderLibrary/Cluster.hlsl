@@ -29,6 +29,10 @@ StructuredBuffer<clusternumlights_t> _ClusterNumItems;
 uint GetClusterIndexZ(float viewZ)
 {
 	float slice = log2(max(1.0, viewZ / _ClusterLighting.x)) / _ClusterLighting.y;
+	//float a1 = log2(max(1.0, viewZ / _ClusterLighting.x));
+	//float a2 = log2(max(1.0, _ClusterLighting.y / _ClusterLighting.x));//todoCPU算
+	//float slice = (_ClusterInfo.z - 1) * (a1/a2);
+
 	return  min(_ClusterInfo.z - 1.0, floor(slice));
 }
 uint3 ComputeClusterIndex3D (float2 screenPos, float viewZ)

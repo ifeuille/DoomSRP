@@ -30,6 +30,7 @@ namespace DoomSRP
         public float ClusterCG_ZDIV;
 
         public Vector4 ClusterdLighting;
+        
 
         //output
         public NativeArray<AABB> ResultClusterAABBS;
@@ -42,7 +43,7 @@ namespace DoomSRP
             // Compute the near and far planes for cluster K.
             float z_i = GetZ2(clusterIndex3D.z);
             float z_ip1 = GetZ2(clusterIndex3D.z + 1);
-
+            
             //z_i = Mathf.Min(FarZ, z_i);
             //z_ip1 = Mathf.Min(FarZ, z_ip1);
 
@@ -66,7 +67,7 @@ namespace DoomSRP
             // Find the min and max points on the near and far planes.
         
             Vector3 farMin, farMax;
-#if false
+#if true
             Vector3 nearMin, nearMax;
             // Origin (camera eye position)
             Vector3 eye = Vector3.zero;
@@ -111,27 +112,35 @@ namespace DoomSRP
         bool IntersectLinePlane0(Vector3 a, Vector3 b, Plane p, out Vector3 q)
         {
             Vector3 ab = b - a;
-            
+#if true
             float t = (p.distance - Vector3.Dot(p.normal, a)) / Vector3.Dot(p.normal, ab);
 
             bool intersect = (t >= 0.0f && t <= 1.0f);
 
             q = Vector3.zero;
-            if (intersect)
-            {
-                q = a + t * ab;
-            }
-
+            q = a + t * ab;
+            //if (intersect)
+            //{
+            //    q = a + t * ab;
+            //}
+#else
+            float rate = p.distance / Mathf.Abs(b.z);
+            q = new Vector3(b.x * rate, b.y * rate, p.distance);
+#endif
             return intersect;
         }
         bool IntersectLinePlane( Vector3 b, Plane p, out Vector3 q)
         {
-            //Vector3 ab = b;
+            Vector3 ab = b;
             //float t = p.distance / Vector3.Dot(p.normal, ab);
             //t = Mathf.Clamp01(t);
             //q = t * ab;
+
             float rate = p.distance / Mathf.Abs(b.z);
             q = new Vector3(b.x * rate, b.y * rate, p.distance);
+
+            //float rate = (p.distance - Vector3.Dot(b, p.normal)) / Vector3.Dot(ab, p.normal);
+            //q = new Vector3(b.x * rate, b.y * rate, p.distance);
             return true;
         }
 
@@ -142,7 +151,7 @@ namespace DoomSRP
             // View space position.
             Vector4 view = ClusterCB_InverseProjectionMatrix * clip;// ClusterCB_InverseProjectionMatrix.MultiplyVector(clip);
             // Perspecitive projection.
-            //if (view.w == 0) view.w = 0.000001f;//?
+            if (view.w == 0) view.w = 0.000001f;//?
              view = view / view.w;
 
             return view;
@@ -187,6 +196,9 @@ namespace DoomSRP
         float GetZ2(int slice)
         {
             return ClusterdLighting.x * Mathf.Pow(2, ClusterdLighting.y * slice);
+            //float zNear = ClusterdLighting.x;
+            //float zFar = ClusterdLighting.y;
+            //return zNear * Mathf.Pow(zFar / zNear, slice / (float)(ClusterCB_GridDimZ - 1));
         }
 #endregion
     }

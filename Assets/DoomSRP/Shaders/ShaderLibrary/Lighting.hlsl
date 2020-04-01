@@ -53,7 +53,13 @@ lightingInput_t PipeLighting (lightingInput_t inputs, uint lightsMin, uint light
 	{
 		//init
 		//uint light_id = ItemGetLightID (lightIdx++);
-		//inputs.debugColor = half3(lightIdx, 0, 0); break;
+		if(lightIdx == 0)
+			inputs.debugColor.x = ItemGetLightID(lightIdx++);
+		else {
+			inputs.debugColor.y = ItemGetLightID(lightIdx++);
+			break;
+		}
+
 		LightData lightParms = GetLightParam(ItemGetLightID (lightIdx++));//MACRO_NAME(_LightsDataList)[light_id];
 		//cull
 		float3 projTC_1 = float3 (

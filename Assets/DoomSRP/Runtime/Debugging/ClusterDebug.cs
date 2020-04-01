@@ -1,12 +1,15 @@
-﻿using DoomSRP;
+﻿#if UNITY_EDITOR
+using DoomSRP;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
+[ExecuteInEditMode]
 public class ClusterDebug : MonoBehaviour
 {
-
+    public static Camera selectCamera;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,18 +19,27 @@ public class ClusterDebug : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+ 
     }
 
     private void OnDrawGizmos()
     {
-        if (null == DoomSRPPipeline.doomSRPPipeline) return;
-        Gizmos.color = Color.white;
-        var boxArray = DoomSRPPipeline.doomSRPPipeline.GetLightLoop().culsterDataGenerator.ClustersAABBs;
-        for(int i = 0; i < boxArray.Length; ++i)
+        selectCamera = null;
+        if (!this.isActiveAndEnabled)
+            return;
+        if (Selection.activeGameObject)
         {
-            Gizmos.DrawWireCube(GetCenter(boxArray[i].Min, boxArray[i].Max),
-                GetExtent(boxArray[i].Min, boxArray[i].Max));
+            selectCamera = Selection.activeGameObject.GetComponent<Camera>();
+        }
+        if (null == DoomSRPPipeline.doomSRPPipeline || selectCamera == null) return;
+        Gizmos.color = Color.white;
+        var boxArray = DoomSRPPipeline.doomSRPPipeline.GetLightLoop().culsterDataGenerator.ClustersAABBsCache;
+        Matrix4x4 cameraW = selectCamera.cameraToWorldMatrix* Matrix4x4.Scale(new Vector3(1, 1, -1));
+
+        for (int i = 0; i < boxArray.Length; ++i)
+        {
+            Gizmos.DrawWireCube(cameraW.MultiplyPoint3x4(GetCenter(boxArray[i].Min, boxArray[i].Max)),
+               GetExtent(boxArray[i].Min, boxArray[i].Max));
         }
 
     }
@@ -40,3 +52,4 @@ public class ClusterDebug : MonoBehaviour
         return new Vector3(Mathf.Abs(min.x - max.x) / 2.0f, Mathf.Abs(min.y - max.y) / 2.0f, Mathf.Abs(min.z - max.z) / 2.0f);
     }
 }
+#endif

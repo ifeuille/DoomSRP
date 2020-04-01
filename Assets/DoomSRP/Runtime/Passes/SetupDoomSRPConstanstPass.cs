@@ -24,7 +24,7 @@ namespace DoomSRP
             public static int _ClusterLighting;
             public static int _ClusterCB_Size;
             public static int LightsDataList;
-            public static int ItemssIDLis;
+            public static int _ItemsIDList;
             public static int ClusterNumItems;
 
 
@@ -45,7 +45,7 @@ namespace DoomSRP
             LightConstantBuffer.LightsDataList = Shader.PropertyToID("_LightsDataList");
             LightConstantBuffer._ClusterLighting = Shader.PropertyToID("_ClusterLighting");
             LightConstantBuffer._ClusterCB_Size = Shader.PropertyToID("_ClusterCB_Size");
-            LightConstantBuffer.ItemssIDLis = Shader.PropertyToID("_ItemsIDList");
+            LightConstantBuffer._ItemsIDList = Shader.PropertyToID("_ItemsIDList");
             LightConstantBuffer.ClusterNumItems = Shader.PropertyToID("_ClusterNumItems");
             
 
@@ -77,7 +77,7 @@ namespace DoomSRP
             cmd.SetGlobalVector(LightConstantBuffer._ClusterCB_Size, cameraData._ClusterCB_Size);
             cmd.SetGlobalVector(LightConstantBuffer._IFScreenSize, cameraData.screenSize);
             cmd.SetGlobalBuffer(LightConstantBuffer.LightsDataList, lightData.lightLoop.lightLoopLightsData.LightsDatasBuf);
-            cmd.SetGlobalBuffer(LightConstantBuffer.ItemssIDLis, lightData.lightLoop.tileAndClusterData.itemsIDListBuf);
+            cmd.SetGlobalBuffer(LightConstantBuffer._ItemsIDList, lightData.lightLoop.tileAndClusterData.itemsIDListBuf);
             cmd.SetGlobalBuffer(LightConstantBuffer.ClusterNumItems, lightData.lightLoop.tileAndClusterData.clusterNumItemsBuf);
             cmd.SetGlobalVector("_CameraClipDistance", new Vector4(
                 cameraData.camera.nearClipPlane,
