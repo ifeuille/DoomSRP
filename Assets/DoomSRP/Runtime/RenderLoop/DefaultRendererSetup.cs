@@ -25,7 +25,6 @@ namespace DoomSRP
         private FinalBlitPass m_FinalBlitPass;
 
 #if UNITY_EDITOR
-        private ClusterDebugPass m_ClusterDebugPass;
         private SceneViewDepthCopyPass m_SceneViewDepthCopyPass;
 #endif
 
@@ -62,7 +61,6 @@ namespace DoomSRP
             m_FinalBlitPass = new FinalBlitPass();
 
 #if UNITY_EDITOR
-            m_ClusterDebugPass = new ClusterDebugPass();
             m_SceneViewDepthCopyPass = new SceneViewDepthCopyPass();
 #endif
 
@@ -207,8 +205,6 @@ namespace DoomSRP
 #if UNITY_EDITOR
             if (renderingData.cameraData.isSceneViewCamera)
             {
-                m_ClusterDebugPass.Setup(renderer.GetMaterial(MaterialHandle.ClusterDebug), colorHandle, depthHandle);
-                renderer.EnqueuePass(m_ClusterDebugPass);
 
                 m_SceneViewDepthCopyPass.Setup(DepthTexture);
                 renderer.EnqueuePass(m_SceneViewDepthCopyPass);

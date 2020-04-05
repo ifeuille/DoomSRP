@@ -179,21 +179,6 @@ float3 unpackR10G10B10(uint value)
 	return float3 (float((value >> uint(20)) & 1023u), float((value >> uint(10)) & 1023u), float(value & 1023u)) / float3 (1023.0, 1023.0, 1023.0);
 }
 
-//uint R8G8B8A8touint(float4 color)
-//{
-//	return color.r * 255 << 24 + color.g * 255 << 16 + color.b * 255 << 8 + color.a * 255;
-//}
-
-//int asint (float x)
-//{
-//	return floatBitsToInt (x);
-//}
-//
-//float asfloat (int x)
-//{
-//	return intBitsToFloat (x);
-//}
-
 float sqrtIEEEIntApproximation (float inX, int inSqrtConst)
 {
 	float param = inX;
@@ -301,11 +286,6 @@ uint getCubeMapFaceID (float x, float y, float z)
 	}
 	return uint(_378);
 }
-
-//float shadow2Ddepth (sampler2DShadow image, float3 texcoord)
-//{
-//	return textureLod (image, float3 (texcoord.xy, texcoord.z), 0.0);
-//}
 
 float3 unpackRGBE (uint value)
 {
