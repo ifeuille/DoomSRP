@@ -17,3 +17,7 @@
 - [ ] 后处理管线(参考PostProcessLayer，子集bloom,tonemap,colorgrading,dof等)
 - [ ] lightmap(环境光only)
 - [ ] probe
+
+## 当前结果展示
+
+![](Document/pics/20200406.png)
