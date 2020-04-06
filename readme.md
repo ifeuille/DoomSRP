@@ -6,6 +6,8 @@
 
 基本策略是参考unity的SRP(light weight和HDSRP)以及doom2016、doom2020。
 
+开发环境Unity 2018.4.12f1 (64-bit) + win10
+
 ## 特性
 
 - [x] atlas based projector灯光支持(仅)
@@ -19,6 +21,6 @@
 - [ ] probe
 - [ ] virtual texture based terrain
 
-## 当前结果展示
+## 结果展示
 
-![](Document/pics/20200406.png)
+![20200406](Document/pics/20200406.png)
