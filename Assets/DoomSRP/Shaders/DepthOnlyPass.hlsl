@@ -1,7 +1,7 @@
 ﻿#ifndef DOOMSRP_DEPTH_ONLY_PASS_INCLUDED
 #define DOOMSRP_DEPTH_ONLY_PASS_INCLUDED
 
-#include "ShaderLibrary/Core.hlsl"
+#include "doomsrp/Core.hlsl"
 
 struct Attributes
 {
@@ -24,7 +24,7 @@ Varyings DepthOnlyVertex (Attributes input)
 	UNITY_SETUP_INSTANCE_ID (input);
 	UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO (output);
 
-	output.uv = TRANSFORM_TEX (input.texcoord, _BaseMap);
+	output.uv = TRANSFORM_TEX (input.texcoord, _MainTex);
 	output.positionCS = TransformObjectToHClip (input.position.xyz);
 	return output;
 }
@@ -33,7 +33,8 @@ half4 DepthOnlyFragment (Varyings input) : SV_TARGET
 {
 	UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX (input);
 
-	Alpha (SampleAlbedoAlpha (input.uv, TEXTURE2D_ARGS (_BaseMap, sampler_BaseMap)).a, _BaseColor, _Cutoff);
+	//Alpha (SampleAlbedoAlpha (input.uv, TEXTURE2D_ARGS (_MainTex, sampler_BaseMap)).a, _BaseColor, _Cutoff);
+	Alpha(SampleAlbedoAlpha(input.uv).a, _Color, _Cutoff);
 	return 0;
 }
 #endif

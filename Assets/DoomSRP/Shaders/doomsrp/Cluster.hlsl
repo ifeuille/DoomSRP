@@ -7,8 +7,8 @@
 
 struct clusternumlights_t
 {
-	int offset;
-	int numItems;
+	uint offset;
+	uint numItems;
 };
 
 

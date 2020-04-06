@@ -26,8 +26,8 @@ Shader "DoomSRP/Shader_DebugCluster"
 			#pragma enable_d3d11_debug_symbols
 			float4 _Color;
 			float4 _ColorLighting;
-			#include "UnityCG.cginc"
-			#include "ShaderLibrary/Cluster.hlsl"
+			//#include "UnityCG.cginc"
+			#include "doomsrp/Cluster.hlsl"
 
 			struct VertexShaderOutput
 			{

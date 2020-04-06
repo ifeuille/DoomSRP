@@ -1,5 +1,7 @@
 ﻿#ifndef IFPIPELINE_COMMON_HLSL_
 #define IFPIPELINE_COMMON_HLSL_
+#include "../core/Common.hlsl"
+#include "ShaderUtilities.hlsl"
 #define ZERO_INITIALIZE(type, name) name = (type)0;
 #include "MathTools.hlsl"
 //最大32
@@ -396,11 +398,29 @@ float SmoothnessEncode (float s)
 	return (_984 * 0.5) + 0.5;
 }
 
-half3 LerpWhiteTo(half3 b, half t)
+//half3 LerpWhiteTo(half3 b, half t)
+//{
+//	half oneMinusT = 1 - t;
+//	return half3(oneMinusT, oneMinusT, oneMinusT) + b * t;
+//}
+
+float4 GetScreenSize()
 {
-	half oneMinusT = 1 - t;
-	return half3(oneMinusT, oneMinusT, oneMinusT) + b * t;
+	return _IFScreenSize;
 }
 
+void InitilizeLightingInput(out lightingInput_t inputs)
+{
+	ZERO_INITIALIZE(lightingInput_t, inputs);
+	inputs.normalTS = float3 (0.0, 0.0, 1.0);
+	//inputs.normalSSS = float3 (0.0, 0.0, 1.0);
+	inputs.alpha = 1;
+	//inputs.ssdoDiffuseMul = 1;
+	//inputs.invTS = float3x3 (
+	//	1.0, 0.0, 0.0,
+	//	0.0, 1.0, 0.0,
+	//	0.0, 0.0, 1.0
+	//	);
+}
 
 #endif

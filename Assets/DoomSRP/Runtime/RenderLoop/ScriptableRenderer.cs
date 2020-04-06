@@ -72,9 +72,6 @@ namespace DoomSRP
                 CoreUtils.CreateEngineMaterial(pipelineAsset.resources.samplingShader),
                 CoreUtils.CreateEngineMaterial(pipelineAsset.resources.blitShader),
                 CoreUtils.CreateEngineMaterial(pipelineAsset.resources.screenSpaceShadowShader),
-#if UNITY_EDITOR
-                CoreUtils.CreateEngineMaterial(pipelineAsset.resources.ClusterDebugShader),
-#endif
             };
 
  

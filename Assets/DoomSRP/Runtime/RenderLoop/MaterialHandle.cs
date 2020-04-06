@@ -8,9 +8,6 @@ namespace DoomSRP
         Blit,
         ScreenSpaceShadow,
 
-#if UNITY_EDITOR
-        ClusterDebug,
-#endif
         Count,
     }
 }

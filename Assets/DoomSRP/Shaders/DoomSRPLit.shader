@@ -2,6 +2,9 @@
 {
 	Properties
 	{
+		// Specular vs Metallic workflow
+		[HideInInspector] _WorkflowMode("WorkflowMode", Float) = 1.0
+
 		_Color("Color", Color) = (0.5,0.5,0.5,1)
 		_MainTex("Albedo", 2D) = "white" {}
 
@@ -32,13 +35,13 @@
 		//[Enum(UV0,0,UV1,1)] _UVSec("UV Set for secondary textures", Float) = 0
 
 		// Blending state
-		//[HideInInspector] _Surface("__surface", Float) = 0.0
-		//[HideInInspector] _Blend("__blend", Float) = 0.0
-		//[HideInInspector] _AlphaClip("__clip", Float) = 0.0
-		//[HideInInspector] _SrcBlend("__src", Float) = 1.0
-		//[HideInInspector] _DstBlend("__dst", Float) = 0.0
-		//[HideInInspector] _ZWrite("__zw", Float) = 1.0
-		//[HideInInspector] _Cull("__cull", Float) = 2.0
+		[HideInInspector] _Surface("__surface", Float) = 0.0
+		[HideInInspector] _Blend("__blend", Float) = 0.0
+		[HideInInspector] _AlphaClip("__clip", Float) = 0.0
+		[HideInInspector] _SrcBlend("__src", Float) = 1.0
+		[HideInInspector] _DstBlend("__dst", Float) = 0.0
+		[HideInInspector] _ZWrite("__zw", Float) = 1.0
+		[HideInInspector] _Cull("__cull", Float) = 2.0
 
 		_ReceiveShadows("Receive Shadows", Float) = 1.0
 	}
@@ -55,17 +58,14 @@
 		{
 			Name "DoomSRPLit"
 			Tags{"LightMode"="ClusterForward"}
-			//Name "FORWARD"
-			//Tags { "LightMode" = "ForwardBase" }
+	
+			Blend[_SrcBlend][_DstBlend]
+			ZWrite[_ZWrite]
+			Cull[_Cull]
 
-			//Blend[_SrcBlend][_DstBlend]
-			//ZWrite[_ZWrite]
-			//Cull[_Cull]
-
-			ZTest  Always
-			ZWrite On
-			Blend  Off
-			ColorMask RGBA
+			//ZTest  Always
+			//Blend[_Blend]
+			//ColorMask RGBA
 
 			HLSLPROGRAM
 			//#pragma prefer_hlslcc gles
@@ -109,13 +109,12 @@
 			
 			#pragma vertex LitPassVertex
 			#pragma fragment LitPassFragment
-			#include "UnityCG.cginc"
-			#include "ShaderLibrary/Common.hlsl"
-			#include "ShaderLibrary/Cluster.hlsl"
-			#include "ShaderLibrary/Lighting.hlsl"
-			#include "ShaderLibrary/CommonPosition.hlsl"
+			//#include "UnityCG.cginc"
+			#include "doomsrp/Core.hlsl"
+			#include "doomsrp/Cluster.hlsl"
+			#include "doomsrp/Lighting.hlsl"
 
-			#include "Lit/InputSurfaceLit.hlsl"
+			#include "doomsrp/InputSurface.hlsl"
 			#include "DoomSRPLit.hlsl"
 			
 			ENDHLSL
@@ -147,12 +146,11 @@
 			//--------------------------------------
 			// GPU Instancing
 			#pragma multi_compile_instancing
-			#include "UnityCG.cginc"
-			#include "Lit/InputSurfaceLit.hlsl"
+			//#include "UnityCG.cginc"
 			#include "DepthOnlyPass.hlsl"
 			ENDHLSL
 		}
 	}
 	Fallback "Legacy Shaders/VertexLit"
-	//CustomEditor "DoomSRP.DoomSRPLitShaderGUI"
+	CustomEditor "DoomSRP.DoomSRPLitShaderGUI"
 }

@@ -17,7 +17,7 @@ Shader "Hidden/DoomSRP/Blit"
             #pragma vertex Vertex
             #pragma fragment Fragment
 
-            #include "Assets/DoomSRP/Shaders/simple/Core.hlsl"
+            #include "Assets/DoomSRP/Shaders/doomsrp/Core.hlsl"
 
             struct Attributes
             {

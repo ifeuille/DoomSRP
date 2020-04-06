@@ -1,6 +1,7 @@
 ﻿#ifndef __IFINPUTSURFACELIT_HLSL__
 #define __IFINPUTSURFACELIT_HLSL__
-#include "../ShaderLibrary/Packing.hlsl"
+#include "Common.hlsl"
+#include "Packing.hlsl"
 CBUFFER_START(UnityPerMaterial)
 float4 _MainTex_ST;
 half4 _Color;
@@ -13,13 +14,27 @@ half _Metallic;
 half _BumpScale;
 half _OcclusionStrength;
 CBUFFER_END
+TEXTURE2D(_MainTex);
+TEXTURE2D(_BumpMap);
+TEXTURE2D(_EmissionMap);
+TEXTURE2D(_OcclusionMap);
+TEXTURE2D(_MetallicGlossMap);
+TEXTURE2D(_SpecGlossMap);
 
-UNITY_DECLARE_TEX2D(_MainTex);
-UNITY_DECLARE_TEX2D(_BumpMap);
-UNITY_DECLARE_TEX2D(_EmissionMap);
-UNITY_DECLARE_TEX2D(_OcclusionMap);
-UNITY_DECLARE_TEX2D(_MetallicGlossMap);
-UNITY_DECLARE_TEX2D(_SpecGlossMap);
+SAMPLER(sampler_MainTex);
+SAMPLER(sampler_BumpMap);
+SAMPLER(sampler_OcclusionMap);
+SAMPLER(sampler_MetallicGlossMap);
+SAMPLER(sampler_SpecGlossMap);
+
+//TEXTURE2D_ARGS(_MainTex, _MainTexSamp);
+//TEXTURE2D_ARGS(_BumpMap, _BumpMapSamp);
+//TEXTURE2D_ARGS(_EmissionMap, _EmissionMapSamp);
+//TEXTURE2D_ARGS(_OcclusionMap, _OcclusionMapSamp);
+//TEXTURE2D_ARGS(_MetallicGlossMap, _MetallicGlossMapSamp);
+//TEXTURE2D_ARGS(_SpecGlossMap, _SpecGlossMapSamp);
+
+
 
 struct SurfaceData
 {
@@ -35,10 +50,10 @@ struct SurfaceData
 
 #ifdef _SPECULAR_SETUP
 //#define SAMPLE_METALLICSPECULAR(uv) SAMPLE_TEXTURE2D(_SpecGlossMap, sampler_SpecGlossMap, uv)
-#define SAMPLE_METALLICSPECULAR(uv) UNITY_SAMPLE_TEX2D(_SpecGlossMap, uv)
+#define SAMPLE_METALLICSPECULAR(uv) SAMPLE_TEXTURE2D(_SpecGlossMap,sampler_SpecGlossMap, uv)
 #else
 //#define SAMPLE_METALLICSPECULAR(uv) SAMPLE_TEXTURE2D(_MetallicGlossMap, sampler_MetallicGlossMap, uv)
-#define SAMPLE_METALLICSPECULAR(uv) UNITY_SAMPLE_TEX2D(_MetallicGlossMap, uv)
+#define SAMPLE_METALLICSPECULAR(uv) SAMPLE_TEXTURE2D(_MetallicGlossMap,sampler_MetallicGlossMap, uv)
 #endif
 
 half4 SampleMetallicSpecGloss(float2 uv, half albedoAlpha)
@@ -74,9 +89,9 @@ half SampleOcclusion(float2 uv)
 #ifdef _OCCLUSIONMAP
 	// TODO: Controls things like these by exposing SHADER_QUALITY levels (low, medium, high)
 #if defined(SHADER_API_GLES)
-	return UNITY_SAMPLE_TEX2D(_OcclusionMap, uv).g;
+	return SAMPLE_TEXTURE2D(_OcclusionMap,sampler_OcclusionMap, uv).g;
 #else
-	half occ = UNITY_SAMPLE_TEX2D(_OcclusionMap, uv).g;
+	half occ = UNITY_SAMPLE_TEX2D(_OcclusionMap, sampler_OcclusionMap, uv).g;
 	return LerpWhiteTo(occ, _OcclusionStrength);
 #endif
 #else
@@ -97,7 +112,7 @@ half3 UnpackNormalScale(half4 packedNormal, half bumpScale)
 half3 SampleNormal(float2 uv, half scale = 1.0h)
 {
 #if _NORMALMAP
-	half4 n = UNITY_SAMPLE_TEX2D(_BumpMap, uv);
+	half4 n = SAMPLE_TEXTURE2D(_BumpMap, uv);
 #if BUMP_SCALE_NOT_SUPPORTED
 	return UnpackNormal(n);
 #else
@@ -125,7 +140,7 @@ half Alpha(half albedoAlpha, half4 color, half cutoff)
 
 half4 SampleAlbedoAlpha(float2 uv)
 {
-	return UNITY_SAMPLE_TEX2D(_MainTex, uv);
+	return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
 }
 
 half3 SampleEmission(float2 uv, half3 emissionColor)
@@ -133,13 +148,13 @@ half3 SampleEmission(float2 uv, half3 emissionColor)
 #ifndef _EMISSION
 	return 0;
 #else
-	return UNITY_SAMPLE_TEX2D(_EmissionMap, uv).rgb * emissionColor;
+	return SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, uv).rgb * emissionColor;
 #endif
 }
 
 inline void InitializeStandardLitSurfaceData(float2 uv, out SurfaceData outSurfaceData)
 {
-	half4 albedoAlpha = UNITY_SAMPLE_TEX2D(_MainTex, uv);
+	half4 albedoAlpha = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex, uv);
 	outSurfaceData.alpha = Alpha(albedoAlpha.a, _Color, _Cutoff);
 
 	half4 specGloss = SampleMetallicSpecGloss(uv, albedoAlpha.a);
@@ -182,4 +197,6 @@ inline half3 DiffuseAndSpecularFromMetallic (half3 albedo, half metallic, out ha
 	oneMinusReflectivity = OneMinusReflectivityFromMetallic (metallic);
 	return albedo * oneMinusReflectivity;
 }
+
+
 #endif

@@ -24,7 +24,6 @@ struct IFVertex2Fragment
 	// [3x3:tangentToWorld | 1x3:viewDirForParallax or worldPos]
 	half4 tangentToWorldAndPackedData[3] : TEXCOORD2;
 	half3 eyeVec : TEXCOORD5;
-	UNITY_FOG_COORDS (6)
 };
 
 half3x3 CreateTangentToWorldPerVertex(half3 normal, half3 tangent, half tangentSign)
@@ -60,6 +59,42 @@ half3 PerPixelWorldNormal(float3 normalTangent, half4 tangentToWorld[3])
 	return normalWorld;
 }
 
+#if 0
+void InitializeInputData(Varyings input, half3 normalTS, out InputData inputData)
+{
+	inputData = (InputData)0;
+
+#ifdef _ADDITIONAL_LIGHTS
+	inputData.positionWS = input.positionWS;
+#endif
+
+#ifdef _NORMALMAP
+	half3 viewDirWS = half3(input.normalWS.w, input.tangentWS.w, input.bitangentWS.w);
+	inputData.normalWS = TransformTangentToWorld(normalTS,
+		half3x3(input.tangentWS.xyz, input.bitangentWS.xyz, input.normalWS.xyz));
+#else
+	half3 viewDirWS = input.viewDirWS;
+	inputData.normalWS = input.normalWS;
+#endif
+
+	inputData.normalWS = NormalizeNormalPerPixel(inputData.normalWS);
+
+#if SHADER_HINT_NICE_QUALITY
+	viewDirWS = SafeNormalize(viewDirWS);
+#endif
+
+	inputData.viewDirectionWS = viewDirWS;
+#if defined(_MAIN_LIGHT_SHADOWS) && !defined(_RECEIVE_SHADOWS_OFF)
+	inputData.shadowCoord = input.shadowCoord;
+#else
+	inputData.shadowCoord = float4(0, 0, 0, 0);
+#endif
+	inputData.fogCoord = input.fogFactorAndVertexLight.x;
+	inputData.vertexLighting = input.fogFactorAndVertexLight.yzw;
+	inputData.bakedGI = SAMPLE_GI(input.lightmapUV, input.vertexSH, inputData.normalWS);
+}
+#endif
+
 IFVertex2Fragment LitPassVertex(IFVertexInput v)
 {
 	IFVertex2Fragment o;
@@ -80,7 +115,7 @@ IFVertex2Fragment LitPassVertex(IFVertexInput v)
 	o.tangentToWorldAndPackedData[1].w = posWS.y;
 	o.tangentToWorldAndPackedData[2].w = posWS.z;
 	o.eyeVec = normalize(posWS.xyz - _WorldSpaceCameraPos);
-	UNITY_TRANSFER_FOG(o, o.positionSS);
+
 	return o;
 }
 
@@ -160,7 +195,7 @@ float4 LitPassFragment(IFVertex2Fragment i) : SV_Target
 	col.a = 1;// inputs.alpha;
 	// Other output :normal .... 
 	// apply fog
-	UNITY_APPLY_FOG(i.fogCoord, col);
+
 	//col.rgb = inputs.debugColor;
 	//col.rgb = inputs.diffuse_lighting;// +inputs.specular_lighting;// color
 	return col;

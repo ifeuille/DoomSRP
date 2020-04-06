@@ -6,7 +6,7 @@ Shader "Hidden/DoomSRP/Sampling"
     }
 
     HLSLINCLUDE
-    #include "Assets/DoomSRP/Shaders/simple/Core.hlsl"
+    #include "Assets/DoomSRP/Shaders/doomsrp/Core.hlsl"
 
     struct Attributes
     {
@@ -66,8 +66,6 @@ Shader "Hidden/DoomSRP/Sampling"
             #pragma vertex Vertex
             #pragma fragment FragBoxDownsample
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
             float4 _MainTex_TexelSize;
 
             float _SampleOffset;

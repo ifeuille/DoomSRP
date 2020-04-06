@@ -16,8 +16,8 @@ Shader "Hidden/DoomSRP/ScreenSpaceShadows"
         #include "Assets/DoomSRP/Shaders/core/Common.hlsl"
         #include "Assets/DoomSRP/Shaders/core/EntityLighting.hlsl"
         #include "Assets/DoomSRP/Shaders/core/ImageBasedLighting.hlsl"
-        #include "Assets/DoomSRP/Shaders/simple/Core.hlsl"
-        #include "Assets/DoomSRP/Shaders/simple/Shadows.hlsl"
+        #include "Assets/DoomSRP/Shaders/doomsrp/Core.hlsl"
+        #include "Assets/DoomSRP/Shaders/doomsrp/Shadows.hlsl"
 
 #if defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED)
         TEXTURE2D_ARRAY_FLOAT(_CameraDepthTexture);

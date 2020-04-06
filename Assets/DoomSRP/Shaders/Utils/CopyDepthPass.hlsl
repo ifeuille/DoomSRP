@@ -1,7 +1,7 @@
 #ifndef LIGHTWEIGHT_COPY_DEPTH_PASS_INCLUDED
 #define LIGHTWEIGHT_COPY_DEPTH_PASS_INCLUDED
 
-#include "Assets/DoomSRP/Shaders/simple/Core.hlsl"
+#include "Assets/DoomSRP/Shaders/doomsrp/Core.hlsl"
 
 struct Attributes
 {

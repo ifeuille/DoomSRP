@@ -10,7 +10,5 @@ public class DoomSRPResources : ScriptableObject
     [FormerlySerializedAs("blitShader"), SerializeField] public Shader blitShader = null;
     [FormerlySerializedAs("screenSpaceShadowShader"), SerializeField] public Shader screenSpaceShadowShader = null;
 
-    [FormerlySerializedAs("ClusterDebug"), SerializeField] public Shader ClusterDebugShader = null;
-
 
 }

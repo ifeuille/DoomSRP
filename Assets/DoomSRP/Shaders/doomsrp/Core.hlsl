@@ -1,8 +1,9 @@
 ﻿#ifndef DOOMSRP_PIPELINE_CORE_INCLUDED
 #define DOOMSRP_PIPELINE_CORE_INCLUDED
-#include "ShaderLibrary/Common.hlsl"
-#include "ShaderLibrary/Packing.hlsl"
-#include "Lit/InputSurfaceLit.hlsl"
+#include "Common.hlsl"
+#include "Packing.hlsl"
+#include "Input.hlsl"
+#include "InputSurface.hlsl"
 
 #if !defined(SHADER_HINT_NICE_QUALITY)
 #ifdef SHADER_API_MOBILE
@@ -104,14 +105,6 @@ real3 UnpackNormal (real4 packedNormal)
 #endif
 }
 
-real3 UnpackNormalScale (real4 packedNormal, real bumpScale)
-{
-#if defined(UNITY_NO_DXT5nm)
-	return UnpackNormalRGB (packedNormal, bumpScale);
-#else
-	return UnpackNormalmapRGorAG (packedNormal, bumpScale);
-#endif
-}
 
 real3 NormalizeNormalPerPixel (real3 normal)
 {
