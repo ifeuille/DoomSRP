@@ -1,26 +1,26 @@
-## 说明
+## Description
 
-基于lightweight srp，实现一些doom2016、doom2020等游戏中用到的特性。
+The aim of this project is to test some features i find in doom2016 and doom2020(or other games) and the pipeline is based on Lightweight SRP.
 
-目标是实现一套能在手机上跑的cluster forward渲染管线(最低需要ES3.1)。
+What's important is that it needs to be running on the phone(ES3.1 need).
 
-基本策略是参考unity的SRP(light weight和HDSRP)以及doom2016、doom2020。
+Develop environment :Unity 2018.4.12f1 (64-bit) + windowns 10
 
-开发环境Unity 2018.4.12f1 (64-bit) + win10
+## Features
 
-## 特性
-
-- [x] atlas based projector灯光支持(仅)
-- [x] cluster基本结构支持
+- [x] atlas based projector light support(only)
+- [x] cluster pipeline basic part
 - [x] depth pre
-- [ ] atlas  based shadow(texture array对比实验)
+- [ ] atlas  based shadow(texture array ?)
 - [ ] atlas  based decal
 - [ ] TAA
-- [ ] 后处理管线(参考PostProcessLayer，子集bloom,tonemap,colorgrading,dof等)
-- [ ] lightmap(环境光only)
+- [ ] postprocess pipeline(refer UnityPostProcess. bloom,tonemap,colorgrading,dof..)
+- [ ] lightmap(environment diffuse only)
 - [ ] probe
 - [ ] virtual texture based terrain
 
-## 结果展示
+## Stage result
+
+### 20200406
 
 ![20200406](Document/pics/20200406.png)
