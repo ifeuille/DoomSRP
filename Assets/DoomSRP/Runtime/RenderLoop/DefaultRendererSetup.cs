@@ -118,7 +118,7 @@ namespace DoomSRP
                 //    renderer.EnqueuePass(m_AdditionalLightsShadowCasterPass);
             }
 
-            bool resolveShadowsInScreenSpace = false;// renderingData.shadowData.requiresScreenSpaceShadowResolve;
+            bool resolveShadowsInScreenSpace = true;// renderingData.shadowData.requiresScreenSpaceShadowResolve;
             bool requiresDepthPrepass = resolveShadowsInScreenSpace || renderingData.cameraData.isSceneViewCamera ||
                                         (renderingData.cameraData.requiresDepthTexture && (!CanCopyDepth(ref renderingData.cameraData)));
 
