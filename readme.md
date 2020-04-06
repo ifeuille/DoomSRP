@@ -8,15 +8,16 @@
 
 ## 特性
 
-- [x] projector灯光支持(仅)
+- [x] atlas based projector灯光支持(仅)
 - [x] cluster基本结构支持
 - [x] depth pre
-- [ ] atlas shadow(texture array对比实验)
-- [ ] atlas decal
+- [ ] atlas  based shadow(texture array对比实验)
+- [ ] atlas  based decal
 - [ ] TAA
 - [ ] 后处理管线(参考PostProcessLayer，子集bloom,tonemap,colorgrading,dof等)
 - [ ] lightmap(环境光only)
 - [ ] probe
+- [ ] virtual texture based terrain
 
 ## 当前结果展示
 
