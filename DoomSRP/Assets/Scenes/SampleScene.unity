@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.17841268, g: 0.22339475, b: 0.3054142, a: 1}
+  m_IndirectSpecularColor: {r: 0.17828096, g: 0.22323485, b: 0.30517077, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -168,23 +168,8 @@ MonoBehaviour:
     transform: {fileID: 88114231}
   spritesAtlas: {fileID: 2648330423490070309, guid: decbefb509d91df40a2b3966cf652eb8,
     type: 3}
-  mprojSpriteName: lightatlas_r_21
+  mprojSpriteName: lightatlas_r_37
   projSpriteData:
-    name: lightatlas_r_21
-    x: 822
-    y: 254
-    width: 122
-    height: 110
-    borderLeft: 0
-    borderRight: 0
-    borderTop: 0
-    borderBottom: 0
-    paddingLeft: 0
-    paddingRight: 0
-    paddingTop: 0
-    paddingBottom: 0
-  mfalloffSpriteName: lightatlas_r_37
-  falloffSpriteData:
     name: lightatlas_r_37
     x: 120
     y: 504
@@ -198,12 +183,27 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  mfalloffSpriteName: lightatlas_r_21
+  falloffSpriteData:
+    name: lightatlas_r_21
+    x: 822
+    y: 254
+    width: 122
+    height: 110
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   temperature: 6500
   useTemperature: 0
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
-  lightColor: {r: 0.509434, g: 0.26673195, b: 0.5025051, a: 1}
+  lightColor: {r: 0.4716981, g: 0.03337486, b: 0.23230986, a: 1}
   lightParms_Shadow: 0
   lightParms_Rect: 0
   lightParms_Circle: 0
@@ -1100,7 +1100,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 802373885}
   m_LocalRotation: {x: 0.40170804, y: 0.19440512, z: -0.47267655, w: 0.7598778}
-  m_LocalPosition: {x: 0.98, y: 6.88, z: 12}
+  m_LocalPosition: {x: 9.63, y: 6.88, z: 12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2021157034}
@@ -1360,12 +1360,12 @@ MonoBehaviour:
     transform: {fileID: 1110608730}
   spritesAtlas: {fileID: 2648330423490070309, guid: decbefb509d91df40a2b3966cf652eb8,
     type: 3}
-  mprojSpriteName: lightatlas_r_21
+  mprojSpriteName: lightatlas_r_20
   projSpriteData:
-    name: lightatlas_r_21
-    x: 822
-    y: 254
-    width: 122
+    name: lightatlas_r_20
+    x: 696
+    y: 368
+    width: 104
     height: 110
     borderLeft: 0
     borderRight: 0
@@ -1375,13 +1375,13 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  mfalloffSpriteName: lightatlas_r_20
+  mfalloffSpriteName: lightatlas_r_02
   falloffSpriteData:
-    name: lightatlas_r_20
+    name: lightatlas_r_02
     x: 696
-    y: 368
-    width: 104
-    height: 110
+    y: 120
+    width: 120
+    height: 128
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -1411,6 +1411,144 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1110608729}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!1 &1253883896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1253883897}
+  - component: {fileID: 1253883899}
+  - component: {fileID: 1253883898}
+  m_Layer: 0
+  m_Name: GameObject (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1253883897
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253883896}
+  m_LocalRotation: {x: 0.5626832, y: 0.2959668, z: -0.4166773, w: 0.6497471}
+  m_LocalPosition: {x: 9.65, y: 6.88, z: 30.16}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2021157034}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 77.91801, y: -23.752, z: -84.645004}
+--- !u!114 &1253883898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253883896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 364cae91bcd584a409af7e4809a2e088, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light: {fileID: 1253883899}
+  cacheTransform: {fileID: 1253883897}
+  iFPipelineProjector:
+    nearClipPlane: 0.1
+    farClipPlane: 12.8
+    fieldOfView: 54.8
+    aspectRatio: 1
+    orthographic: 0
+    orthoGraphicSize: 32.7
+    transform: {fileID: 1253883897}
+  spritesAtlas: {fileID: 2648330423490070309, guid: decbefb509d91df40a2b3966cf652eb8,
+    type: 3}
+  mprojSpriteName: lightatlas_r_34
+  projSpriteData:
+    name: lightatlas_r_34
+    x: 2
+    y: 762
+    width: 252
+    height: 254
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  mfalloffSpriteName: lightatlas_r_30
+  falloffSpriteData:
+    name: lightatlas_r_30
+    x: 502
+    y: 744
+    width: 192
+    height: 216
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  temperature: 6500
+  useTemperature: 0
+  intensity: 7.15
+  specMultiplier: 1
+  shadowBleedReduce: 0
+  lightColor: {r: 1, g: 0.74293566, b: 0.2688679, a: 1}
+  lightParms_Shadow: 0
+  lightParms_Rect: 0
+  lightParms_Circle: 0
+  lightParms_SkipSkipModel: 1
+  lightParams_NoDiffuse: 0
+  area_width: 9.55
+  area_height: 10
+  area_falloff: 1
+--- !u!108 &1253883899
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253883896}
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
@@ -1652,7 +1790,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1685717411}
   m_LocalRotation: {x: 0.5626832, y: 0.2959668, z: -0.4166773, w: 0.6497471}
-  m_LocalPosition: {x: -6.83, y: 6.88, z: 44.35}
+  m_LocalPosition: {x: -8.84, y: 6.88, z: 44.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2021157034}
@@ -1682,13 +1820,13 @@ MonoBehaviour:
     transform: {fileID: 1685717412}
   spritesAtlas: {fileID: 2648330423490070309, guid: decbefb509d91df40a2b3966cf652eb8,
     type: 3}
-  mprojSpriteName: lightatlas_r_06
+  mprojSpriteName: lightatlas_r_02
   projSpriteData:
-    name: lightatlas_r_06
-    x: 578
-    y: 260
-    width: 124
-    height: 116
+    name: lightatlas_r_02
+    x: 696
+    y: 120
+    width: 120
+    height: 128
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -1697,12 +1835,12 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  mfalloffSpriteName: lightatlas_r_20
+  mfalloffSpriteName: lightatlas_r_21
   falloffSpriteData:
-    name: lightatlas_r_20
-    x: 696
-    y: 368
-    width: 104
+    name: lightatlas_r_21
+    x: 822
+    y: 254
+    width: 122
     height: 110
     borderLeft: 0
     borderRight: 0
@@ -1782,7 +1920,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1745969918
 Transform:
   m_ObjectHideFlags: 0
@@ -1898,13 +2036,13 @@ MonoBehaviour:
     transform: {fileID: 1847955889}
   spritesAtlas: {fileID: 2648330423490070309, guid: decbefb509d91df40a2b3966cf652eb8,
     type: 3}
-  mprojSpriteName: lightatlas_r_13
+  mprojSpriteName: lightatlas_r_30
   projSpriteData:
-    name: lightatlas_r_13
-    x: 578
-    y: 134
-    width: 124
-    height: 116
+    name: lightatlas_r_30
+    x: 502
+    y: 744
+    width: 192
+    height: 216
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -1913,13 +2051,13 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  mfalloffSpriteName: lightatlas_r_21
+  mfalloffSpriteName: lightatlas_r_13
   falloffSpriteData:
-    name: lightatlas_r_21
-    x: 822
-    y: 254
-    width: 122
-    height: 110
+    name: lightatlas_r_13
+    x: 578
+    y: 134
+    width: 124
+    height: 116
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -2050,13 +2188,13 @@ MonoBehaviour:
     transform: {fileID: 1930455639}
   spritesAtlas: {fileID: 2648330423490070309, guid: decbefb509d91df40a2b3966cf652eb8,
     type: 3}
-  mprojSpriteName: lightatlas_r_06
+  mprojSpriteName: lightatlas_r_01
   projSpriteData:
-    name: lightatlas_r_06
-    x: 578
-    y: 260
-    width: 124
-    height: 116
+    name: lightatlas_r_01
+    x: 2
+    y: 2
+    width: 488
+    height: 500
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -2065,13 +2203,13 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  mfalloffSpriteName: lightatlas_r_20
+  mfalloffSpriteName: lightatlas_r_28
   falloffSpriteData:
-    name: lightatlas_r_20
-    x: 696
-    y: 368
+    name: lightatlas_r_28
+    x: 822
+    y: 366
     width: 104
-    height: 110
+    height: 116
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -2166,6 +2304,7 @@ Transform:
   - {fileID: 1685717412}
   - {fileID: 1110608730}
   - {fileID: 88114231}
+  - {fileID: 1253883897}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

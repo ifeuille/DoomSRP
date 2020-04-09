@@ -12,17 +12,6 @@ struct clusternumlights_t
 };
 
 
-CBUFFER_START(DoomSRPPublicBuffer)
-int4 _ClusterInfo;
-float4 _ClusterLighting;//z divz,w 
-float4 _ClusterCB_Size;
-float4 _ItemsIDListTexSize;//xy _ItemsIDListTex;zw _ClusterNumItemsTex
-float4 _ClusterNumItemsTexSize;
-float4 _LightParamsTexSize;//灯光参数纹理换成的尺寸信息
-float4 _CameraClipDistance;
-CBUFFER_END
-
-
 StructuredBuffer<uint> _ItemsIDList;
 StructuredBuffer<clusternumlights_t> _ClusterNumItems;
 

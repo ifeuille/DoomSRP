@@ -134,11 +134,21 @@ namespace DoomSRP
         //todo 用colorPacked优化
         //Vector4 color;
     };
+    public struct LightData_Shadow
+    {
 
+    }
     public struct LightDataInAll
     {
         public LightData lightData;
         public SFiniteLightBound sFiniteLightBound;
+        public LightData_Shadow shadowData;
     }
 
+    public struct LightDataForShadow
+    {
+        public int lightIndex;
+        public LightData_Shadow shadowData;
+
+    }
 }

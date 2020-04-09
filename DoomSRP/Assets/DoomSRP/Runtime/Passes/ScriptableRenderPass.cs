@@ -8,15 +8,10 @@ namespace DoomSRP
 {
     public struct ShadowData
     {
-        public bool supportsMainLightShadows;
         public bool requiresScreenSpaceShadowResolve;
-        public int mainLightShadowmapWidth;
-        public int mainLightShadowmapHeight;
-        public int mainLightShadowCascadesCount;
-        public Vector3 mainLightShadowCascadesSplit;
         public bool supportsAdditionalLightShadows;
-        public int additionalLightsShadowmapWidth;
-        public int additionalLightsShadowmapHeight;
+        public int lightsShadowmapWidth;
+        public int lightsShadowmapHeight;
         public bool supportsSoftShadows;
         public int shadowmapDepthBufferBits;
         public List<Vector4> bias;
@@ -26,7 +21,7 @@ namespace DoomSRP
         public CullResults cullResults;
         public CameraData cameraData;
         public LightsData lightData;
-        //public ShadowData shadowData;
+        public ShadowData shadowData;
         public bool supportsDynamicBatching;
         public PipelineSettings settings;
     }

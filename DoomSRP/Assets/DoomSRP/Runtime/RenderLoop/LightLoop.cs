@@ -21,6 +21,7 @@ namespace DoomSRP
         private NativeArray<LightData> NativeLightsDataList;
         //unused
         public NativeArray<LightData> LightsDataList { get { return NativeLightsDataList; } }
+        public BetterList<LightDataForShadow> LightsDataForShadow;
 
         public CulsterDataGenerator culsterDataGenerator;// = new CulsterDataGenerator();
         [HideInInspector]
@@ -52,6 +53,8 @@ namespace DoomSRP
                 culsterDataGenerator.Initilize(pipelineSettings);
                 tileAndClusterData.Initilize(pipelineSettings.NumClusters, pipelineSettings.MaxItemsPerCluster);
                 lightLoopLightsData.Initialize(pipelineSettings.MaxItemsOnScreen);
+
+                LightsDataForShadow.Allocate(NumMaxLights);
             }
         }
 
@@ -107,6 +110,14 @@ namespace DoomSRP
                 NativeLightsBoundList[i] = lightDataInAll.sFiniteLightBound;
                 NativeLightsDataList[i] = lightDataInAll.lightData;
                 ++VisibleLight;
+
+                //for shadow
+                if(ifLight.lightParms_Shadow)
+                {
+                    LightDataForShadow lightDataForShadow = new LightDataForShadow();
+                    lightDataForShadow.lightIndex = i;
+                    lightDataForShadow.shadowData = lightDataInAll.shadowData;
+                }
             }
 
 

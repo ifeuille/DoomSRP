@@ -11,6 +11,8 @@ namespace DoomSRP
         //[Range(0,512)]
         [SerializeField]
         public int MaxItemsOnScreen = 512;//同步修改#define MAXITEMSONSCREEN 256
+        [SerializeField]
+        public int MaxShadowLightsNum = 64;//阴影灯光数量最大值8x8
 
         [HideInInspector]
         [SerializeField]
