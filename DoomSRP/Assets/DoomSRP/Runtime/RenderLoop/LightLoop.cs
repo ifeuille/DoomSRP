@@ -21,7 +21,7 @@ namespace DoomSRP
         private NativeArray<LightData> NativeLightsDataList;
         //unused
         public NativeArray<LightData> LightsDataList { get { return NativeLightsDataList; } }
-        public BetterList<LightDataForShadow> LightsDataForShadow;
+        public BetterList<LightDataForShadow> LightsDataForShadow = new BetterList<LightDataForShadow>();
 
         public CulsterDataGenerator culsterDataGenerator;// = new CulsterDataGenerator();
         [HideInInspector]

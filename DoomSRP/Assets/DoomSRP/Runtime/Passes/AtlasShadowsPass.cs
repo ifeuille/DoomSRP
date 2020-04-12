@@ -79,14 +79,14 @@ namespace DoomSRP
         {
             m_LightsShadowmapTexture = null;
 
-            for (int i = 0; i < m_LightShadowMatrices.Length; ++i)
-                m_LightShadowMatrices[i] = Matrix4x4.identity;
+            //for (int i = 0; i < m_LightShadowMatrices.Length; ++i)
+            //    m_LightShadowMatrices[i] = Matrix4x4.identity;
 
-            for (int i = 0; i < m_LightSlices.Length; ++i)
-                m_LightSlices[i].Clear();
+            //for (int i = 0; i < m_LightSlices.Length; ++i)
+            //    m_LightSlices[i].Clear();
 
-            for (int i = 0; i < m_LightsShadowStrength.Length; ++i)
-                m_LightsShadowStrength[i] = 0.0f;
+            //for (int i = 0; i < m_LightsShadowStrength.Length; ++i)
+            //    m_LightsShadowStrength[i] = 0.0f;
         }
     }
 }

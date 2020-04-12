@@ -9,7 +9,7 @@ namespace DoomSRP
     public struct ShadowData
     {
         public bool requiresScreenSpaceShadowResolve;
-        public bool supportsAdditionalLightShadows;
+        public bool supportsLightShadows;
         public int lightsShadowmapWidth;
         public int lightsShadowmapHeight;
         public bool supportsSoftShadows;

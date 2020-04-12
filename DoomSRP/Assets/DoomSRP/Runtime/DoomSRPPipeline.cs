@@ -258,6 +258,15 @@ namespace DoomSRP
 
             //InitializeShadowData(settings, visibleLights, mainLightCastShadows, additionalLightsCastShadows && !renderingData.lightData.shadeAdditionalLightsPerVertex, out renderingData.shadowData);
             renderingData.supportsDynamicBatching = false;// settings.supportsDynamicBatching;
+
+            //todo: settings
+            renderingData.shadowData = new ShadowData();
+            renderingData.shadowData.lightsShadowmapHeight = 1024;
+            renderingData.shadowData.lightsShadowmapWidth = 1024;
+            renderingData.shadowData.supportsLightShadows = true;
+            renderingData.shadowData.supportsSoftShadows = false;
+            renderingData.shadowData.shadowmapDepthBufferBits = 24;
+
         }
         static void InitializeLightData(PipelineSettings settings, List<VisibleLight> visibleLights, LightLoop lightloop, out LightsData lightData)
         {
