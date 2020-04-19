@@ -89,16 +89,15 @@ namespace DoomSRP
         {
             lights.Clear();
             var unityLights = visibleLights;
-            foreach(var ul in unityLights)
+            VisibleLight = 0;
+            int i = 0;
+            foreach (var ul in unityLights)
             {
                 var pl = ul.light.GetComponent<ProjectorLight>();
                 if(pl != null)
                     lights.Add(pl);
-            }
-            VisibleLight = 0;
-            for (int i = 0; i < lights.size && i < NumMaxLights; ++i)
-            {
-                var ifLight = lights[i];
+
+                var ifLight = pl;
                 if (ifLight.spritesAtlas != spritesAtlas)
                 {
                     spritesAtlas = ifLight.spritesAtlas;
@@ -112,14 +111,22 @@ namespace DoomSRP
                 ++VisibleLight;
 
                 //for shadow
-                if(ifLight.lightParms_Shadow)
+                // TODO  frustum cull
+                if (ifLight.lightParms_Shadow)
                 {
                     LightDataForShadow lightDataForShadow = new LightDataForShadow();
                     lightDataForShadow.lightIndex = i;
                     lightDataForShadow.shadowData = lightDataInAll.shadowData;
+                    lightDataForShadow.visibleLight = ul;
+                    lightDataForShadow.projectorLight = ifLight;
+                    LightsDataForShadow.Add(lightDataForShadow);
+                }
+                ++i;
+                if(i >= NumMaxLights)
+                {
+                    break;
                 }
             }
-
 
             culsterDataGenerator.Run(cameraData, pipelineSettings,this);
             lightLoopLightsData.LightsDatasBuf.SetData(LightsDataList);

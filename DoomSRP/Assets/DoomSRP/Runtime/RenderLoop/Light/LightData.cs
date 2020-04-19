@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 namespace DoomSRP
 {
@@ -133,11 +134,21 @@ namespace DoomSRP
         public float shadowBleedReduce;
         //todo 用colorPacked优化
         //Vector4 color;
+
+        public bool shadow()
+        {
+            return ((lightParms & 0x10) != 0);
+        }
+        
     };
     public struct LightData_Shadow
     {
+        public Matrix4x4 viewMatrix;
+        public Matrix4x4 projMatrix;
 
+        public SPlanes planes;
     }
+
     public struct LightDataInAll
     {
         public LightData lightData;
@@ -150,5 +161,7 @@ namespace DoomSRP
         public int lightIndex;
         public LightData_Shadow shadowData;
 
+        public VisibleLight visibleLight; 
+        public ProjectorLight projectorLight;
     }
 }

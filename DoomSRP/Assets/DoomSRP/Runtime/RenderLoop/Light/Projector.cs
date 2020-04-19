@@ -19,6 +19,7 @@ namespace DoomSRP
         public Matrix4x4 distance;
         public Matrix4x4 clipping;
         public Matrix4x4 frustumMatrix;
+        public Matrix4x4 viewMatrix;
     }
 
     [Serializable]
@@ -154,6 +155,7 @@ namespace DoomSRP
             }
         }
 
+
         public Matrix4x4 GetWorldToLocalMatrixNoScale()
         {            
             Vector3 pos = new Vector3(-transform.position.x,-transform.position.y,-transform.position.z);
@@ -218,6 +220,9 @@ namespace DoomSRP
             gpumatrix = GL.GetGPUProjectionMatrix(projectSettings.clipping, false);
             //projectSettings.falloffR = projectSettings.clipping.GetRow(2);//z/w
             projectSettings.falloffR = gpumatrix.GetRow(2);//z/w
+
+            projectSettings.viewMatrix = projectorToWorld;// TODO ?
+
             return projectSettings;
         }
 

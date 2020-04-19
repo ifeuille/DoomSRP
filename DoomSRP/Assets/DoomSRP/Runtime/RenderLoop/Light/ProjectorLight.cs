@@ -258,6 +258,20 @@ namespace DoomSRP
 #if UNITY_EDITOR
             cacheLightData = lightDataInAll;
 #endif
+
+            // shadow
+            {
+                LightData_Shadow shadowData = new LightData_Shadow();
+                if(lightParms_Shadow)
+                {
+                    shadowData.projMatrix = iFPipelineProjector.GetProjectorSettings.projection;
+                    shadowData.viewMatrix = iFPipelineProjector.GetProjectorSettings.viewMatrix;
+
+                    shadowData.planes = cacheLightData.sFiniteLightBound.planes;
+                }
+                lightDataInAll.shadowData = shadowData;
+            }
+
             return lightDataInAll;
         }
 
