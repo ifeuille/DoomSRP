@@ -23,7 +23,6 @@ SAMPLER_CMP (sampler_LightsShadowmapTexture);
 &3 cube map? 2：
 17~21:/63  shadow_fade
 31~22 灯光索引
-
 */
 float GetShadowMask (lightingInput_t inputs, uint light_parms)
 {
@@ -34,8 +33,8 @@ float GetShadowMask (lightingInput_t inputs, uint light_parms)
 		float4 pos;
 		pos .xyz = inputs.position + (inputs.normal * normal_bias_scale);
 		pos.w = 1;
-		shadowparms_t shadow_parms = _ShadowsParms[(light_parms >> uint(22)];
-		vec4 shadowTC_1 = mul (shadow_parms.shadowLight, pos);
+		shadowparms_t shadow_parms = _ShadowsParms[(light_parms >> uint(22))];
+		float4 shadowTC_1 = mul (shadow_parms.shadowLight, pos);
 		shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
 		if (shadowTC_1.x > 0 && shadowTC_1.x < 1 && shadowTC_1.y > 0 && shadowTC_1.y < 1)
 		{

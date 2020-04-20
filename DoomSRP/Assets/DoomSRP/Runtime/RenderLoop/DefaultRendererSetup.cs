@@ -13,6 +13,7 @@ namespace DoomSRP
         private DepthOnlyPass m_DepthOnlyPass;
         //private MainLightShadowCasterPass m_MainLightShadowCasterPass;
         //private AdditionalLightsShadowCasterPass m_AdditionalLightsShadowCasterPass;
+        private AtlasShadowsPass AtlasShadowsPass;
         private SetupForwardRenderingPass m_SetupForwardRenderingPass;
         //private ScreenSpaceShadowResolvePass m_ScreenSpaceShadowResolvePass;
         private CreateDoomSRPRenderTexturesPass m_CreateRenderTexturesPass;
@@ -34,6 +35,7 @@ namespace DoomSRP
         private RenderTargetHandle OpaqueColor;
         //private RenderTargetHandle MainLightShadowmap;
         //private RenderTargetHandle AdditionalLightsShadowmap;
+        private RenderTargetHandle LightsShadowmap;
         //private RenderTargetHandle ScreenSpaceShadowmap;
 
         private List<IBeforeRender> m_BeforeRenderPasses = new List<IBeforeRender>(10);
@@ -49,6 +51,7 @@ namespace DoomSRP
             m_DepthOnlyPass = new DepthOnlyPass();
             //m_MainLightShadowCasterPass = new MainLightShadowCasterPass();
             //m_AdditionalLightsShadowCasterPass = new AdditionalLightsShadowCasterPass();
+            AtlasShadowsPass = new AtlasShadowsPass();
             m_SetupForwardRenderingPass = new SetupForwardRenderingPass();
             //m_ScreenSpaceShadowResolvePass = new ScreenSpaceShadowResolvePass();
             m_CreateRenderTexturesPass = new CreateDoomSRPRenderTexturesPass();
@@ -72,6 +75,7 @@ namespace DoomSRP
             OpaqueColor.Init("_CameraOpaqueTexture");
             //MainLightShadowmap.Init("_MainLightShadowmapTexture");
             //AdditionalLightsShadowmap.Init("_AdditionalLightsShadowmapTexture");
+            LightsShadowmap.Init("_LightsShadowMapTexture");
             //ScreenSpaceShadowmap.Init("_ScreenSpaceShadowmapTexture");
 
             m_Initialized = true;
@@ -116,6 +120,14 @@ namespace DoomSRP
                 //bool additionalLightShadows = m_AdditionalLightsShadowCasterPass.Setup(AdditionalLightsShadowmap, ref renderingData, renderer.maxVisibleAdditionalLights);
                 //if (additionalLightShadows)
                 //    renderer.EnqueuePass(m_AdditionalLightsShadowCasterPass);
+            }
+            if(renderingData.shadowData.supportsLightShadows)
+            {
+                bool lightShadows = AtlasShadowsPass.Setup(LightsShadowmap,ref renderingData, renderingData.settings.MaxShadowLightsNum);
+                if(lightShadows)
+                {
+                    renderer.EnqueuePass(AtlasShadowsPass);
+                }
             }
 
             bool resolveShadowsInScreenSpace = true;// renderingData.shadowData.requiresScreenSpaceShadowResolve;

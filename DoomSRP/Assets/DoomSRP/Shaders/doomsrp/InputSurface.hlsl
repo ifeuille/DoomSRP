@@ -138,6 +138,11 @@ half Alpha(half albedoAlpha, half4 color, half cutoff)
 	return alpha;
 }
 
+//half4 SampleAlbedoAlpha (float2 uv, TEXTURE2D_ARGS (albedoAlphaMap, sampler_albedoAlphaMap))
+//{
+//	return SAMPLE_TEXTURE2D (albedoAlphaMap, sampler_albedoAlphaMap, uv);
+//}
+
 half4 SampleAlbedoAlpha(float2 uv)
 {
 	return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);

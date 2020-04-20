@@ -7,6 +7,9 @@
 #include "doomsrp/AtlasShadows.hlsl"
 #endif
 
+float4 _ShadowBias; // x: depth bias, y: normal bias
+float3 _LightDirection;
+
 struct Attributes
 {
 	float4 positionOS   : POSITION;
@@ -26,8 +29,13 @@ float4 GetShadowPositionHClip (Attributes input)
 {
 	float3 positionWS = TransformObjectToWorld (input.positionOS.xyz);
 	float3 normalWS = TransformObjectToWorldNormal (input.normalOS);
+	float invNdotL = 1.0 - saturate (dot (_LightDirection, normalWS));
+	float scale = invNdotL * _ShadowBias.y;
 
-	float4 positionCS = TransformWorldToHClip (ApplyShadowBias (positionWS, normalWS, _LightDirection));
+	// normal bias is negative since we want to apply an inset normal offset
+	positionWS = _LightDirection * _ShadowBias.xxx + positionWS;
+	positionWS = normalWS * scale.xxx + positionWS;
+	float4 positionCS = TransformWorldToHClip (positionWS);
 
 #if UNITY_REVERSED_Z
 	positionCS.z = min (positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
@@ -43,14 +51,14 @@ Varyings ShadowPassVertex (Attributes input)
 	Varyings output;
 	UNITY_SETUP_INSTANCE_ID (input);
 
-	output.uv = TRANSFORM_TEX (input.texcoord, _BaseMap);
-	output.positionCS = GetShadowPositionHClip (input);
+	output.uv = TRANSFORM_TEX (input.texcoord, _MainTex);
+	output.positionCS = GetShadowPositionHClip(input);
 	return output;
 }
 
 half4 ShadowPassFragment (Varyings input) : SV_TARGET
 {
-	Alpha (SampleAlbedoAlpha (input.uv, TEXTURE2D_ARGS (_BaseMap, sampler_BaseMap)).a, _BaseColor, _Cutoff);
+	Alpha (SampleAlbedoAlpha (input.uv).a, _Color, _Cutoff);
 	return 0;
 }
 #endif

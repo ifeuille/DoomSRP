@@ -62,11 +62,13 @@ namespace DoomSRP
             out Matrix4x4 shadowMatrix)
         {
             ShadowSplitData splitData = new ShadowSplitData();
-            for(int i = 0; i < 6; ++i)
+            splitData.cullingSphere.Set(0.0f, 0.0f, 0.0f, float.NegativeInfinity);
+            splitData.cullingPlaneCount = 6;
+            for (int i = 0; i < 6; ++i)
             {
                 var splane = shadowData.planes[i];
                 Plane plane = new Plane(splane.normal, splane.distance);
-                splitData.SetCullingPlane(0, plane);
+                splitData.SetCullingPlane(i, plane);
             }
             shadowMatrix = GetShadowTransform(shadowData.projMatrix, shadowData.viewMatrix);
             return true;

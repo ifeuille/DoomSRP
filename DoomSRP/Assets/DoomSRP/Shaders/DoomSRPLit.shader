@@ -177,8 +177,11 @@
 
 			#pragma vertex ShadowPassVertex
 			#pragma fragment ShadowPassFragment
+			#include "doomsrp/Core.hlsl"
+		/*	#include "doomsrp/Cluster.hlsl"
+			#include "doomsrp/Lighting.hlsl"*/
 
-			#include "doomsrp/Input.hlsl"
+			#include "doomsrp/InputSurface.hlsl"
 			#include "ShadowCasterPass.hlsl"
 			ENDHLSL
 
