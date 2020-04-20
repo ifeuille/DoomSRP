@@ -159,6 +159,7 @@ namespace DoomSRP
     public struct LightDataForShadow
     {
         public int lightIndex;
+        public int unityLightIndex;
         public LightData_Shadow shadowData;
 
         public VisibleLight visibleLight; 

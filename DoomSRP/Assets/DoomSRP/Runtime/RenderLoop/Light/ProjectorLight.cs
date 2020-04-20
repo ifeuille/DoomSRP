@@ -46,6 +46,19 @@ namespace DoomSRP
         [Range(0, 20)] [HideInInspector] [SerializeField] public float specMultiplier = 1f;
         [Range(0, 20)] [HideInInspector] [SerializeField] public float shadowBleedReduce = 0f;
 
+
+        //     Shadow mapping constant bias.
+        public float shadowBias { get; set; }
+
+        //     Shadow mapping normal-based bias.
+        public float shadowNormalBias { get; set; }
+
+        //     Near plane value to use for shadow frustums.
+        public float shadowNearPlane { get; set; }
+
+        public bool softShadow { get; set; }
+
+
         /** 
          * Filter color of the light.
          * Note that this can change the light's effective intensity.

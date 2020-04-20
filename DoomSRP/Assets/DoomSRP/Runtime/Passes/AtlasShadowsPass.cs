@@ -41,6 +41,10 @@ namespace DoomSRP
 
         public AtlasShadowsPass()
         {
+            m_LightShadowMatrices = new Matrix4x4[0];
+            m_LightSlices = new ShadowSliceData[0];
+            m_LightsShadowStrength = new float[0];
+
             ShadowsConstantBuffer._ShadowAtlasResolution = Shader.PropertyToID("_ShadowAtlasResolution");
             ShadowsConstantBuffer._LightsShadowmapTexture = Shader.PropertyToID("_LightsShadowmapTexture");
             ShadowsConstantBuffer._ShadowsParms = Shader.PropertyToID("_ShadowsParms");
@@ -67,6 +71,14 @@ namespace DoomSRP
         {
             Clear();
             this.destination = destination;
+            if (m_LightShadowMatrices.Length != maxVisibleShaodwLights)
+            {
+                m_LightShadowMatrices = new Matrix4x4[maxVisibleShaodwLights];
+                m_LightSlices = new ShadowSliceData[maxVisibleShaodwLights];
+                m_LightsShadowStrength = new float[maxVisibleShaodwLights];
+            }
+            m_ShadowCastingLightIndices.Clear();
+
 
             m_ShadowmapWidth = renderingData.shadowData.lightsShadowmapWidth;
             m_ShadowmapHeight = renderingData.shadowData.lightsShadowmapHeight;
@@ -81,7 +93,7 @@ namespace DoomSRP
 
             for(int i = 0; i < shadowLightDataList.size && m_ShadowCastingLightIndices.size < maxShadowLightsNum; ++i)
             {
-                m_ShadowCastingLightIndices.Add(i);
+                m_ShadowCastingLightIndices.Add(shadowLightDataList[i].unityLightIndex);
             }
 
             int shadowCastingLightsCount = m_ShadowCastingLightIndices.size;
@@ -132,14 +144,14 @@ namespace DoomSRP
         {
             m_LightsShadowmapTexture = null;
 
-            //for (int i = 0; i < m_LightShadowMatrices.Length; ++i)
-            //    m_LightShadowMatrices[i] = Matrix4x4.identity;
+            for (int i = 0; i < m_LightShadowMatrices.Length; ++i)
+                m_LightShadowMatrices[i] = Matrix4x4.identity;
 
-            //for (int i = 0; i < m_LightSlices.Length; ++i)
-            //    m_LightSlices[i].Clear();
+            for (int i = 0; i < m_LightSlices.Length; ++i)
+                m_LightSlices[i].Clear();
 
-            //for (int i = 0; i < m_LightsShadowStrength.Length; ++i)
-            //    m_LightsShadowStrength[i] = 0.0f;
+            for (int i = 0; i < m_LightsShadowStrength.Length; ++i)
+                m_LightsShadowStrength[i] = 0.0f;
         }
 
         void RenderProjectorShadowmapAtlas(ref ScriptableRenderContext context, ref CullResults cullResults, ref LightsData lightData, ref ShadowData shadowData)
@@ -170,7 +182,8 @@ namespace DoomSRP
                     
                     if (m_ShadowCastingLightIndices.size > 1)
                         ShadowUtils.ApplySliceTransform(ref m_LightSlices[i], shadowmapWidth, shadowmapHeight);
-                    
+                    //cullResults 这个cullResults导致shadow必须每帧都算。。
+                    //有没有办法静态灯光只算一次，也就是对灯光进行cull,这还涉及到场景管理了
                     var settings = new DrawShadowsSettings(cullResults, shadowLightIndex);
                     Vector4 shadowBias = ShadowUtils.GetShadowBias(ref shadowLightData.shadowData, shadowLightIndex,
                             ref shadowData, m_LightSlices[i].projectionMatrix, m_LightSlices[i].resolution);

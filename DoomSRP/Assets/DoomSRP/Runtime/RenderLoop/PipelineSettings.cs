@@ -35,6 +35,8 @@ namespace DoomSRP
 
         public int msaaSampleCount = 1;
 
+        public bool supportsSoftShadows = false;
+
         public void Check()
         {
             Debug.Assert(NumClusterX % 4 == 0);

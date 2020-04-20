@@ -11,7 +11,7 @@ namespace DoomSRP
     {
         [HideInInspector] [SerializeField] public SpritesAtlas spritesAtlas;
 
-        BetterList<ProjectorLight> lights = new BetterList<ProjectorLight>();
+        public BetterList<ProjectorLight> lights = new BetterList<ProjectorLight>();
         private int m_NumVisibleLights = 0;
 
         public int VisibleLight { get { return m_NumVisibleLights; } set { m_NumVisibleLights = value; } }
@@ -85,18 +85,19 @@ namespace DoomSRP
             }
         }
 
-        public void RebuildLightsList(List<VisibleLight> visibleLights, CameraData cameraData,PipelineSettings pipelineSettings)
+        public void RebuildLightsList(List<VisibleLight> visibleLights, CameraData cameraData,PipelineSettings pipelineSettings,ref RenderingData renderingData)
         {
             lights.Clear();
             var unityLights = visibleLights;
             VisibleLight = 0;
-            int i = 0;
-            foreach (var ul in unityLights)
-            {
-                var pl = ul.light.GetComponent<ProjectorLight>();
-                if(pl != null)
-                    lights.Add(pl);
 
+            bool softShadow = false;
+            for(int i = 0; i < unityLights.Count; ++i)
+            {
+                var ul = unityLights[i];
+                var pl = ul.light.GetComponent<ProjectorLight>();
+                if (pl != null)
+                    lights.Add(pl);
                 var ifLight = pl;
                 if (ifLight.spritesAtlas != spritesAtlas)
                 {
@@ -119,15 +120,17 @@ namespace DoomSRP
                     lightDataForShadow.shadowData = lightDataInAll.shadowData;
                     lightDataForShadow.visibleLight = ul;
                     lightDataForShadow.projectorLight = ifLight;
+                    lightDataForShadow.unityLightIndex = i;
                     LightsDataForShadow.Add(lightDataForShadow);
+
+                    softShadow |= ifLight.softShadow;
                 }
-                ++i;
-                if(i >= NumMaxLights)
+                if (i >= NumMaxLights)
                 {
                     break;
                 }
             }
-
+            renderingData.shadowData.supportsSoftShadows = softShadow;
             culsterDataGenerator.Run(cameraData, pipelineSettings,this);
             lightLoopLightsData.LightsDatasBuf.SetData(LightsDataList);
             tileAndClusterData.itemsIDListBuf.SetData(culsterDataGenerator.ResultItemsIDList);

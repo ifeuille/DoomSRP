@@ -145,6 +145,9 @@ namespace DoomSRP
 
         public LightLoop lightLoop = new LightLoop();
         public static DoomSRPPipeline doomSRPPipeline;
+
+        static List<Vector4> m_ShadowBiasData = new List<Vector4>();
+
         public LightLoop GetLightLoop()
         {
             if(doomSRPPipeline != null) { return doomSRPPipeline.lightLoop; }
@@ -227,8 +230,6 @@ namespace DoomSRP
 
                 RenderingData renderingData;
                 InitializeRenderingData(settings, ref cameraData, ref cullResults, ref lightloop, out renderingData);
-                pipelineInstance.GetLightLoop().RebuildLightsList(cullResults.visibleLights, cameraData, settings);
-
                 var setupToUse = setup;
                 if (setupToUse == null)
                     setupToUse = defaultRendererSetup;
@@ -255,18 +256,18 @@ namespace DoomSRP
             renderingData.settings = settings;
             //todo 自定义光源裁剪，因为这个光源是projector光源
             InitializeLightData(settings, visibleLights, lightloop, out renderingData.lightData);
-
-            //InitializeShadowData(settings, visibleLights, mainLightCastShadows, additionalLightsCastShadows && !renderingData.lightData.shadeAdditionalLightsPerVertex, out renderingData.shadowData);
             renderingData.supportsDynamicBatching = false;// settings.supportsDynamicBatching;
 
             //todo: settings
             renderingData.shadowData = new ShadowData();
-            renderingData.shadowData.lightsShadowmapHeight = 1024;
-            renderingData.shadowData.lightsShadowmapWidth = 1024;
+            renderingData.shadowData.lightsShadowmapHeight = 2048;
+            renderingData.shadowData.lightsShadowmapWidth = 2048;
             renderingData.shadowData.supportsLightShadows = true;
             renderingData.shadowData.supportsSoftShadows = false;
             renderingData.shadowData.shadowmapDepthBufferBits = 24;
 
+            lightloop.RebuildLightsList(cullResults.visibleLights, cameraData, settings, ref renderingData);
+            InitializeShadowData(settings, lightloop, ref renderingData.shadowData);
         }
         static void InitializeLightData(PipelineSettings settings, List<VisibleLight> visibleLights, LightLoop lightloop, out LightsData lightData)
         {
@@ -283,6 +284,27 @@ namespace DoomSRP
             //lightData.mainLightIndex = 0;
         }
 
+        static void InitializeShadowData(PipelineSettings settings, LightLoop lightLoop, ref ShadowData shadowData)
+        {
+            m_ShadowBiasData.Clear();
+            var lights = lightLoop.lights;
+            for(int i = 0; i < lights.size; ++i)
+            {
+                var light = lights[i];
+                m_ShadowBiasData.Add(new Vector4(light.shadowBias, light.shadowNormalBias, 0.0f, 0.0f));
+            }
+            
+            shadowData.bias = m_ShadowBiasData;
+
+            // Until we can have keyword stripping forcing single cascade hard shadows on gles2
+            bool supportsScreenSpaceShadows = SystemInfo.graphicsDeviceType != GraphicsDeviceType.OpenGLES2;
+
+            // we resolve shadows in screenspace when cascades are enabled to save ALU as computing cascade index + shadowCoord on fragment is expensive
+            shadowData.requiresScreenSpaceShadowResolve = supportsScreenSpaceShadows;
+            shadowData.supportsSoftShadows = settings.supportsSoftShadows && shadowData.supportsSoftShadows;
+            shadowData.shadowmapDepthBufferBits = 16;
+        }
+
         static void SetupPerCameraShaderConstants(CameraData cameraData)
         {            
             Camera camera = cameraData.camera;
@@ -297,6 +319,7 @@ namespace DoomSRP
             //Shader.SetGlobalMatrix(PerCameraBuffer._InvCameraViewProj, invViewProjMatrix);
 
         }
+
         void SortCameras(Camera[] cameras)
         {
             Array.Sort(cameras, (lhs, rhs) => (int)(lhs.depth - rhs.depth));
