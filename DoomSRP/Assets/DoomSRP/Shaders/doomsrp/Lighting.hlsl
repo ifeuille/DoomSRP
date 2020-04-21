@@ -2,7 +2,11 @@
 #define _IFPIPELINE_LIGHTING_HLSL
 #include "Common.hlsl"
 #include "Cluster.hlsl"
-
+#ifdef _TEXTUREARRAY_SHAODWSMAP
+#include "TextureArrayShadows.hlsl"
+#else
+#include "AtlasShadows.hlsl"
+#endif
 struct LightData
 {
 	float3 pos;

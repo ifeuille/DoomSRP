@@ -177,6 +177,49 @@ namespace DoomSRP
             GUILayout.EndVertical();
         }
 
+        void DrawShadow()
+        {
+
+            //[HideInInspector] [SerializeField] public bool biasCustom = false;
+            //[Range(0, 10)] [HideInInspector] [SerializeField] public float shadowBias = 1.0f;
+            //[Range(0, 10)] [HideInInspector] [SerializeField] public float shadowNormalBias = 1.0f;
+            //[Range(0.1f, 10)] [HideInInspector] [SerializeField] public float shadowNearPlane = 0.01f;
+            //[HideInInspector] [SerializeField] public bool softShadow = false;
+
+            ProjectorLight l = target as ProjectorLight;
+            if (!l.lightParms_Shadow) return;
+            GUILayout.Label("Shadow");
+            GUILayout.BeginVertical("box");
+            l.biasCustom = EditorGUILayout.Toggle("Custom Bias", l.biasCustom);
+            if(l.biasCustom)
+            {
+                GUILayout.BeginVertical("box");
+                SerializedProperty sb1 = IFPipelineEditorTools.DrawProperty("Bias", serializedObject, "shadowBias", GUILayout.MinWidth(20f));
+                if (sb1.floatValue != l.shadowBias)
+                {
+                    l.shadowBias = sb1.floatValue;
+                }
+                sb1 = IFPipelineEditorTools.DrawProperty("Normal Bias", serializedObject, "shadowNormalBias", GUILayout.MinWidth(20f));
+                if (sb1.floatValue != l.shadowNormalBias)
+                {
+                    l.shadowNormalBias = sb1.floatValue;
+                }
+                GUILayout.EndVertical();
+            }
+            SerializedProperty sb = IFPipelineEditorTools.DrawProperty("Near Plane", serializedObject, "shadowNearPlane", GUILayout.MinWidth(20f));
+            if (sb.floatValue != l.shadowNearPlane)
+            {
+                l.shadowNearPlane = sb.floatValue;
+            }
+            sb = IFPipelineEditorTools.DrawProperty("Soft Shadow", serializedObject, "softShadow", GUILayout.MinWidth(20f));
+            if (sb.boolValue != l.softShadow)
+            {
+                l.softShadow = sb.boolValue;
+            }
+
+            GUILayout.EndVertical();
+        }
+
         override public void OnPreviewGUI(Rect rect, GUIStyle background)
         {
             ProjectorLight l = target as ProjectorLight;
@@ -194,6 +237,7 @@ namespace DoomSRP
             DrawProjector();
             DrawAtlas();
             DrawLightProperties();
+            DrawShadow();
             OnPreviewGUI(GUILayoutUtility.GetRect(240, 240), EditorStyles.whiteLabel);
             //l.iFPipelineProjector.SetDirty();
             if (GUI.changed)

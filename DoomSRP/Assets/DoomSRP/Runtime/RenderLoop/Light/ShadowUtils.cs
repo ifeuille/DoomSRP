@@ -116,8 +116,12 @@ namespace DoomSRP
             shadowSliceData.shadowTransform = sliceTransform * shadowSliceData.shadowTransform;
         }
 
-        public static Vector4 GetShadowBias(/*ref VisibleLight shadowLight,*/ ref LightData_Shadow lightShadowData, int shadowLightIndex, ref ShadowData shadowData, Matrix4x4 lightProjectionMatrix, float shadowResolution)
+        public static Vector4 GetShadowBias(/*ref VisibleLight shadowLight,*/
+            ref LightData_Shadow lightShadowData, int shadowLightIndex, ref ShadowData shadowData, 
+            out Matrix4x4 lightProjectionMatrix, out Matrix4x4 lightViewMatrix, float shadowResolution)
         {
+            lightProjectionMatrix = lightShadowData.projMatrix;
+            lightViewMatrix = lightShadowData.viewMatrix;
             if (shadowLightIndex < 0 || shadowLightIndex >= shadowData.bias.Count)
             {
                 Debug.LogWarning(string.Format("{0} is not a valid light index.", shadowLightIndex));

@@ -46,17 +46,11 @@ namespace DoomSRP
         [Range(0, 20)] [HideInInspector] [SerializeField] public float specMultiplier = 1f;
         [Range(0, 20)] [HideInInspector] [SerializeField] public float shadowBleedReduce = 0f;
 
-
-        //     Shadow mapping constant bias.
-        public float shadowBias = 1.0f;
-
-        //     Shadow mapping normal-based bias.
-        public float shadowNormalBias = 1.0f;
-
-        //     Near plane value to use for shadow frustums.
-        public float shadowNearPlane = 0.01f;
-
-        public bool softShadow = false;
+        [HideInInspector] [SerializeField] public bool biasCustom = false;
+        [Range(0, 10)] [HideInInspector] [SerializeField] public float shadowBias = 1.0f;
+        [Range(0, 10)] [HideInInspector] [SerializeField] public float shadowNormalBias = 1.0f;
+        [Range(0.1f, 10)] [HideInInspector] [SerializeField] public float shadowNearPlane = 0.01f;
+        [HideInInspector] [SerializeField] public bool softShadow = false;
 
 
         /** 

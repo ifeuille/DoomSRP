@@ -117,7 +117,7 @@ namespace DoomSRP
                 if (ifLight.lightParms_Shadow)
                 {
                     LightDataForShadow lightDataForShadow = new LightDataForShadow();
-                    lightDataForShadow.lightIndex = j;
+                    lightDataForShadow.lightIndex = j++;
                     lightDataForShadow.shadowData = lightDataInAll.shadowData;
                     lightDataForShadow.visibleLight = ul;
                     lightDataForShadow.projectorLight = ifLight;
@@ -126,11 +126,6 @@ namespace DoomSRP
 
                     softShadow |= ifLight.softShadow;
                 }
-                if (j >= NumMaxLights)
-                {
-                    break;
-                }
-                ++j;
             }
             renderingData.shadowData.supportsSoftShadows = softShadow;
             culsterDataGenerator.Run(cameraData, pipelineSettings,this);

@@ -94,7 +94,7 @@ namespace DoomSRP
 
             for(int i = 0; i < shadowLightDataList.size && m_ShadowCastingLightIndices.Count < maxShadowLightsNum; ++i)
             {
-                m_ShadowCastingLightIndices.Add(shadowLightDataList[i].unityLightIndex);
+                m_ShadowCastingLightIndices.Add(shadowLightDataList[i].lightIndex);
             }
 
             int shadowCastingLightsCount = m_ShadowCastingLightIndices.Count;
@@ -190,7 +190,7 @@ namespace DoomSRP
                     // from HDSRP : TODO remove DrawShadowSettings, lightIndex and splitData when scriptable culling is available
                     var settings = new DrawShadowsSettings(cullResults, 0);
                     Vector4 shadowBias = ShadowUtils.GetShadowBias(ref shadowLightData.shadowData, shadowLightIndex,
-                            ref shadowData, m_LightSlices[i].projectionMatrix, m_LightSlices[i].resolution);
+                            ref shadowData, out m_LightSlices[i].projectionMatrix, out m_LightSlices[i].viewMatrix, m_LightSlices[i].resolution);
                     ShadowUtils.SetupShadowCasterConstantBuffer(cmd, ref shadowLightData.visibleLight, shadowBias);//?
                     ShadowUtils.RenderShadowSlice(cmd, ref context, ref m_LightSlices[i],
                         ref settings, m_LightSlices[i].projectionMatrix, m_LightSlices[i].viewMatrix);
