@@ -112,7 +112,7 @@ half3 UnpackNormalScale(half4 packedNormal, half bumpScale)
 half3 SampleNormal(float2 uv, half scale = 1.0h)
 {
 #if _NORMALMAP
-	half4 n = SAMPLE_TEXTURE2D(_BumpMap, uv);
+	half4 n = SAMPLE_TEXTURE2D(_BumpMap,sampler_BumpMap, uv);
 #if BUMP_SCALE_NOT_SUPPORTED
 	return UnpackNormal(n);
 #else

@@ -117,7 +117,10 @@ namespace DoomSRP
     public struct LightData
     {
         public Vector3 pos;
-        public uint lightParms;//[2] shadow?,[5] circle area light,[6] rect area light,[8] diffuse?
+        //[2] shadow?,[5] circle area light,[6] rect area light,[8] diffuse?
+        //[17~21]:/63 shadow_fade
+        //[31~22]:灯光索引
+        public uint lightParms;
         public Vector4 posShadow;
         public Vector4 falloffR;
         public Vector4 projS;

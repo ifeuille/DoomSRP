@@ -260,8 +260,8 @@ namespace DoomSRP
 
             //todo: settings
             renderingData.shadowData = new ShadowData();
-            renderingData.shadowData.lightsShadowmapHeight = 2048;
-            renderingData.shadowData.lightsShadowmapWidth = 2048;
+            renderingData.shadowData.lightsShadowmapHeight = 1024;
+            renderingData.shadowData.lightsShadowmapWidth = 1024;
             renderingData.shadowData.supportsLightShadows = true;
             renderingData.shadowData.supportsSoftShadows = false;
             renderingData.shadowData.shadowmapDepthBufferBits = 24;

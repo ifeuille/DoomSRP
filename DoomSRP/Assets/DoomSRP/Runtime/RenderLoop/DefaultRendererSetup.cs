@@ -88,7 +88,7 @@ namespace DoomSRP
             Camera camera = renderingData.cameraData.camera;
             camera.GetComponents(m_BeforeRenderPasses);
 
-            renderer.SetupPerObjectLightIndices(ref renderingData.cullResults, ref renderingData.lightData);
+            renderer.SetupPerObjectLightIndices(ref renderingData.cullResults, ref renderingData);
             RenderTextureDescriptor baseDescriptor = ScriptableRenderer.CreateRenderTextureDescriptor(ref renderingData.cameraData);
             RenderTextureDescriptor shadowDescriptor = baseDescriptor;
             ClearFlag clearFlag = ScriptableRenderer.GetCameraClearFlag(renderingData.cameraData.camera);

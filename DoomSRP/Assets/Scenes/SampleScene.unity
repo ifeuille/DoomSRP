@@ -203,6 +203,10 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  shadowBias: 1
+  shadowNormalBias: 1
+  shadowNearPlane: 0.01
+  softShadow: 0
   lightColor: {r: 0.4716981, g: 0.03337486, b: 0.23230986, a: 1}
   lightParms_Shadow: 0
   lightParms_Rect: 0
@@ -379,8 +383,12 @@ MonoBehaviour:
   intensity: 1.07
   specMultiplier: 1
   shadowBleedReduce: 0
+  shadowBias: 1
+  shadowNormalBias: 1
+  shadowNearPlane: 0.01
+  softShadow: 0
   lightColor: {r: 0.6509804, g: 0.65882355, b: 0.65882355, a: 1}
-  lightParms_Shadow: 0
+  lightParms_Shadow: 1
   lightParms_Rect: 0
   lightParms_Circle: 0
   lightParms_SkipSkipModel: 1
@@ -1165,6 +1173,10 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  shadowBias: 1
+  shadowNormalBias: 1
+  shadowNearPlane: 0.01
+  softShadow: 0
   lightColor: {r: 0.040583838, g: 0.1509434, b: 0.044482607, a: 1}
   lightParms_Shadow: 0
   lightParms_Rect: 0
@@ -1395,6 +1407,10 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  shadowBias: 1
+  shadowNormalBias: 1
+  shadowNearPlane: 0.01
+  softShadow: 0
   lightColor: {r: 1, g: 0.74293566, b: 0.2688679, a: 1}
   lightParms_Shadow: 0
   lightParms_Rect: 0
@@ -1533,6 +1549,10 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  shadowBias: 1
+  shadowNormalBias: 1
+  shadowNearPlane: 0.01
+  softShadow: 0
   lightColor: {r: 1, g: 0.74293566, b: 0.2688679, a: 1}
   lightParms_Shadow: 0
   lightParms_Rect: 0
@@ -1855,6 +1875,10 @@ MonoBehaviour:
   intensity: 2.79
   specMultiplier: 1
   shadowBleedReduce: 0
+  shadowBias: 1
+  shadowNormalBias: 1
+  shadowNearPlane: 0.01
+  softShadow: 0
   lightColor: {r: 0.8584906, g: 0.16602883, b: 0.6830222, a: 1}
   lightParms_Shadow: 0
   lightParms_Rect: 0
@@ -2071,6 +2095,10 @@ MonoBehaviour:
   intensity: 4.12
   specMultiplier: 1
   shadowBleedReduce: 0
+  shadowBias: 1
+  shadowNormalBias: 1
+  shadowNearPlane: 0.01
+  softShadow: 0
   lightColor: {r: 1, g: 0.079761535, b: 0, a: 1}
   lightParms_Shadow: 0
   lightParms_Rect: 0
@@ -2223,6 +2251,10 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  shadowBias: 1
+  shadowNormalBias: 1
+  shadowNearPlane: 0.01
+  softShadow: 0
   lightColor: {r: 0.19842473, g: 0.38160405, b: 0.46226418, a: 1}
   lightParms_Shadow: 0
   lightParms_Rect: 0

@@ -34,10 +34,11 @@ namespace DoomSRP
         bool m_SupportsBoxFilterForShadows;
         private RenderTargetHandle destination { get; set; }
 
-        BetterList<int> m_ShadowCastingLightIndices = new BetterList<int>();
+        List<int> m_ShadowCastingLightIndices = new List<int>();
         ShadowSliceData[] m_LightSlices;
         float[] m_LightsShadowStrength;
         Matrix4x4[] m_LightShadowMatrices;
+        private ComputeBuffer lightShadowParams;
 
         public AtlasShadowsPass()
         {
@@ -91,12 +92,12 @@ namespace DoomSRP
             var lightDataList = renderingData.lightData.lightLoop.LightsDataList;
 
 
-            for(int i = 0; i < shadowLightDataList.size && m_ShadowCastingLightIndices.size < maxShadowLightsNum; ++i)
+            for(int i = 0; i < shadowLightDataList.size && m_ShadowCastingLightIndices.Count < maxShadowLightsNum; ++i)
             {
                 m_ShadowCastingLightIndices.Add(shadowLightDataList[i].unityLightIndex);
             }
 
-            int shadowCastingLightsCount = m_ShadowCastingLightIndices.size;
+            int shadowCastingLightsCount = m_ShadowCastingLightIndices.Count;
             if (shadowCastingLightsCount == 0) return false;
             int sliceResolution = ShadowUtils.GetMaxTileResolutionInAtlas(m_ShadowmapWidth, m_ShadowmapHeight, shadowCastingLightsCount);
             bool anyShadows = false;
@@ -135,6 +136,8 @@ namespace DoomSRP
         {
             if (renderer == null)
                 throw new ArgumentNullException("renderer");
+
+            lightShadowParams = renderer.lightShadowParams;
 
             if (renderingData.shadowData.supportsLightShadows)
                 RenderProjectorShadowmapAtlas(ref context, ref renderingData.cullResults, ref renderingData.lightData, ref renderingData.shadowData);
@@ -175,16 +178,17 @@ namespace DoomSRP
                 SetRenderTarget(cmd, m_LightsShadowmapTexture, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store,
                     ClearFlag.Depth, Color.black, TextureDimension.Tex2D);
 
-                for (int i = 0; i < m_ShadowCastingLightIndices.size; ++i)
+                for (int i = 0; i < m_ShadowCastingLightIndices.Count; ++i)
                 {
                     int shadowLightIndex = m_ShadowCastingLightIndices[i];
                     LightDataForShadow shadowLightData = shadowLightDataList[shadowLightIndex];
                     
-                    if (m_ShadowCastingLightIndices.size > 1)
+                    if (m_ShadowCastingLightIndices.Count > 1)
                         ShadowUtils.ApplySliceTransform(ref m_LightSlices[i], shadowmapWidth, shadowmapHeight);
                     //cullResults 这个cullResults导致shadow必须每帧都算。。
                     //有没有办法静态灯光只算一次，也就是对灯光进行cull,这还涉及到场景管理了
-                    var settings = new DrawShadowsSettings(cullResults, shadowLightIndex);
+                    // from HDSRP : TODO remove DrawShadowSettings, lightIndex and splitData when scriptable culling is available
+                    var settings = new DrawShadowsSettings(cullResults, 0);
                     Vector4 shadowBias = ShadowUtils.GetShadowBias(ref shadowLightData.shadowData, shadowLightIndex,
                             ref shadowData, m_LightSlices[i].projectionMatrix, m_LightSlices[i].resolution);
                     ShadowUtils.SetupShadowCasterConstantBuffer(cmd, ref shadowLightData.visibleLight, shadowBias);//?
@@ -208,14 +212,18 @@ namespace DoomSRP
         {
             for (int i = 0; i < m_LightSlices.Length; ++i)
                 m_LightShadowMatrices[i] = m_LightSlices[i].shadowTransform;
-
+            if(lightShadowParams != null)
+            {
+                lightShadowParams.SetData(m_LightShadowMatrices);
+                cmd.SetGlobalBuffer(ShadowsConstantBuffer._LightsWorldToShadow, lightShadowParams);
+            }
             float invShadowAtlasWidth = 1.0f / shadowData.lightsShadowmapWidth;
             float invShadowAtlasHeight = 1.0f / shadowData.lightsShadowmapHeight;
             float invHalfShadowAtlasWidth = 0.5f * invShadowAtlasWidth;
             float invHalfShadowAtlasHeight = 0.5f * invShadowAtlasHeight;
             
             cmd.SetGlobalTexture(destination.id, m_LightsShadowmapTexture);
-            cmd.SetGlobalMatrixArray(ShadowsConstantBuffer._LightsWorldToShadow, m_LightShadowMatrices);
+            //cmd.SetGlobalMatrixArray(ShadowsConstantBuffer._LightsWorldToShadow, m_LightShadowMatrices);
             cmd.SetGlobalFloatArray(ShadowsConstantBuffer._ShadowStrength, m_LightsShadowStrength);
             cmd.SetGlobalVector(ShadowsConstantBuffer._ShadowOffset0, new Vector4(-invHalfShadowAtlasWidth, -invHalfShadowAtlasHeight, 0.0f, 0.0f));
             cmd.SetGlobalVector(ShadowsConstantBuffer._ShadowOffset1, new Vector4(invHalfShadowAtlasWidth, -invHalfShadowAtlasHeight, 0.0f, 0.0f));

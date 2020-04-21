@@ -146,7 +146,7 @@ lightingInput_t PipeLighting (lightingInput_t inputs, uint lightsMin, uint light
 		float shadow = 1.0;
 		if ((light_parms & 4u) != 0u)
 		{
-			//TODO shadow
+			shadow = GetShadowMask (inputs, light_parms);
 		}
 		uint param_159 = lightParms.colorPacked;
 		float3 light_color = (unpackRGBE(param_159) * shadow);

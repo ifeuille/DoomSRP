@@ -13,7 +13,8 @@ struct shadowparms_t
 	float4 shadowAtlasScaleBias;
 };
 
-StructuredBuffer<shadowparms_t> _ShadowsParms;
+//StructuredBuffer<shadowparms_t> _ShadowsParms;
+StructuredBuffer<float4x4> _LightsWorldToShadow;
 TEXTURE2D_SHADOW (_LightsShadowmapTexture);
 SAMPLER_CMP (sampler_LightsShadowmapTexture);
 
@@ -33,12 +34,17 @@ float GetShadowMask (lightingInput_t inputs, uint light_parms)
 		float4 pos;
 		pos .xyz = inputs.position + (inputs.normal * normal_bias_scale);
 		pos.w = 1;
+#if 0
 		shadowparms_t shadow_parms = _ShadowsParms[(light_parms >> uint(22))];
 		float4 shadowTC_1 = mul (shadow_parms.shadowLight, pos);
 		shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
+#else
+		float4 shadowTC_1 = mul (_LightsWorldToShadow[(light_parms >> uint(22))], pos);
+		//shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
+#endif
 		if (shadowTC_1.x > 0 && shadowTC_1.x < 1 && shadowTC_1.y > 0 && shadowTC_1.y < 1)
 		{
-			shadowTC_1.xy = (shadowTC_1.xy * shadow_parms.shadowAtlasScaleBias.xy) + shadow_parms.shadowAtlasScaleBias.zw;
+			//shadowTC_1.xy = (shadowTC_1.xy * shadow_parms.shadowAtlasScaleBias.xy) + shadow_parms.shadowAtlasScaleBias.zw;
 #ifndef _SHADOWS_SOFT
 			real4 attenuation4;
 			attenuation4.x = SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, shadowTC_1.xyz);

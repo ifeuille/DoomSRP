@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
@@ -10,6 +11,8 @@ namespace DoomSRP
     public sealed class ScriptableRenderer
     {
         public ComputeBuffer perObjectLightIndices;
+        public ComputeBuffer lightShadowParams;
+
 
         static Mesh s_FullscreenMesh = null;
         static Mesh fullscreenMesh
@@ -83,6 +86,11 @@ namespace DoomSRP
             {
                 perObjectLightIndices.Release();
                 perObjectLightIndices = null;
+            }
+            if(lightShadowParams != null)
+            {
+                lightShadowParams.Release();
+                lightShadowParams = null;
             }
 
             for (int i = 0; i < m_Materials.Length; ++i)
@@ -247,10 +255,17 @@ namespace DoomSRP
             CommandBufferPool.Release(cmd);
         }
 
-        public void SetupPerObjectLightIndices(ref CullResults cullResults, ref LightsData lightData)
+        public void SetupPerObjectLightIndices(ref CullResults cullResults, ref RenderingData lightData)
         {
+            if (lightShadowParams == null)
+            {
+                lightShadowParams = new ComputeBuffer(lightData.settings.MaxShadowLightsNum, sizeof(float)*16);
+            }
+            List<VisibleLight> visibleLights = lightData.lightData.visibleLights;
+            var lightLoop = lightData.lightData.lightLoop;
 
-            List<VisibleLight> visibleLights = lightData.visibleLights;
+            //GC?
+#if false
             int[] perObjectLightIndexMap = cullResults.GetLightIndexMap();
 
             int directionalLightsCount = 0;
@@ -299,6 +314,7 @@ namespace DoomSRP
 
                 cullResults.FillLightIndices(perObjectLightIndices);
             }
+#endif
         }
     }
 }

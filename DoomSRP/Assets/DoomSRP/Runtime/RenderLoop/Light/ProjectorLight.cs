@@ -48,15 +48,15 @@ namespace DoomSRP
 
 
         //     Shadow mapping constant bias.
-        public float shadowBias { get; set; }
+        public float shadowBias = 1.0f;
 
         //     Shadow mapping normal-based bias.
-        public float shadowNormalBias { get; set; }
+        public float shadowNormalBias = 1.0f;
 
         //     Near plane value to use for shadow frustums.
-        public float shadowNearPlane { get; set; }
+        public float shadowNearPlane = 0.01f;
 
-        public bool softShadow { get; set; }
+        public bool softShadow = false;
 
 
         /** 
@@ -279,8 +279,9 @@ namespace DoomSRP
                 {
                     shadowData.projMatrix = iFPipelineProjector.GetProjectorSettings.projection;
                     shadowData.viewMatrix = iFPipelineProjector.GetProjectorSettings.viewMatrix;
-
+#if UNITY_EDITOR
                     shadowData.planes = cacheLightData.sFiniteLightBound.planes;
+#endif
                 }
                 lightDataInAll.shadowData = shadowData;
             }

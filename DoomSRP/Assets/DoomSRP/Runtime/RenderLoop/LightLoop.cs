@@ -90,14 +90,15 @@ namespace DoomSRP
             lights.Clear();
             var unityLights = visibleLights;
             VisibleLight = 0;
-
+            LightsDataForShadow.Clear();
             bool softShadow = false;
+            int j = 0;
             for(int i = 0; i < unityLights.Count; ++i)
             {
                 var ul = unityLights[i];
                 var pl = ul.light.GetComponent<ProjectorLight>();
-                if (pl != null)
-                    lights.Add(pl);
+                if (pl == null) continue;
+                lights.Add(pl);
                 var ifLight = pl;
                 if (ifLight.spritesAtlas != spritesAtlas)
                 {
@@ -116,7 +117,7 @@ namespace DoomSRP
                 if (ifLight.lightParms_Shadow)
                 {
                     LightDataForShadow lightDataForShadow = new LightDataForShadow();
-                    lightDataForShadow.lightIndex = i;
+                    lightDataForShadow.lightIndex = j;
                     lightDataForShadow.shadowData = lightDataInAll.shadowData;
                     lightDataForShadow.visibleLight = ul;
                     lightDataForShadow.projectorLight = ifLight;
@@ -125,10 +126,11 @@ namespace DoomSRP
 
                     softShadow |= ifLight.softShadow;
                 }
-                if (i >= NumMaxLights)
+                if (j >= NumMaxLights)
                 {
                     break;
                 }
+                ++j;
             }
             renderingData.shadowData.supportsSoftShadows = softShadow;
             culsterDataGenerator.Run(cameraData, pipelineSettings,this);
