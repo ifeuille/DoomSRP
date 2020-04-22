@@ -203,6 +203,7 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  biasCustom: 0
   shadowBias: 1
   shadowNormalBias: 1
   shadowNearPlane: 0.01
@@ -383,6 +384,7 @@ MonoBehaviour:
   intensity: 1.07
   specMultiplier: 1
   shadowBleedReduce: 0
+  biasCustom: 0
   shadowBias: 1
   shadowNormalBias: 1
   shadowNearPlane: 0.01
@@ -1173,12 +1175,13 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  biasCustom: 0
   shadowBias: 1
   shadowNormalBias: 1
   shadowNearPlane: 0.01
   softShadow: 0
   lightColor: {r: 0.040583838, g: 0.1509434, b: 0.044482607, a: 1}
-  lightParms_Shadow: 0
+  lightParms_Shadow: 1
   lightParms_Rect: 0
   lightParms_Circle: 0
   lightParms_SkipSkipModel: 1
@@ -1407,6 +1410,7 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  biasCustom: 0
   shadowBias: 1
   shadowNormalBias: 1
   shadowNearPlane: 0.01
@@ -1549,6 +1553,7 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  biasCustom: 0
   shadowBias: 1
   shadowNormalBias: 1
   shadowNearPlane: 0.01
@@ -1875,6 +1880,7 @@ MonoBehaviour:
   intensity: 2.79
   specMultiplier: 1
   shadowBleedReduce: 0
+  biasCustom: 0
   shadowBias: 1
   shadowNormalBias: 1
   shadowNearPlane: 0.01
@@ -2095,12 +2101,13 @@ MonoBehaviour:
   intensity: 4.12
   specMultiplier: 1
   shadowBleedReduce: 0
+  biasCustom: 0
   shadowBias: 1
   shadowNormalBias: 1
   shadowNearPlane: 0.01
   softShadow: 0
   lightColor: {r: 1, g: 0.079761535, b: 0, a: 1}
-  lightParms_Shadow: 0
+  lightParms_Shadow: 1
   lightParms_Rect: 0
   lightParms_Circle: 0
   lightParms_SkipSkipModel: 1
@@ -2251,6 +2258,7 @@ MonoBehaviour:
   intensity: 7.15
   specMultiplier: 1
   shadowBleedReduce: 0
+  biasCustom: 0
   shadowBias: 1
   shadowNormalBias: 1
   shadowNearPlane: 0.01

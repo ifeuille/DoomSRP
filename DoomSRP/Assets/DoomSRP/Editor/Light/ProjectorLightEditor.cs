@@ -12,7 +12,7 @@ public class ProjectorLightEditor : Editor
 {
     override public void OnInspectorGUI()
     {
-
+        //base.OnInspectorGUI();
     }
 }
 
@@ -124,6 +124,7 @@ namespace DoomSRP
         {
             EditorGUILayout.Space();
             ProjectorLight l = target as ProjectorLight;
+
             GUILayout.Label("Properties");
             GUILayout.BeginVertical("box");
 
@@ -187,7 +188,14 @@ namespace DoomSRP
             //[HideInInspector] [SerializeField] public bool softShadow = false;
 
             ProjectorLight l = target as ProjectorLight;
-            if (!l.lightParms_Shadow) return;
+            if (!l.lightParms_Shadow)
+            {
+                if (l.light.shadows != LightShadows.None)
+                {
+                    l.light.shadows = LightShadows.None;
+                }
+                return;
+            }
             GUILayout.Label("Shadow");
             GUILayout.BeginVertical("box");
             l.biasCustom = EditorGUILayout.Toggle("Custom Bias", l.biasCustom);
@@ -198,11 +206,13 @@ namespace DoomSRP
                 if (sb1.floatValue != l.shadowBias)
                 {
                     l.shadowBias = sb1.floatValue;
+                    l.light.shadowBias = sb1.floatValue;
                 }
                 sb1 = IFPipelineEditorTools.DrawProperty("Normal Bias", serializedObject, "shadowNormalBias", GUILayout.MinWidth(20f));
                 if (sb1.floatValue != l.shadowNormalBias)
                 {
                     l.shadowNormalBias = sb1.floatValue;
+                    l.light.shadowNormalBias = sb1.floatValue;
                 }
                 GUILayout.EndVertical();
             }
@@ -210,11 +220,17 @@ namespace DoomSRP
             if (sb.floatValue != l.shadowNearPlane)
             {
                 l.shadowNearPlane = sb.floatValue;
+                l.light.shadowNearPlane = sb.floatValue;
             }
             sb = IFPipelineEditorTools.DrawProperty("Soft Shadow", serializedObject, "softShadow", GUILayout.MinWidth(20f));
             if (sb.boolValue != l.softShadow)
             {
                 l.softShadow = sb.boolValue;
+                l.light.shadows = LightShadows.Soft;
+            }
+            else
+            {
+                l.light.shadows = LightShadows.Hard;
             }
 
             GUILayout.EndVertical();

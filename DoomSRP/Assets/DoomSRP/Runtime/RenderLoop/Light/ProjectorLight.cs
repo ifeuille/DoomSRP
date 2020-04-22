@@ -51,8 +51,7 @@ namespace DoomSRP
         [Range(0, 10)] [HideInInspector] [SerializeField] public float shadowNormalBias = 1.0f;
         [Range(0.1f, 10)] [HideInInspector] [SerializeField] public float shadowNearPlane = 0.01f;
         [HideInInspector] [SerializeField] public bool softShadow = false;
-
-
+ 
         /** 
          * Filter color of the light.
          * Note that this can change the light's effective intensity.
@@ -271,7 +270,7 @@ namespace DoomSRP
                 LightData_Shadow shadowData = new LightData_Shadow();
                 if(lightParms_Shadow)
                 {
-                    shadowData.projMatrix = iFPipelineProjector.GetProjectorSettings.projection;
+                    shadowData.projMatrix = iFPipelineProjector.GetProjectorSettings.projMatrix;
                     shadowData.viewMatrix = iFPipelineProjector.GetProjectorSettings.viewMatrix;
 #if UNITY_EDITOR
                     shadowData.planes = cacheLightData.sFiniteLightBound.planes;

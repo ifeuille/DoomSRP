@@ -188,7 +188,11 @@ namespace DoomSRP
                     //cullResults 这个cullResults导致shadow必须每帧都算。。
                     //有没有办法静态灯光只算一次，也就是对灯光进行cull,这还涉及到场景管理了
                     // from HDSRP : TODO remove DrawShadowSettings, lightIndex and splitData when scriptable culling is available
-                    var settings = new DrawShadowsSettings(cullResults, 0);
+                    // lightindex must be right otherwise unity will not render the light's shadow.
+                    var settings = new DrawShadowsSettings(cullResults, shadowLightData.unityLightIndex);
+                    var pos = shadowLightData.projectorLight.cacheTransform.position;
+                    var dis = shadowLightData.projectorLight.iFPipelineProjector.farClipPlane;
+                    settings.splitData.cullingSphere = new Vector4(pos.x, pos.y, pos.z, dis);
                     Vector4 shadowBias = ShadowUtils.GetShadowBias(ref shadowLightData.shadowData, shadowLightIndex,
                             ref shadowData, out m_LightSlices[i].projectionMatrix, out m_LightSlices[i].viewMatrix, m_LightSlices[i].resolution);
                     ShadowUtils.SetupShadowCasterConstantBuffer(cmd, ref shadowLightData.visibleLight, shadowBias);//?

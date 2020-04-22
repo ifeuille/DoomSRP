@@ -40,7 +40,7 @@ float GetShadowMask (lightingInput_t inputs, uint light_parms)
 		shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
 #else
 		float4 shadowTC_1 = mul (_LightsWorldToShadow[(light_parms >> uint(22))], pos);
-		//shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
+		shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
 #endif
 		if (shadowTC_1.x > 0 && shadowTC_1.x < 1 && shadowTC_1.y > 0 && shadowTC_1.y < 1)
 		{
