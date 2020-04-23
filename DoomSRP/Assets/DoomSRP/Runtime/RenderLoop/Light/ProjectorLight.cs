@@ -269,7 +269,7 @@ namespace DoomSRP
             {
                 LightData_Shadow shadowData = new LightData_Shadow();
                 if(lightParms_Shadow)
-                {
+                {                   
                     shadowData.projMatrix = iFPipelineProjector.GetProjectorSettings.projMatrix;
                     shadowData.viewMatrix = iFPipelineProjector.GetProjectorSettings.viewMatrix;
 #if UNITY_EDITOR
@@ -286,6 +286,22 @@ namespace DoomSRP
         {
             iFPipelineProjector.Update();
 #if UNITY_EDITOR
+            if(lightParms_Shadow)
+            {
+                if (softShadow)
+                {
+                    light.shadows = LightShadows.Soft;
+                }
+                else
+                {
+                    light.shadows = LightShadows.Hard;
+                }
+            }
+            else
+            {
+                light.shadows = LightShadows.None;
+            }
+          
             projSpriteData = spritesAtlas.GetSprite(mprojSpriteName);
             falloffSpriteData = spritesAtlas.GetSprite(mfalloffSpriteName);
 

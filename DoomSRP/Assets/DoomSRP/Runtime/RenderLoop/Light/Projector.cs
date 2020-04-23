@@ -224,32 +224,15 @@ namespace DoomSRP
             //projectSettings.falloffR = projectSettings.clipping.GetRow(2);//z/w
             projectSettings.falloffR = gpumatrix.GetRow(2);//z/w
 
-            projectSettings.projMatrix = GL.GetGPUProjectionMatrix(projectionMatrix,false);
-            projectSettings.viewMatrix = zscale * transform.localToWorldMatrix.inverse;
+            {
+                //view
+                Matrix4x4 view = zscale * transform.localToWorldMatrix.inverse;
+                projectSettings.projMatrix = GL.GetGPUProjectionMatrix(projectionMatrix, false);
+                projectSettings.viewMatrix = zscale * transform.localToWorldMatrix.inverse;
+            }
 
             return projectSettings;
         }
-        static Matrix4x4 ExtractSpotLightMatrix(VisibleLight vl, float nearPlane, float guardAngle, float aspectRatio, out Matrix4x4 view, out Matrix4x4 proj, out Matrix4x4 deviceProj, out Matrix4x4 vpinverse, out Vector4 lightDir, out ShadowSplitData splitData)
-        {
-            splitData = new ShadowSplitData();
-            splitData.cullingSphere.Set(0.0f, 0.0f, 0.0f, float.NegativeInfinity);
-            splitData.cullingPlaneCount = 0;
-            // get lightDir
-            lightDir = vl.light.transform.forward;
-            // calculate view
-            Matrix4x4 scaleMatrix = Matrix4x4.identity;
-            scaleMatrix.m22 = -1.0f;
-            view = scaleMatrix * vl.localToWorld.inverse;
-            // calculate projection
-            float fov = vl.spotAngle + guardAngle;
-            float nearZ = Mathf.Max(nearPlane, 0.0001f);
-            proj = Matrix4x4.Perspective(fov, aspectRatio, nearZ, vl.range);
-            // and the compound (deviceProj will potentially inverse-Z)
-            deviceProj = GL.GetGPUProjectionMatrix(proj, false);
-            InvertPerspective(ref deviceProj, ref view, out vpinverse);
-            return deviceProj * view;
-        }
-
         static void InvertPerspective(ref Matrix4x4 proj, ref Matrix4x4 view, out Matrix4x4 vpinv)
         {
             Matrix4x4 invview;
@@ -278,19 +261,8 @@ namespace DoomSRP
             invview.m13 = -(invview.m10 * view.m03 + invview.m11 * view.m13 + invview.m12 * view.m23);
             invview.m23 = -(invview.m20 * view.m03 + invview.m21 * view.m13 + invview.m22 * view.m23);
         }
-        static float CalcGuardAnglePerspective(float angleInDeg, float resolution, float filterWidth, float normalBiasMax, float guardAngleMaxInDeg)
-        {
-            float angleInRad = angleInDeg * 0.5f * Mathf.Deg2Rad;
-            float res = 2.0f / resolution;
-            float texelSize = Mathf.Cos(angleInRad) * res;
-            float beta = normalBiasMax * texelSize * 1.4142135623730950488016887242097f;
-            float guardAngle = Mathf.Atan(beta);
-            texelSize = Mathf.Tan(angleInRad + guardAngle) * res;
-            guardAngle = Mathf.Atan((resolution + Mathf.Ceil(filterWidth)) * texelSize * 0.5f) * 2.0f * Mathf.Rad2Deg - angleInDeg;
-            guardAngle *= 2.0f;
 
-            return guardAngle < guardAngleMaxInDeg ? guardAngle : guardAngleMaxInDeg;
-        }
+
         public static SPlanes GetCullingPlanes(Matrix4x4 frustumMatrix,Matrix4x4 objTrans)
         {
             // From the objects that we are rendering from this camera.

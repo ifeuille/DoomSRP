@@ -63,13 +63,13 @@ namespace DoomSRP
         {
             ShadowSplitData splitData = new ShadowSplitData();
             splitData.cullingSphere.Set(0.0f, 0.0f, 0.0f, float.NegativeInfinity);
-            splitData.cullingPlaneCount = 6;
-            for (int i = 0; i < 6; ++i)
-            {
-                var splane = shadowData.planes[i];
-                Plane plane = new Plane(splane.normal, splane.distance);
-                splitData.SetCullingPlane(i, plane);
-            }
+            splitData.cullingPlaneCount = 0;
+            //for (int i = 0; i < 6; ++i)
+            //{
+            //    var splane = shadowData.planes[i];
+            //    Plane plane = new Plane(splane.normal, splane.distance);
+            //    splitData.SetCullingPlane(i, plane);
+            //}
             shadowMatrix = GetShadowTransform(shadowData.projMatrix, shadowData.viewMatrix);
             return true;
         }

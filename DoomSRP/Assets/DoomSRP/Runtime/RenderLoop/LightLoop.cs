@@ -122,6 +122,12 @@ namespace DoomSRP
                     lightDataForShadow.visibleLight = ul;
                     lightDataForShadow.projectorLight = ifLight;
                     lightDataForShadow.unityLightIndex = i;
+
+                    //Matrix4x4 scaleMatrix = Matrix4x4.identity;
+                    ////scaleMatrix.m22 = -1.0f;
+                    //Matrix4x4 view = scaleMatrix * ul.localToWorld.inverse;
+                    //lightDataForShadow.shadowData.viewMatrix = view;
+
                     LightsDataForShadow.Add(lightDataForShadow);
 
                     softShadow |= ifLight.softShadow;
