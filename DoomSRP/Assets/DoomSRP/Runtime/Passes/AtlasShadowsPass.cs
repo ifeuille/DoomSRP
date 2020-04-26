@@ -34,7 +34,7 @@ namespace DoomSRP
         bool m_SupportsBoxFilterForShadows;
         private RenderTargetHandle destination { get; set; }
 
-        List<int> m_ShadowCastingLightIndices = new List<int>();
+        //List<int> m_ShadowCastingLightIndices = new List<int>();
         ShadowSliceData[] m_LightSlices;
         float[] m_LightsShadowStrength;
         Matrix4x4[] m_LightShadowMatrices;
@@ -78,33 +78,24 @@ namespace DoomSRP
                 m_LightSlices = new ShadowSliceData[maxVisibleShaodwLights];
                 m_LightsShadowStrength = new float[maxVisibleShaodwLights];
             }
-            m_ShadowCastingLightIndices.Clear();
-
 
             m_ShadowmapWidth = renderingData.shadowData.lightsShadowmapWidth;
             m_ShadowmapHeight = renderingData.shadowData.lightsShadowmapHeight;
             //var visibleLights = renderingData.lightData.visibleLights;
-            m_ShadowCastingLightIndices.Clear();
 
             int lightsCount = renderingData.lightData.lightLoop.VisibleLight;
             int maxShadowLightsNum = renderingData.settings.MaxShadowLightsNum;
             var shadowLightDataList = renderingData.lightData.lightLoop.LightsDataForShadow;
             var lightDataList = renderingData.lightData.lightLoop.LightsDataList;
 
-
-            for(int i = 0; i < shadowLightDataList.size && m_ShadowCastingLightIndices.Count < maxShadowLightsNum; ++i)
-            {
-                m_ShadowCastingLightIndices.Add(shadowLightDataList[i].lightIndex);
-            }
-
-            int shadowCastingLightsCount = m_ShadowCastingLightIndices.Count;
+            int shadowCastingLightsCount = shadowLightDataList.size;
             if (shadowCastingLightsCount == 0) return false;
             int sliceResolution = ShadowUtils.GetMaxTileResolutionInAtlas(m_ShadowmapWidth, m_ShadowmapHeight, shadowCastingLightsCount);
             bool anyShadows = false;
             int shadowSlicesPerRow = (m_ShadowmapWidth / sliceResolution);
             for (int i = 0; i < shadowCastingLightsCount; ++i)
             {
-                int shadowLightIndex = m_ShadowCastingLightIndices[i];
+                int shadowLightIndex = shadowLightDataList[i].lightIndex;
                 var shadowData = shadowLightDataList[shadowLightIndex];
                 
                 Matrix4x4 shadowTransform;
@@ -123,10 +114,6 @@ namespace DoomSRP
                     m_LightsShadowStrength[i] = 1;//TODO Shadow strength
                     anyShadows = true;
                 }
-                else
-                {
-                    m_ShadowCastingLightIndices.RemoveAt(i--);
-                }
             }
 
             return anyShadows;
@@ -142,7 +129,19 @@ namespace DoomSRP
             if (renderingData.shadowData.supportsLightShadows)
                 RenderProjectorShadowmapAtlas(ref context, ref renderingData.cullResults, ref renderingData.lightData, ref renderingData.shadowData);
         }
-        
+
+        public override void FrameCleanup(CommandBuffer cmd)
+        {
+            if (cmd == null)
+                throw new ArgumentNullException("cmd");
+
+            if (m_LightsShadowmapTexture)
+            {
+                RenderTexture.ReleaseTemporary(m_LightsShadowmapTexture);
+                m_LightsShadowmapTexture = null;
+            }
+        }
+
         void Clear()
         {
             m_LightsShadowmapTexture = null;
@@ -174,17 +173,15 @@ namespace DoomSRP
                     k_ShadowmapBufferBits, m_ShadowmapFormat);
                 m_LightsShadowmapTexture.filterMode = FilterMode.Bilinear;
                 m_LightsShadowmapTexture.wrapMode = TextureWrapMode.Clamp;
-
+                
                 SetRenderTarget(cmd, m_LightsShadowmapTexture, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store,
                     ClearFlag.Depth, Color.black, TextureDimension.Tex2D);
 
-                for (int i = 0; i < m_ShadowCastingLightIndices.Count; ++i)
+                for (int i = 0; i < shadowLightDataList.size; ++i)
                 {
-                    int shadowLightIndex = m_ShadowCastingLightIndices[i];
-                    LightDataForShadow shadowLightData = shadowLightDataList[shadowLightIndex];
-                    
-                    if (m_ShadowCastingLightIndices.Count > 1)
-                        ShadowUtils.ApplySliceTransform(ref m_LightSlices[i], shadowmapWidth, shadowmapHeight);
+                    LightDataForShadow shadowLightData = shadowLightDataList[i];
+                    int shadowLightIndex = shadowLightData.lightIndex;
+                    ShadowUtils.ApplySliceTransform(ref m_LightSlices[i], shadowmapWidth, shadowmapHeight);
                     //cullResults 这个cullResults导致shadow必须每帧都算。。
                     //有没有办法静态灯光只算一次，也就是对灯光进行cull,这还涉及到场景管理了
                     // from HDSRP : TODO remove DrawShadowSettings, lightIndex and splitData when scriptable culling is available

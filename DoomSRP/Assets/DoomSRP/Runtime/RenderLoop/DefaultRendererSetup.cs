@@ -75,7 +75,7 @@ namespace DoomSRP
             OpaqueColor.Init("_CameraOpaqueTexture");
             //MainLightShadowmap.Init("_MainLightShadowmapTexture");
             //AdditionalLightsShadowmap.Init("_AdditionalLightsShadowmapTexture");
-            LightsShadowmap.Init("_LightsShadowMapTexture");
+            LightsShadowmap.Init("_LightsShadowmapTexture");
             //ScreenSpaceShadowmap.Init("_ScreenSpaceShadowmapTexture");
 
             m_Initialized = true;

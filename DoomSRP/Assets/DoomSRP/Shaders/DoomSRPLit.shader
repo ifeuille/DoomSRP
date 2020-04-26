@@ -134,6 +134,7 @@
 			#pragma prefer_hlslcc gles
 			#pragma exclude_renderers d3d11_9x
 			#pragma target 2.0
+			#pragma enable_d3d11_debug_symbols
 
 			#pragma vertex DepthOnlyVertex
 			#pragma fragment DepthOnlyFragment
@@ -174,6 +175,7 @@
 			// GPU Instancing
 			#pragma multi_compile_instancing
 			#pragma shader_feature _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+			#pragma enable_d3d11_debug_symbols
 
 			#pragma vertex ShadowPassVertex
 			#pragma fragment ShadowPassFragment

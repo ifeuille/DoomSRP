@@ -93,7 +93,9 @@ namespace DoomSRP
             LightsDataForShadow.Clear();
             bool softShadow = false;
             int j = 0;
-            for(int i = 0; i < unityLights.Count; ++i)
+            int currentShadowIndex = 0;
+            int maxShadowNum = pipelineSettings.MaxShadowLightsNum;
+            for (int i = 0; i < unityLights.Count; ++i)
             {
                 var ul = unityLights[i];
                 var pl = ul.light.GetComponent<ProjectorLight>();
@@ -106,15 +108,19 @@ namespace DoomSRP
                 }
                 //矩阵是从右向左乘的,view需要z取反
                 Matrix4x4 c2w = /*Camera.main*/cameraData.camera.cameraToWorldMatrix * Matrix4x4.Scale(new Vector3(1, 1, -1));// Camera.main.transform.localToWorldMatrix;
-
-                LightDataInAll lightDataInAll = ifLight.GetLightData(c2w);
+                int shadowIndex = currentShadowIndex;
+                if(currentShadowIndex >= maxShadowNum)
+                {
+                    shadowIndex = -1;
+                }
+                LightDataInAll lightDataInAll = ifLight.GetLightData(c2w, shadowIndex);
                 NativeLightsBoundList[i] = lightDataInAll.sFiniteLightBound;
                 NativeLightsDataList[i] = lightDataInAll.lightData;
                 ++VisibleLight;
 
                 //for shadow
                 // TODO  frustum cull
-                if (ifLight.lightParms_Shadow)
+                if (ifLight.lightParms_Shadow && currentShadowIndex < maxShadowNum)
                 {
                     LightDataForShadow lightDataForShadow = new LightDataForShadow();
                     lightDataForShadow.lightIndex = j++;

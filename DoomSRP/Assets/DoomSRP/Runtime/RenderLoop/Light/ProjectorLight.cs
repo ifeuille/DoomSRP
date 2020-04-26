@@ -105,17 +105,25 @@ namespace DoomSRP
         [HideInInspector] [SerializeField] public bool lightParms_SkipSkipModel = true;//是否允许忽略模型忽略 64
         //[HideInInspector] [SerializeField] public bool lightParams_IsArea = false;//48=32+16 夹角接近超过90°是否还计算, 也就是是否是区域光,如果是则继续判断,因为区域光的lightPos要偏移
         [HideInInspector] [SerializeField] public bool lightParams_NoDiffuse = false;//256，将diffuse light color置为0
+        int lightParams_ShadowIndex = 0;
 
+        bool needDrawShadow = false;
         public int LightParams
         {
             get
             {
                 int value = 0;
-                value |= lightParms_Shadow ? 4 : 0;
+                value |= /*lightParms_Shadow*/needDrawShadow ? 4 : 0;
                 value |= lightParms_Rect ? 32 : 0;
                 value |= lightParms_Circle ? 16 : 0;
                 value |= lightParms_SkipSkipModel ? 64 : 0;
                 value |= lightParams_NoDiffuse ? 256 : 0;
+
+                //shadow index
+                if(needDrawShadow)
+                {
+                    value |= ((lightParams_ShadowIndex & 0x3ff) << 22);
+                }
                 return value;
             }
         }
@@ -154,7 +162,7 @@ namespace DoomSRP
         LightDataInAll cacheLightData;
         Vector3 posa, posb, posc, posd;
 #endif
-        public LightDataInAll GetLightData(Matrix4x4 c2w)
+        public LightDataInAll GetLightData(Matrix4x4 c2w, int currentShadowIndex)
         {
             LightDataInAll lightDataInAll = new LightDataInAll();
 
@@ -170,7 +178,7 @@ namespace DoomSRP
 
             LightData lightData = new LightData();
             lightData.pos = cacheTransform.position;
-            lightData.lightParms = (uint)LightParams;
+            //lightData.lightParms = (uint)LightParams;
             lightData.posShadow = new Vector4();
             lightData.falloffR = ps.falloffR;
             lightData.projS = ps.projectMatrixX;
@@ -260,7 +268,6 @@ namespace DoomSRP
                 lightData.boxMax = boxMax;
             }
 
-            lightDataInAll.lightData = lightData;
 #if UNITY_EDITOR
             cacheLightData = lightDataInAll;
 #endif
@@ -268,16 +275,25 @@ namespace DoomSRP
             // shadow
             {
                 LightData_Shadow shadowData = new LightData_Shadow();
-                if(lightParms_Shadow)
-                {                   
+                if(lightParms_Shadow && currentShadowIndex != -1)
+                {
+                    needDrawShadow = true;
+                    lightParams_ShadowIndex = currentShadowIndex;
                     shadowData.projMatrix = iFPipelineProjector.GetProjectorSettings.projMatrix;
                     shadowData.viewMatrix = iFPipelineProjector.GetProjectorSettings.viewMatrix;
 #if UNITY_EDITOR
                     shadowData.planes = cacheLightData.sFiniteLightBound.planes;
 #endif
                 }
+                else
+                {
+                    needDrawShadow = false;
+                }
                 lightDataInAll.shadowData = shadowData;
             }
+
+            lightData.lightParms = (uint)LightParams;
+            lightDataInAll.lightData = lightData;
 
             return lightDataInAll;
         }
