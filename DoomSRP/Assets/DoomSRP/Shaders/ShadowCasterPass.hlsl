@@ -33,8 +33,8 @@ float4 GetShadowPositionHClip (Attributes input)
 	float scale = invNdotL * _ShadowBias.y;
 
 	// normal bias is negative since we want to apply an inset normal offset
-	//positionWS = _LightDirection * _ShadowBias.xxx + positionWS;
-	//positionWS = normalWS * scale.xxx + positionWS;
+	positionWS = _LightDirection * _ShadowBias.xxx + positionWS;
+	positionWS = normalWS * scale.xxx + positionWS;
 	float4 positionCS = TransformWorldToHClip (positionWS);
 
 #if UNITY_REVERSED_Z
@@ -42,7 +42,6 @@ float4 GetShadowPositionHClip (Attributes input)
 #else
 	positionCS.z = max (positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
 #endif
-
 
 	return positionCS;
 }

@@ -15,11 +15,11 @@ namespace DoomSRP
             public static int _LightsShadowmapTexture;
             public static int _LightsWorldToShadow;
             public static int _ShadowStrength;
-            public static int _ShadowmapSize;
-            public static int _ShadowOffset0;
-            public static int _ShadowOffset1;
-            public static int _ShadowOffset2;
-            public static int _ShadowOffset3;
+            public static int _ClusterShadowmapSize;
+            public static int _ClusterShadowOffset0;
+            public static int _ClusterShadowOffset1;
+            public static int _ClusterShadowOffset2;
+            public static int _ClusterShadowOffset3;
         }
 
         const int k_ShadowmapBufferBits = 16;
@@ -51,11 +51,11 @@ namespace DoomSRP
             ShadowsConstantBuffer._ShadowsParms = Shader.PropertyToID("_ShadowsParms");
             ShadowsConstantBuffer._LightsWorldToShadow = Shader.PropertyToID("_LightsWorldToShadow");
             ShadowsConstantBuffer._ShadowStrength = Shader.PropertyToID("_ShadowStrength");
-            ShadowsConstantBuffer._ShadowmapSize = Shader.PropertyToID("_ShadowmapSize");
-            ShadowsConstantBuffer._ShadowOffset0 = Shader.PropertyToID("_ShadowOffset0");
-            ShadowsConstantBuffer._ShadowOffset1 = Shader.PropertyToID("_ShadowOffset1");
-            ShadowsConstantBuffer._ShadowOffset2 = Shader.PropertyToID("_ShadowOffset2");
-            ShadowsConstantBuffer._ShadowOffset3 = Shader.PropertyToID("_ShadowOffset3");
+            ShadowsConstantBuffer._ClusterShadowmapSize = Shader.PropertyToID("_ClusterShadowmapSize");
+            ShadowsConstantBuffer._ClusterShadowOffset0 = Shader.PropertyToID("_ClusterShadowOffset0");
+            ShadowsConstantBuffer._ClusterShadowOffset1 = Shader.PropertyToID("_ClusterShadowOffset1");
+            ShadowsConstantBuffer._ClusterShadowOffset2 = Shader.PropertyToID("_ClusterShadowOffset2");
+            ShadowsConstantBuffer._ClusterShadowOffset3 = Shader.PropertyToID("_ClusterShadowOffset3");
 
             RegisterShaderPassName("ShadowCaster");
                        
@@ -226,11 +226,11 @@ namespace DoomSRP
             cmd.SetGlobalTexture(destination.id, m_LightsShadowmapTexture);
             //cmd.SetGlobalMatrixArray(ShadowsConstantBuffer._LightsWorldToShadow, m_LightShadowMatrices);
             cmd.SetGlobalFloatArray(ShadowsConstantBuffer._ShadowStrength, m_LightsShadowStrength);
-            cmd.SetGlobalVector(ShadowsConstantBuffer._ShadowOffset0, new Vector4(-invHalfShadowAtlasWidth, -invHalfShadowAtlasHeight, 0.0f, 0.0f));
-            cmd.SetGlobalVector(ShadowsConstantBuffer._ShadowOffset1, new Vector4(invHalfShadowAtlasWidth, -invHalfShadowAtlasHeight, 0.0f, 0.0f));
-            cmd.SetGlobalVector(ShadowsConstantBuffer._ShadowOffset2, new Vector4(-invHalfShadowAtlasWidth, invHalfShadowAtlasHeight, 0.0f, 0.0f));
-            cmd.SetGlobalVector(ShadowsConstantBuffer._ShadowOffset3, new Vector4(invHalfShadowAtlasWidth, invHalfShadowAtlasHeight, 0.0f, 0.0f));
-            cmd.SetGlobalVector(ShadowsConstantBuffer._ShadowmapSize, 
+            cmd.SetGlobalVector(ShadowsConstantBuffer._ClusterShadowOffset0, new Vector4(-invHalfShadowAtlasWidth, -invHalfShadowAtlasHeight, 0.0f, 0.0f));
+            cmd.SetGlobalVector(ShadowsConstantBuffer._ClusterShadowOffset1, new Vector4(invHalfShadowAtlasWidth, -invHalfShadowAtlasHeight, 0.0f, 0.0f));
+            cmd.SetGlobalVector(ShadowsConstantBuffer._ClusterShadowOffset2, new Vector4(-invHalfShadowAtlasWidth, invHalfShadowAtlasHeight, 0.0f, 0.0f));
+            cmd.SetGlobalVector(ShadowsConstantBuffer._ClusterShadowOffset3, new Vector4(invHalfShadowAtlasWidth, invHalfShadowAtlasHeight, 0.0f, 0.0f));
+            cmd.SetGlobalVector(ShadowsConstantBuffer._ClusterShadowmapSize, 
                 new Vector4(invShadowAtlasWidth, invShadowAtlasHeight, shadowData.lightsShadowmapWidth, shadowData.lightsShadowmapHeight));
         }
     }

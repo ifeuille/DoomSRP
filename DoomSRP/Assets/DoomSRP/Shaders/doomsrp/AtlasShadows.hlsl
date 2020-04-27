@@ -1,7 +1,7 @@
 ﻿#ifndef DOOMSRP_ATLAS_SHADOWS_HLSL
 #define DOOMSRP_ATLAS_SHADOWS_HLSL
 #include "Common.hlsl"
-
+#include "Assets/DoomSRP/Shaders/core/CommonMaterial.hlsl"
 
 struct shadowparms_t
 {
@@ -18,6 +18,98 @@ StructuredBuffer<float4x4> _LightsWorldToShadow;
 
 TEXTURE2D_SHADOW (_LightsShadowmapTexture);
 SAMPLER_CMP (sampler_LightsShadowmapTexture);
+CBUFFER_START(_ClusterLightsShadowBuffer)
+half4       _ClusterShadowOffset0;
+half4       _ClusterShadowOffset1;
+half4       _ClusterShadowOffset2;
+half4       _ClusterShadowOffset3;
+float4      _ClusterShadowmapSize; // (xy: 1/width and 1/height, zw: width and height)
+CBUFFER_END
+
+#if UNITY_REVERSED_Z
+#define BEYOND_SHADOW_FAR(shadowCoord) shadowCoord.z <= UNITY_RAW_FAR_CLIP_VALUE
+#else
+#define BEYOND_SHADOW_FAR(shadowCoord) shadowCoord.z >= UNITY_RAW_FAR_CLIP_VALUE
+#endif
+struct ShadowSamplingData
+{
+	half4 shadowOffset0;
+	half4 shadowOffset1;
+	half4 shadowOffset2;
+	half4 shadowOffset3;
+	float4 shadowmapSize;
+};
+ShadowSamplingData GetClusterLightShadowSamplingData()
+{
+	ShadowSamplingData shadowSamplingData;
+	shadowSamplingData.shadowOffset0 = _ClusterShadowOffset0;
+	shadowSamplingData.shadowOffset1 = _ClusterShadowOffset1;
+	shadowSamplingData.shadowOffset2 = _ClusterShadowOffset2;
+	shadowSamplingData.shadowOffset3 = _ClusterShadowOffset3;
+	shadowSamplingData.shadowmapSize = _ClusterShadowmapSize;
+	return shadowSamplingData;
+}
+
+real SampleShadowmap(float4 shadowCoord, TEXTURE2D_SHADOW_ARGS(ShadowMap, sampler_ShadowMap), ShadowSamplingData samplingData, half shadowStrength, bool isPerspectiveProjection = true)
+{
+	// Compiler will optimize this branch away as long as isPerspectiveProjection is known at compile time
+	if (isPerspectiveProjection)
+		shadowCoord.xyz /= shadowCoord.w;
+
+	real attenuation;
+
+#ifdef _SHADOWS_SOFT
+#ifdef SHADER_API_MOBILE
+	// 4-tap hardware comparison
+	real4 attenuation4;
+	attenuation4.x = SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, shadowCoord.xyz + samplingData.shadowOffset0.xyz);
+	attenuation4.y = SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, shadowCoord.xyz + samplingData.shadowOffset1.xyz);
+	attenuation4.z = SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, shadowCoord.xyz + samplingData.shadowOffset2.xyz);
+	attenuation4.w = SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, shadowCoord.xyz + samplingData.shadowOffset3.xyz);
+	attenuation = dot(attenuation4, 0.25);
+#else
+	float fetchesWeights[9];
+	float2 fetchesUV[9];
+	SampleShadow_ComputeSamples_Tent_5x5(samplingData.shadowmapSize, shadowCoord.xy, fetchesWeights, fetchesUV);
+
+	attenuation = fetchesWeights[0] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[0].xy, shadowCoord.z));
+	attenuation += fetchesWeights[1] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[1].xy, shadowCoord.z));
+	attenuation += fetchesWeights[2] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[2].xy, shadowCoord.z));
+	attenuation += fetchesWeights[3] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[3].xy, shadowCoord.z));
+	attenuation += fetchesWeights[4] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[4].xy, shadowCoord.z));
+	attenuation += fetchesWeights[5] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[5].xy, shadowCoord.z));
+	attenuation += fetchesWeights[6] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[6].xy, shadowCoord.z));
+	attenuation += fetchesWeights[7] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[7].xy, shadowCoord.z));
+	attenuation += fetchesWeights[8] * SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, float3(fetchesUV[8].xy, shadowCoord.z));
+#endif
+#else
+	// 1-tap hardware comparison
+	attenuation = SAMPLE_TEXTURE2D_SHADOW(ShadowMap, sampler_ShadowMap, shadowCoord.xyz);
+#endif
+
+	attenuation = LerpWhiteTo(attenuation, shadowStrength);
+
+	// Shadow coords that fall out of the light frustum volume must always return attenuation 1.0
+	real r = BEYOND_SHADOW_FAR(shadowCoord) ? 1.0 : attenuation;
+#if UNITY_REVERSED_Z
+	r = 1 - r;
+#endif
+	return r;
+}
+
+real GetShadowMask(lightingInput_t inputs, uint light_parms)
+{
+	real normal_bias_scale = 0.5;// This is important
+	float4 pos;
+	pos.xyz = inputs.position +(inputs.normal * normal_bias_scale);
+	pos.w = 1;
+	float4 shadowCoord = mul(_LightsWorldToShadow[(light_parms >> uint(22))], pos);
+	//shadowCoord = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
+	ShadowSamplingData shadowSamplingData = GetClusterLightShadowSamplingData();
+	half shadowStrength = 1;
+	return SampleShadowmap(shadowCoord, TEXTURE2D_PARAM(_LightsShadowmapTexture, sampler_LightsShadowmapTexture),
+		shadowSamplingData, shadowStrength, true);
+}
 
 
 /*uint light_parms
@@ -26,7 +118,7 @@ SAMPLER_CMP (sampler_LightsShadowmapTexture);
 17~21:/63  shadow_fade
 31~22 灯光索引
 */
-float GetShadowMask (lightingInput_t inputs, uint light_parms)
+float GetShadowMask1 (lightingInput_t inputs, uint light_parms)
 {
 	float shadow = 1.0;
 	float normal_bias_scale = 0.5;

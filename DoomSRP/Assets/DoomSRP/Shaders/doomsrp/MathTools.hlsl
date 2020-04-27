@@ -1,4 +1,6 @@
-﻿//判断是这一位是否为1,bitValue 1<<bitNum
+﻿#ifndef DOOMSRP_MATHTOOLS_H
+#define DOOMSRP_MATHTOOLS_H
+//判断是这一位是否为1,bitValue 1<<bitNum
 bool Bit_And_Single(uint value, uint bitValue)
 {
 	return (value / bitValue) % 2 == 1;
@@ -15,12 +17,15 @@ uint int_bitfieldExtract(uint val, int off, int size)
 {
 	//uint v31 = val & 0x80000000;//提取最高位
 	//int ival = val & 0x7fffffff;//除了符号位
-	int mask = int ((1 << size) - 1);
+	int mask = int((1 << size) - 1);
 	//val = val >> off;
 	//val = val & mask;
 	//return val;
-	int val1 = int (val >> off);
+	int val1 = int(val >> off);
 	return uint(uint(val1)& mask);
 	/*int mask = int((1 << size) - 1);
 	return uint(((int)val >> off) & mask);*/
 }
+
+
+#endif
