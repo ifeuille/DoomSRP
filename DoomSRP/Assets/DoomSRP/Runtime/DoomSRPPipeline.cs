@@ -124,7 +124,8 @@ namespace DoomSRP
 
     public class DoomSRPPipeline : RenderPipeline
     {
-        PipelineSettings settings = new PipelineSettings();// { get; set; }
+        [SerializeField]
+        public PipelineSettings settings = new PipelineSettings();// { get; set; }
         static class PerFrameBuffer
         {
             public static int _GlossyEnvironmentColor;

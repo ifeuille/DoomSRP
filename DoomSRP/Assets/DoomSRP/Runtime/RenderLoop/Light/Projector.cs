@@ -226,7 +226,7 @@ namespace DoomSRP
 
             {
                 //view
-                projectSettings.projMatrix = projectionMatrix;// GL.GetGPUProjectionMatrix(projectionMatrix, false);
+                projectSettings.projMatrix = GL.GetGPUProjectionMatrix(projectionMatrix, false);
                 projectSettings.viewMatrix = zscale * transform.localToWorldMatrix.inverse;
             }
 

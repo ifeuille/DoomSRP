@@ -15,6 +15,7 @@ struct shadowparms_t
 
 //StructuredBuffer<shadowparms_t> _ShadowsParms;
 StructuredBuffer<float4x4> _LightsWorldToShadow;
+
 TEXTURE2D_SHADOW (_LightsShadowmapTexture);
 SAMPLER_CMP (sampler_LightsShadowmapTexture);
 
