@@ -200,7 +200,7 @@ namespace DoomSRP
             textureScaleAndBias.m13 = 0.5f;
 
             // Apply texture scale and offset to save a MAD in shader.
-            return textureScaleAndBias * worldToShadow;
+            return /*textureScaleAndBias **/ worldToShadow;
         }
     }
 }

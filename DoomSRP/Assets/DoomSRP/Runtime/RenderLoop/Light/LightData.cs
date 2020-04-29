@@ -114,6 +114,13 @@ namespace DoomSRP
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct shadowparms_t
+    {
+        public Matrix4x4 shadowLight;
+        public Vector4 shadowAtlasScaleBias;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct LightData
     {
         public Vector3 pos;

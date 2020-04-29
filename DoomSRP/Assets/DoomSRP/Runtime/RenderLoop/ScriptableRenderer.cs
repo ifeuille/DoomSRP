@@ -259,7 +259,7 @@ namespace DoomSRP
         {
             if (lightShadowParams == null)
             {
-                lightShadowParams = new ComputeBuffer(lightData.settings.MaxShadowLightsNum, sizeof(float)*16);
+                lightShadowParams = new ComputeBuffer(lightData.settings.MaxShadowLightsNum, Marshal.SizeOf<shadowparms_t>());
             }
             List<VisibleLight> visibleLights = lightData.lightData.visibleLights;
             var lightLoop = lightData.lightData.lightLoop;

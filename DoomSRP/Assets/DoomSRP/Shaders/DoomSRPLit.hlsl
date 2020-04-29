@@ -196,7 +196,7 @@ float4 LitPassFragment(IFVertex2Fragment i) : SV_Target
 	// Other output :normal .... 
 	// apply fog
 
-	col.rgb = inputs.debugColor;
+	//col.rgb = inputs.debugColor;
 	//col.rgb = inputs.diffuse_lighting;// +inputs.specular_lighting;// color
 	return col;
 }
