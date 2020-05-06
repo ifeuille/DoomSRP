@@ -132,12 +132,12 @@ float GetShadowMask1 (lightingInput_t inputs, uint light_parms)
 	float4 shadowTC_1 = mul (shadow_parms.shadowLight, pos);
 	shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
 #else
-	float4 shadowTC_1 = mul (_LightsWorldToShadow[(light_parms >> uint(22))], pos);
+	float4 shadowTC_1 = mul (_ShadowsParms[(light_parms >> uint(22))].shadowLight, pos);
 	shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
 #endif
 	if (shadowTC_1.x > 0 && shadowTC_1.x < 1 && shadowTC_1.y > 0 && shadowTC_1.y < 1)
-	{
-		shadowTC_1.xy = (shadowTC_1.xy * shadow_parms.shadowAtlasScaleBias.xy) + shadow_parms.shadowAtlasScaleBias.zw;
+	{ 
+		//shadowTC_1.xy = (shadowTC_1.xy * shadow_parms.shadowAtlasScaleBias.xy) + shadow_parms.shadowAtlasScaleBias.zw;
 #ifndef _SHADOWS_SOFT
 		real4 attenuation4;
 		attenuation4.x = SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, shadowTC_1.xyz);
