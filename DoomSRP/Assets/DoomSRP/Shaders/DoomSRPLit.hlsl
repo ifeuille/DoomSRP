@@ -195,7 +195,8 @@ float4 LitPassFragment(IFVertex2Fragment i) : SV_Target
 	col.a = 1;// inputs.alpha;
 	// Other output :normal .... 
 	// apply fog
-
+	
+	//return half4(inputs.shadow, inputs.shadow, inputs.shadow, 1);
 	//col.rgb = inputs.debugColor;
 	//col.rgb = inputs.diffuse_lighting;// +inputs.specular_lighting;// color
 	return col;

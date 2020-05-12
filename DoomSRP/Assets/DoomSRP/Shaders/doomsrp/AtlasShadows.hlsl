@@ -119,25 +119,21 @@ real GetShadowMask(lightingInput_t inputs, uint light_parms)
 17~21:/63  shadow_fade
 31~22 灯光索引
 */
-float GetShadowMask1 (lightingInput_t inputs, uint light_parms)
+float GetShadowMask1(lightingInput_t inputs, uint light_parms)
 {
 	float shadow = 1.0;
 	float normal_bias_scale = 0.5;
 	float4 pos;
 	pos.xyz = inputs.position + (inputs.normal * normal_bias_scale);
 	pos.w = 1;
-#if 0
-
 	shadowparms_t shadow_parms = _ShadowsParms[(light_parms >> uint(22))];
 	float4 shadowTC_1 = mul (shadow_parms.shadowLight, pos);
 	shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
-#else
-	float4 shadowTC_1 = mul (_ShadowsParms[(light_parms >> uint(22))].shadowLight, pos);
-	shadowTC_1 = float4(shadowTC_1.xyz / shadowTC_1.w, shadowTC_1.w);
-#endif
 	if (shadowTC_1.x > 0 && shadowTC_1.x < 1 && shadowTC_1.y > 0 && shadowTC_1.y < 1)
 	{ 
-		//shadowTC_1.xy = (shadowTC_1.xy * shadow_parms.shadowAtlasScaleBias.xy) + shadow_parms.shadowAtlasScaleBias.zw;
+		shadowTC_1.xy = (shadowTC_1.xy * shadow_parms.shadowAtlasScaleBias.xy) + shadow_parms.shadowAtlasScaleBias.zw;
+		//shadowTC_1.y = 1 - shadowTC_1.y;
+
 #ifndef _SHADOWS_SOFT
 		real4 attenuation4;
 		attenuation4.x = SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, shadowTC_1.xyz);
@@ -151,7 +147,7 @@ float GetShadowMask1 (lightingInput_t inputs, uint light_parms)
 		float2 base_uv = float2 (floor (uv.x + 0.5), floor (uv.y + 0.5));
 		float s = (uv.x + 0.5) - base_uv.x;
 		float t = (uv.y + 0.5) - base_uv.y;
-		base_uv -= float2 (0.5);
+		base_uv -= float2 (0.5, 0.5);
 		base_uv *= shadowMapSizeInv;
 		float uw0 = 4.0 - (3.0 * s);
 		float uw1 = 7.0;
@@ -170,20 +166,20 @@ float GetShadowMask1 (lightingInput_t inputs, uint light_parms)
 		shadow = (s0 + s1) + s2;
 		float vw1 = 7.0;
 		float v1 = (3.0 + t) / vw1;
-		float3 param_152 = float3 (base_uv + (vec2 (u0, v1) * shadowMapSizeInv), shadowTC_1.z);
+		float3 param_152 = float3 (base_uv + (float2 (u0, v1) * shadowMapSizeInv), shadowTC_1.z);
 		float s0_1 = (uw0 * vw1) * SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, param_152);
-		float3 param_153 = float3 (base_uv + (vec2 (u1, v1) * shadowMapSizeInv), shadowTC_1.z);
+		float3 param_153 = float3 (base_uv + (float2 (u1, v1) * shadowMapSizeInv), shadowTC_1.z);
 		float s1_1 = (uw1 * vw1) * SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, param_153);
-		float3 param_154 = float3 (base_uv + (vec2 (u2, v1) * shadowMapSizeInv), shadowTC_1.z);
+		float3 param_154 = float3 (base_uv + (float2 (u2, v1) * shadowMapSizeInv), shadowTC_1.z);
 		float s2_1 = (uw2 * vw1) * SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, param_154);
 		shadow += ((s0_1 + s1_1) + s2_1);
 		float vw2 = 1.0 + (3.0 * t);
 		float v2 = (t / vw2) + 2.0;
-		float3 param_155 = float3 (base_uv + (vec2 (u0, v2) * shadowMapSizeInv), shadowTC_1.z);
+		float3 param_155 = float3 (base_uv + (float2 (u0, v2) * shadowMapSizeInv), shadowTC_1.z);
 		float s0_2 = (uw0 * vw2) * SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, param_155);
-		float3 param_156 = float3 (base_uv + (vec2 (u1, v2) * shadowMapSizeInv), shadowTC_1.z);
+		float3 param_156 = float3 (base_uv + (float2 (u1, v2) * shadowMapSizeInv), shadowTC_1.z);
 		float s1_2 = (uw1 * vw2) * SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, param_156);
-		float3 param_157 = float3 (base_uv + (vec2 (u2, v2) * shadowMapSizeInv), shadowTC_1.z);
+		float3 param_157 = float3 (base_uv + (float2 (u2, v2) * shadowMapSizeInv), shadowTC_1.z);
 		float s2_2 = (uw2 * vw2) * SAMPLE_TEXTURE2D_SHADOW (_LightsShadowmapTexture, sampler_LightsShadowmapTexture, param_157);
 		shadow += ((s0_2 + s1_2) + s2_2);
 		shadow /= 144.0;

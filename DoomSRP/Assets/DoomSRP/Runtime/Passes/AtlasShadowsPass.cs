@@ -13,7 +13,7 @@ namespace DoomSRP
             public static int _ShadowAtlasResolution;
             public static int _ShadowsParms;
             public static int _LightsShadowmapTexture;
-            public static int _LightsWorldToShadow;
+            //public static int _LightsWorldToShadow;
             public static int _ShadowStrength;
             public static int _ClusterShadowmapSize;
             public static int _ClusterShadowOffset0;
@@ -50,7 +50,7 @@ namespace DoomSRP
             ShadowsConstantBuffer._ShadowAtlasResolution = Shader.PropertyToID("_ShadowAtlasResolution");
             ShadowsConstantBuffer._LightsShadowmapTexture = Shader.PropertyToID("_LightsShadowmapTexture");
             ShadowsConstantBuffer._ShadowsParms = Shader.PropertyToID("_ShadowsParms");
-            ShadowsConstantBuffer._LightsWorldToShadow = Shader.PropertyToID("_LightsWorldToShadow");
+            //ShadowsConstantBuffer._LightsWorldToShadow = Shader.PropertyToID("_LightsWorldToShadow");
             ShadowsConstantBuffer._ShadowStrength = Shader.PropertyToID("_ShadowStrength");
             ShadowsConstantBuffer._ClusterShadowmapSize = Shader.PropertyToID("_ClusterShadowmapSize");
             ShadowsConstantBuffer._ClusterShadowOffset0 = Shader.PropertyToID("_ClusterShadowOffset0");
@@ -215,26 +215,29 @@ namespace DoomSRP
         
         void SetupLightsShadowReceiverConstants(CommandBuffer cmd, ref ShadowData shadowData)
         {
-            int atlasWidth = shadowData.lightsShadowmapWidth;
-            int atlasHeight = shadowData.lightsShadowmapHeight;
+            float atlasWidth = shadowData.lightsShadowmapWidth;
+            float atlasHeight = shadowData.lightsShadowmapHeight;
             for (int i = 0; i < m_LightSlices.Length; ++i)
             {
                 m_LightShadowParams[i].shadowLight = m_LightSlices[i].shadowTransform;
-                int x = m_LightSlices[i].offsetX;
-                int y = m_LightSlices[i].offsetY;
-                int w = m_LightSlices[i].resolution;
-              
+                float x = m_LightSlices[i].offsetX;
+                float y = m_LightSlices[i].offsetY;
+                float w = m_LightSlices[i].resolution;
+                m_LightShadowParams[i].shadowAtlasScaleBias = new Vector4(
+                    w/ atlasWidth, w/ atlasHeight, x/ atlasWidth, y/ atlasHeight
+                    );
             }
-            if(lightShadowParams != null)
+            if (lightShadowParams != null)
             {
                 lightShadowParams.SetData(m_LightShadowParams);
-                cmd.SetGlobalBuffer(ShadowsConstantBuffer._LightsWorldToShadow, lightShadowParams);
+                cmd.SetGlobalBuffer(ShadowsConstantBuffer._ShadowsParms, lightShadowParams);
             }
             float invShadowAtlasWidth = 1.0f / shadowData.lightsShadowmapWidth;
             float invShadowAtlasHeight = 1.0f / shadowData.lightsShadowmapHeight;
             float invHalfShadowAtlasWidth = 0.5f * invShadowAtlasWidth;
             float invHalfShadowAtlasHeight = 0.5f * invShadowAtlasHeight;
-            
+
+            cmd.SetGlobalVector(ShadowsConstantBuffer._ShadowAtlasResolution, new Vector4(shadowData.lightsShadowmapWidth, shadowData.lightsShadowmapHeight, invShadowAtlasWidth, invShadowAtlasHeight));
             cmd.SetGlobalTexture(destination.id, m_LightsShadowmapTexture);
             //cmd.SetGlobalMatrixArray(ShadowsConstantBuffer._LightsWorldToShadow, m_LightShadowMatrices);
             cmd.SetGlobalFloatArray(ShadowsConstantBuffer._ShadowStrength, m_LightsShadowStrength);

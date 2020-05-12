@@ -16,6 +16,7 @@ CBUFFER_END
 //用于光照计算的中间结构体
 struct lightingInput_t
 {
+	half shadow;
 	half3 debugColor;
 	float3 albedo;
 	//float3 colorMask;
@@ -57,7 +58,7 @@ float4 _ClusterLighting;//z divz,w
 float4 _ClusterCB_Size;
 float4 _ItemsIDListTexSize;//xy _ItemsIDListTex;zw _ClusterNumItemsTex
 float4 _ClusterNumItemsTexSize;
-float4 _LightParamsTexSize;//灯光参数纹理换成的尺寸信息
+//float4 _LightParamsTexSize;//灯光参数纹理换成的尺寸信息
 float4 _CameraClipDistance;
 float4 _ShadowAtlasResolution;//xy(wh),zw(1/wh)
 CBUFFER_END
@@ -428,6 +429,7 @@ void InitilizeLightingInput(out lightingInput_t inputs)
 	inputs.normalTS = float3 (0.0, 0.0, 1.0);
 	//inputs.normalSSS = float3 (0.0, 0.0, 1.0);
 	inputs.alpha = 1;
+	inputs.shadow = 1;
 	//inputs.ssdoDiffuseMul = 1;
 	//inputs.invTS = float3x3 (
 	//	1.0, 0.0, 0.0,

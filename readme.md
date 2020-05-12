@@ -11,13 +11,14 @@ Develop environment :Unity 2018.4.12f1 (64-bit) + windowns 10
 - [x] atlas based projector light support(only)
 - [x] cluster pipeline basic part
 - [x] depth pre
-- [ ] atlas  based shadow(texture array ?)
+- [x] atlas  based shadow(todo texture array based..compare)
 - [ ] atlas  based decal
 - [ ] TAA
 - [ ] postprocess pipeline(refer UnityPostProcess. bloom,tonemap,colorgrading,dof..)
 - [ ] lightmap(environment diffuse only)
 - [ ] probe
 - [ ] virtual texture based terrain
+- [ ] profile and optimize
 
 ## Stage result
 

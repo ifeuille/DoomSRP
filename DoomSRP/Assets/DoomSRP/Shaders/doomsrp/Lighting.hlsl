@@ -52,7 +52,6 @@ lightingInput_t PipeLighting (lightingInput_t inputs, uint lightsMin, uint light
 {
 	uint lightIdx = lightsMin;
 	const float clip_min_1 = 0.0039215688593685626983642578125;
-
 	while (lightIdx < lightsMax)
 	{
 		LightData lightParms = GetLightParam(ItemGetLightID (lightIdx++));//MACRO_NAME(_LightsDataList)[light_id];
@@ -150,10 +149,10 @@ lightingInput_t PipeLighting (lightingInput_t inputs, uint lightsMin, uint light
 		float shadow = 1.0;
 		if ((light_parms & 4u) != 0u)
 		{
-			//inputs.debugColor = float4(0, 1, 0, 1); break;
 			shadow = GetShadowMask (inputs, light_parms);
 			//inputs.debugColor = float4(shadow, shadow, shadow, 1); break;
 		}
+		inputs.shadow *= shadow;
 		//inputs.debugColor = float4(shadow, shadow, shadow, 1); break;
 		uint param_159 = lightParms.colorPacked;
 		float3 light_color = (unpackRGBE(param_159) * shadow);

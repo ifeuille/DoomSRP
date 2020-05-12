@@ -109,7 +109,7 @@ namespace DoomSRP
                 //矩阵是从右向左乘的,view需要z取反
                 Matrix4x4 c2w = /*Camera.main*/cameraData.camera.cameraToWorldMatrix * Matrix4x4.Scale(new Vector3(1, 1, -1));// Camera.main.transform.localToWorldMatrix;
                 int shadowIndex = currentShadowIndex;
-                if(currentShadowIndex >= maxShadowNum)
+                if(currentShadowIndex >= maxShadowNum || !ifLight.lightParms_Shadow)
                 {
                     shadowIndex = -1;
                 }
@@ -137,6 +137,7 @@ namespace DoomSRP
                     LightsDataForShadow.Add(lightDataForShadow);
 
                     softShadow |= ifLight.softShadow;
+                    ++currentShadowIndex;
                 }
             }
             renderingData.shadowData.supportsSoftShadows = softShadow;
