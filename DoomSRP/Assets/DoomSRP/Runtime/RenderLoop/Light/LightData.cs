@@ -38,6 +38,7 @@ namespace DoomSRP
         public int offset;
         public int numItems;
     };
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Vector4Int
     {

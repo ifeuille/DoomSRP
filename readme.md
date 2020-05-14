@@ -6,6 +6,8 @@ What's important is that it needs to be running on the phone(ES3.1 need).
 
 Develop environment :Unity 2018.4.12f1 (64-bit) + windowns 10
 
+Hybrid Renderer pacagae need.
+
 ## Features
 
 - [x] atlas based projector light support(only)

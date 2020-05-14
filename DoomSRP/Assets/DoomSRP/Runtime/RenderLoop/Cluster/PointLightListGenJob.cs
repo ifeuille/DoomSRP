@@ -6,7 +6,7 @@ using Unity.Jobs;
 
 namespace DoomSRP
 {
-    public struct PointLightListGenJobSingleLine //: IJobParallelFor
+    public struct PointLightListGenJob : IJobParallelFor
     {
         //input
         public int VisibleLightsCount;
@@ -22,16 +22,9 @@ namespace DoomSRP
 
         //output
         public NativeArray<clusternumlights_t> ResultClusterNumItems;
-        public NativeArray<uint> ResultItemsIDList;
-
-        public void Run(int count)
-        {
-            for (int i = 0; i < count; ++i)
-            {
-                Execute(i);
-            }
-        }
-
+        //public NativeArray<uint> ResultItemsIDList;
+        //public NativeArray<NativeArray<uint>> ResultItemsIDVec;
+        public NativeMultiHashMap<int, uint>.Concurrent ResultItemsIDVec;
         // for each cluster
         public void Execute(int i)
         {
@@ -41,17 +34,17 @@ namespace DoomSRP
             AABB clusterAABB = InputClusterAABBS[clusterIndex1D];
             //1.light clulling test
             //todo more light type
-            for (int index = 0; index < VisibleLightsCount; ++index)
+            for (int index = 0; index < VisibleLightsCount && lightOffs < NumItemsPerCluster; ++index)
             {
                 SFiniteLightBound bound = LightBounds[index];
                 SPlanes planes;
-//#if UNITY_EDITOR
-//                if (IsClusterEditorHelper)
-//                {
-//                    planes = Projector.GetCullingPlanes(bound.frustumMatrix, _CameraWorldMatrix);//world to view
-//                }
-//                else
-//#endif
+                //#if UNITY_EDITOR
+                //                if (IsClusterEditorHelper)
+                //                {
+                //                    planes = Projector.GetCullingPlanes(bound.frustumMatrix, _CameraWorldMatrix);//world to view
+                //                }
+                //                else
+                //#endif
                 {
                     planes = bound.planes;
                 }
@@ -66,7 +59,7 @@ namespace DoomSRP
             //3.set cluster info
             ClusterInfoSet(clusterIndex1D, lightOffs, decalsOffs);
         }
-#region utils
+        #region utils
         void ClusterInfoSet(int clusterID, int lightOffs, int decalsOffs)
         {
             clusternumlights_t clusterInfo;
@@ -79,9 +72,7 @@ namespace DoomSRP
         void Item_Set_Light(int clusterID, int idInCluster, uint idOfListList)
         {
             if (idInCluster >= NumItemsPerCluster) return;
-            int lightsid_id = NumItemsPerCluster * clusterID + idInCluster;
-            //uint value = ResultItemssIDList[lightsid_id];
-            ResultItemsIDList[lightsid_id] = /*value |*/ (4095u & idOfListList);
+            ResultItemsIDVec.Add(clusterID, 4095u & idOfListList);
         }
 
         //bool SphereInsideAABB(SFiniteLightBound sphere, AABB aabb)
@@ -109,7 +100,7 @@ namespace DoomSRP
         {
 
             bool inside = true;
- 
+
             //试视锥体的6个平面。 
             for (int i = 0; i < 6; i++)
             {
@@ -130,25 +121,25 @@ namespace DoomSRP
         {
             Vector3 m = GetCenter(a.Min, a.Max);// a.GetCenter();// center of AABB
             Vector3 extent = GetExtent(a.Min, a.Max);//a.GetExtent();// half-diagonal
-            for (int i = 0; i<6; ++i)
-	        {
+            for (int i = 0; i < 6; ++i)
+            {
                 Plane p = ps[i];
                 Vector3 normal = p.normal;
                 float dist = p.GetDistanceToPoint(m);
                 float radius = Vector3.Dot(extent, new Vector3(Mathf.Abs(normal.x), Mathf.Abs(normal.y), Mathf.Abs(normal.z)));
-                if (dist + radius<= 0) return false; // behind clip plane
-	        }
-	        return true; // AABB intersects space bounded by planes
+                if (dist + radius <= 0) return false; // behind clip plane
+            }
+            return true; // AABB intersects space bounded by planes
         }
 
-        Vector3 GetCenter(Vector3 min,Vector3 max)
+        Vector3 GetCenter(Vector3 min, Vector3 max)
         {
             return (min + max) * 0.5f;
         }
-        Vector3 GetExtent(Vector3 min,Vector3 max)
+        Vector3 GetExtent(Vector3 min, Vector3 max)
         {
-            return new Vector3(Mathf.Abs(min.x - max.x)/2.0f, Mathf.Abs(min.y - max.y) / 2.0f, Mathf.Abs(min.z - max.z) / 2.0f);
+            return new Vector3(Mathf.Abs(min.x - max.x) / 2.0f, Mathf.Abs(min.y - max.y) / 2.0f, Mathf.Abs(min.z - max.z) / 2.0f);
         }
-#endregion
+        #endregion
     }
 }

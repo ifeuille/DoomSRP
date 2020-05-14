@@ -17,12 +17,13 @@ namespace DoomSRP
 #endif
         public NativeArray<clusternumlights_t> ResultClusterNumItems;
         public NativeArray<uint> ResultItemsIDList;
-
+        public NativeMultiHashMap<int, uint> ResultItemsIDVec;
         //PipelineSettings pipelineSettings;
-        
+
         GenerateClusterJob generateClusterJob;
         //PointLightListGenJob pointLightListGenJob;
         PointLightListGenJobSingleLine pointLightListGenJobSingleLine;
+        PointLightListGenJob pointLightListGenJob;
 
 
         public void Initilize(PipelineSettings settings)
@@ -31,17 +32,29 @@ namespace DoomSRP
             //pipelineSettings.Check();
 
             //CleanUp();
-            ClustersAABBs = new NativeArray<AABB>(settings.NumClusters, Allocator.Persistent);
 #if UNITY_EDITOR
             ClustersAABBsCache = new NativeArray<AABB>(settings.NumClusters, Allocator.Persistent);
 #endif
-            ResultClusterNumItems = new NativeArray<clusternumlights_t>(settings.NumClusters, Allocator.Persistent);
-            ResultItemsIDList = new NativeArray<uint>(settings.MaxItemsPerCluster * settings.NumClusters, Allocator.Persistent);
-
 
             generateClusterJob = new GenerateClusterJob();
             //pointLightListGenJob = new PointLightListGenJob();
             pointLightListGenJobSingleLine = new PointLightListGenJobSingleLine();
+            pointLightListGenJob = new PointLightListGenJob();
+        }
+
+        public void Begin(PipelineSettings settings)
+        {
+            ClustersAABBs = new NativeArray<AABB>(settings.NumClusters, Allocator.TempJob);
+            ResultClusterNumItems = new NativeArray<clusternumlights_t>(settings.NumClusters, Allocator.TempJob);
+            ResultItemsIDList = new NativeArray<uint>(settings.MaxItemsPerCluster * settings.NumClusters, Allocator.TempJob);
+            ResultItemsIDVec = new NativeMultiHashMap<int, uint>(settings.NumClusters * settings.MaxItemsPerCluster, Allocator.TempJob);
+        }
+        public void End()
+        {
+            ClustersAABBs.Dispose();
+            ResultClusterNumItems.Dispose();
+            ResultItemsIDList.Dispose();
+            //ResultItemsIDVec.Dispose();
         }
 
         private void Set(CameraData cameraData, PipelineSettings pipelineSettings,LightLoop lightLoop)
@@ -80,31 +93,42 @@ namespace DoomSRP
             pointLightListGenJobSingleLine.ResultClusterNumItems = ResultClusterNumItems;
             pointLightListGenJobSingleLine.ResultItemsIDList = ResultItemsIDList;
 
+
+            pointLightListGenJob.NumClusters = pipelineSettings.NumClusters;
+            pointLightListGenJob.VisibleLightsCount = lightLoop.VisibleLight;
+            pointLightListGenJob.LightBounds = lightLoop.LigtsBoundList;
+            pointLightListGenJob.IsClusterEditorHelper = pipelineSettings.IsClusterEditorHelper;
+            pointLightListGenJob._CameraWorldMatrix = cameraData._CameraWorldMatrix;
+            pointLightListGenJob.NumItemsPerCluster = LightDefins.MaxItemsPerCluster;
+            pointLightListGenJob.InputClusterAABBS = ClustersAABBs;
+            pointLightListGenJob.ResultClusterNumItems = ResultClusterNumItems;
+            pointLightListGenJob.ResultItemsIDVec = ResultItemsIDVec.ToConcurrent();
         }
 
         public void CleanUp()
         {
-            if(/*ClustersAABBs != null &&*/ ClustersAABBs.IsCreated)
-                ClustersAABBs.Dispose();
-            if (/*ResultClusterNumItems != null &&*/ ResultClusterNumItems.IsCreated)
-                ResultClusterNumItems.Dispose();
-            if (/*ResultItemsIDList != null &&*/ ResultItemsIDList.IsCreated)
-                ResultItemsIDList.Dispose();
 #if UNITY_EDITOR
             if (ClustersAABBsCache.IsCreated)
                 ClustersAABBsCache.Dispose();
 #endif
         }
 
+
         public void Run(/*Camera camera*/CameraData cameraData, PipelineSettings pipelineSettings, LightLoop lightLoop)
         {
+            UnityEngine.Profiling.Profiler.BeginSample("RebuildLightsList run");
             Set(cameraData, pipelineSettings, lightLoop);
+            UnityEngine.Profiling.Profiler.BeginSample("RebuildLightsList run generateClusterJob");
             // Schedule the job with one Execute per index in the results array and only 1 item per processing batch
             generateClusterJob.Run(pipelineSettings.NumClusters);
-            //JobHandle generateClusterJobHandle = generateClusterJob.Schedule(pipelineSettings.NumClusters, 1);
-
-            pointLightListGenJobSingleLine.Run(pipelineSettings.NumClusters);
-
+            JobHandle generateClusterJobHandle = generateClusterJob.Schedule(pipelineSettings.NumClusters, 1);
+            UnityEngine.Profiling.Profiler.EndSample();
+            UnityEngine.Profiling.Profiler.BeginSample("RebuildLightsList run pointLightListGenJobSingleLine");
+            //pointLightListGenJob.Run(pipelineSettings.NumClusters);
+            JobHandle pointLightListGenJobHandle = pointLightListGenJob.Schedule(pipelineSettings.NumClusters, 32, generateClusterJobHandle);
+            JobHandle.ScheduleBatchedJobs();
+            pointLightListGenJobHandle.Complete();
+            UnityEngine.Profiling.Profiler.EndSample();
             //JobHandle pointLightListGenJobSingleLineHandle = pointLightListGenJobSingleLine.Schedule(pipelineSettings.NumClusters, 1, generateClusterJobHandle);
             //pointLightListGenJobSingleLineHandle.Complete();
 #if UNITY_EDITOR
@@ -113,6 +137,20 @@ namespace DoomSRP
                 ClustersAABBsCache.CopyFrom(ClustersAABBs);
             }
 #endif
+            int index = 0;
+            for (int i = 0; i < pipelineSettings.NumClusters; ++i)
+            {
+                index = 0;
+                bool found = ResultItemsIDVec.TryGetFirstValue(i, out uint item, out NativeMultiHashMapIterator<int> it);
+                while (found && index < pipelineSettings.MaxItemsPerCluster)
+                {
+                    ResultItemsIDList[i * pipelineSettings.MaxItemsPerCluster + index] = item;
+                    index++;
+                    found = ResultItemsIDVec.TryGetNextValue(out item, ref it);
+                }
+            }
+            ResultItemsIDVec.Dispose();
+            UnityEngine.Profiling.Profiler.EndSample();
         }
 
         public void ClearNumItems(PipelineSettings pipelineSettings)

@@ -87,6 +87,7 @@ namespace DoomSRP
 
         public void RebuildLightsList(List<VisibleLight> visibleLights, CameraData cameraData,PipelineSettings pipelineSettings,ref RenderingData renderingData)
         {
+            UnityEngine.Profiling.Profiler.BeginSample("RebuildLightsList");
             lights.Clear();
             var unityLights = visibleLights;
             VisibleLight = 0;
@@ -141,13 +142,13 @@ namespace DoomSRP
                 }
             }
             renderingData.shadowData.supportsSoftShadows = softShadow;
+            culsterDataGenerator.Begin(pipelineSettings);
             culsterDataGenerator.Run(cameraData, pipelineSettings,this);
             lightLoopLightsData.LightsDatasBuf.SetData(LightsDataList);
             tileAndClusterData.itemsIDListBuf.SetData(culsterDataGenerator.ResultItemsIDList);
             tileAndClusterData.clusterNumItemsBuf.SetData(culsterDataGenerator.ResultClusterNumItems);
-#if UNITY_EDITOR
-            tileAndClusterData.clusterAABBsBuf.SetData(culsterDataGenerator.ClustersAABBs);
-#endif
+            culsterDataGenerator.End();
+            UnityEngine.Profiling.Profiler.EndSample();
         }
 
 

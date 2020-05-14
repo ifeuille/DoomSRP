@@ -82,14 +82,6 @@ namespace DoomSRP
             cmd.SetGlobalVector("_CameraClipDistance", new Vector4(
                 cameraData.camera.nearClipPlane,
                 cameraData.camera.farClipPlane - cameraData.camera.nearClipPlane, 0,0));
-#if UNITY_EDITOR
-            cmd.SetGlobalBuffer("ClusterAABBs", /*IFPipelineManager.*/lightData.lightLoop.tileAndClusterData.clusterAABBsBuf);
-            cmd.SetGlobalMatrix("_CameraWorldMatrix", /*Camera.main*/cameraData.camera.transform.localToWorldMatrix);
-            cmd.SetGlobalInt("NUM_CLUSTERS_X", /*IFPipelineManager.*/settings.NumClusterX);
-            cmd.SetGlobalInt("NUM_CLUSTERS_Y", /*IFPipelineManager.*/settings.NumClusterY);
-            cmd.SetGlobalInt("NUM_CLUSTERS_Z", /*IFPipelineManager.*/settings.NumClusterZ);
-            cmd.SetGlobalInt("MAX_ITEMS_PERCUSTER", /*IFPipelineManager.*/settings.MaxItemsPerCluster);
-#endif
         }
 
         /// <inheritdoc/>
