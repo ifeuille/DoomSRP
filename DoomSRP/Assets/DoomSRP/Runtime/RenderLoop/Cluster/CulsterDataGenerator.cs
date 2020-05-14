@@ -125,7 +125,7 @@ namespace DoomSRP
             UnityEngine.Profiling.Profiler.EndSample();
             UnityEngine.Profiling.Profiler.BeginSample("RebuildLightsList run pointLightListGenJobSingleLine");
             //pointLightListGenJob.Run(pipelineSettings.NumClusters);
-            JobHandle pointLightListGenJobHandle = pointLightListGenJob.Schedule(pipelineSettings.NumClusters, 32, generateClusterJobHandle);
+            JobHandle pointLightListGenJobHandle = pointLightListGenJob.Schedule(pipelineSettings.NumClusters, 8, generateClusterJobHandle);
             JobHandle.ScheduleBatchedJobs();
             pointLightListGenJobHandle.Complete();
             UnityEngine.Profiling.Profiler.EndSample();

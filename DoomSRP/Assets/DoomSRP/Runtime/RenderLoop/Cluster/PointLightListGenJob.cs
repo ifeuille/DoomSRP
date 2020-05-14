@@ -119,8 +119,8 @@ namespace DoomSRP
 
         bool IntersectAABBPlaneBounds(AABB a, SPlanes ps)
         {
-            Vector3 m = GetCenter(a.Min, a.Max);// a.GetCenter();// center of AABB
-            Vector3 extent = GetExtent(a.Min, a.Max);//a.GetExtent();// half-diagonal
+            Vector3 m = a.m;// GetCenter(a.Min, a.Max);// a.GetCenter();// center of AABB
+            Vector3 extent = a.extent;// GetExtent(a.Min, a.Max);//a.GetExtent();// half-diagonal
             for (int i = 0; i < 6; ++i)
             {
                 Plane p = ps[i];

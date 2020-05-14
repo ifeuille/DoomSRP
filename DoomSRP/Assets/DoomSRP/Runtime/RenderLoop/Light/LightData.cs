@@ -60,6 +60,8 @@ namespace DoomSRP
     {
         public Vector4 Min;
         public Vector4 Max;
+        public Vector3 m;
+        public Vector3 extent;
     };
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct SPlanes
