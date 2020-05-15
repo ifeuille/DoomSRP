@@ -18,6 +18,8 @@ namespace DoomSRP
         private NativeArray<SFiniteLightBound> NativeLightsBoundList;
         private int NumMaxLights = 0;
         public NativeArray<SFiniteLightBound> LigtsBoundList { get { return NativeLightsBoundList; } }
+        public NativeArray<Sphere> LightsSphereList;
+
         private NativeArray<LightData> NativeLightsDataList;
         //unused
         public NativeArray<LightData> LightsDataList { get { return NativeLightsDataList; } }
@@ -45,6 +47,7 @@ namespace DoomSRP
                 Dispose();
                 NumMaxLights = pipelineSettings.MaxItemsOnScreen;
                 NativeLightsBoundList = new NativeArray<SFiniteLightBound>(NumMaxLights, Allocator.Persistent);
+                LightsSphereList = new NativeArray<Sphere>(NumMaxLights, Allocator.Persistent);
                 NativeLightsDataList = new NativeArray<LightData>(NumMaxLights, Allocator.Persistent);
                 lights.Clear();
                 culsterDataGenerator = new CulsterDataGenerator();
@@ -63,6 +66,10 @@ namespace DoomSRP
             if (/*NativeLightsBoundList != null && */NativeLightsBoundList.IsCreated)
             {
                 NativeLightsBoundList.Dispose();
+            }
+            if(LightsSphereList.IsCreated)
+            {
+                LightsSphereList.Dispose();
             }
             if (/*NativeLightsDataList != null &&*/ NativeLightsDataList.IsCreated)
             {

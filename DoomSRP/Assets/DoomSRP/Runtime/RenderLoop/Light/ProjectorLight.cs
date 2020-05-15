@@ -168,12 +168,11 @@ namespace DoomSRP
 
             var ps = iFPipelineProjector.GetProjectorSettings;
             {
-                var bound = new SFiniteLightBound();
-#if UNITY_EDITOR
-                bound.frustumMatrix = ps.frustumMatrix;
-#endif
-                bound.planes = Projector.GetCullingPlanes(ps.frustumMatrix, c2w);//world to view
-                lightDataInAll.sFiniteLightBound = bound;
+                //bound.planes = Projector.GetCullingPlanes(ps.frustumMatrix, c2w);//world to view
+                Projector.GetCullingPlanesAndSphere(
+                    out lightDataInAll.sFiniteLightBound.planes,
+                    out lightDataInAll.sFiniteLightBound.aabb, 
+                    ps.frustumMatrix, c2w);
             }
 
             LightData lightData = new LightData();

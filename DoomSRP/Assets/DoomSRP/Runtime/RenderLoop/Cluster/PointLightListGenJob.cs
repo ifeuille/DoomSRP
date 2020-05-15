@@ -37,22 +37,13 @@ namespace DoomSRP
             for (int index = 0; index < VisibleLightsCount && lightOffs < NumItemsPerCluster; ++index)
             {
                 SFiniteLightBound bound = LightBounds[index];
-                SPlanes planes;
-                //#if UNITY_EDITOR
-                //                if (IsClusterEditorHelper)
-                //                {
-                //                    planes = Projector.GetCullingPlanes(bound.frustumMatrix, _CameraWorldMatrix);//world to view
-                //                }
-                //                else
-                //#endif
+                if(IntersectAABBAABB(clusterAABB, bound.aabb))
                 {
-                    planes = bound.planes;
-                }
-                //planes = IFPipelineProjector.GetCullingPlanes(bound.frustumMatrix, _CameraWorldMatrix);
-                if (IntersectAABBPlaneBounds(clusterAABB, planes))
-                {
-                    Item_Set_Light(clusterIndex1D, lightOffs, (uint)index);
-                    ++lightOffs;
+                    if (IntersectAABBPlaneBounds(clusterAABB, bound.planes))
+                    {
+                        Item_Set_Light(clusterIndex1D, lightOffs, (uint)index);
+                        ++lightOffs;
+                    }
                 }
             }
             //2.todo decals
@@ -132,14 +123,15 @@ namespace DoomSRP
             return true; // AABB intersects space bounded by planes
         }
 
-        Vector3 GetCenter(Vector3 min, Vector3 max)
+        bool IntersectAABBAABB(AABB a, AABB b)
         {
-            return (min + max) * 0.5f;
+            if (Mathf.Abs(a.m.x - b.m.x) > a.extent.x + b.extent.x
+              || Mathf.Abs(a.m.y - b.m.y) > a.extent.y + b.extent.y
+              || Mathf.Abs(a.m.z - b.m.z) > a.extent.z + b.extent.z)
+                return false;
+            return true;
         }
-        Vector3 GetExtent(Vector3 min, Vector3 max)
-        {
-            return new Vector3(Mathf.Abs(min.x - max.x) / 2.0f, Mathf.Abs(min.y - max.y) / 2.0f, Mathf.Abs(min.z - max.z) / 2.0f);
-        }
+
         #endregion
     }
 }

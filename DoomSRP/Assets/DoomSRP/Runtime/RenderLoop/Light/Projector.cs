@@ -270,9 +270,62 @@ namespace DoomSRP
             Matrix4x4 finalMatrix = frustumMatrix * objTrans;
             return ExtractProjectionPlanes(finalMatrix);
         }
+        public static void GetCullingPlanesAndSphere(out SPlanes planes,out AABB aabb,Matrix4x4 frustumMatrix, Matrix4x4 objTrans)
+        {
+            // From the objects that we are rendering from this camera.
+            // Cull it further to the objects that overlap with the Projector frustum
+            Matrix4x4 finalMatrix = frustumMatrix * objTrans;
+            planes = ExtractProjectionPlanes(finalMatrix);
+            aabb = ExtracetProjectionAABB(finalMatrix);
+        }
+        static Vector4[] PosInPSForAABB = new Vector4[8]
+        {
+            new Vector4(-1,-1,-1, 1),
+            new Vector4(-1,-1,1, 1),
+            new Vector4(-1,1,-1, 1),
+            new Vector4(-1,1,1, 1),
+            new Vector4(1,-1,-1, 1),
+            new Vector4(1,-1,1, 1),
+            new Vector4(1,1,-1, 1),
+            new Vector4(1,1,1, 1)
+        };
+        unsafe static AABB ExtracetProjectionAABB(Matrix4x4 finalMatrix)
+        {
+            /*
+             为了获取视锥在world space里的AABB，我们需要先获取其8个顶点在world space里的坐标。即project space中的八个顶点乘以(view*project)的逆矩阵
+             八个顶点为：
+             (-1,-1,-1,1),(-1,-1,1,1),
+             (-1,1,-1,1),(-1,1,1,1),
+             (1,-1,-1,1),(1,-1,1,1),
+             (1,1,-1,1),(1,1,1,1)
+             */
+            Vector3* vectors = stackalloc Vector3[8];//unsafe
+            vectors[0] = finalMatrix * PosInPSForAABB[0];
+            vectors[1] = finalMatrix * PosInPSForAABB[1];
+            vectors[2] = finalMatrix * PosInPSForAABB[2];
+            vectors[3] = finalMatrix * PosInPSForAABB[3];
+            vectors[4] = finalMatrix * PosInPSForAABB[4];
+            vectors[5] = finalMatrix * PosInPSForAABB[5];
+            vectors[6] = finalMatrix * PosInPSForAABB[6];
+            vectors[7] = finalMatrix * PosInPSForAABB[7];
+
+            Vector3 aabbMin = vectors[0];
+            Vector3 aabbMax = vectors[0];
+            for (int i = 1; i < 8; ++i)
+            {
+                aabbMin = Vector3.Min(aabbMin, vectors[i]);
+                aabbMax = Vector3.Max(aabbMax, vectors[i]);
+            }
+            AABB aabb = new AABB();
+            aabb.Min = new Vector4(aabbMin.x, aabbMin.y, aabbMin.z, 1.0f);
+            aabb.Max = new Vector4(aabbMax.x, aabbMax.y, aabbMax.z, 1.0f);
+            aabb.GenerateCenterAndExtent();
+            return aabb;
+        }
 
         static SPlanes ExtractProjectionPlanes( Matrix4x4 finalMatrix )
         {
+            //https://www.zhihu.com/question/46377273/answer/101213293
             SPlanes outPlanes = new SPlanes();
             const int kPlaneFrustumLeft = 0;
             const int kPlaneFrustumRight = 1;
@@ -282,7 +335,7 @@ namespace DoomSRP
             const int kPlaneFrustumFar = 5;
             //const int kPlaneFrustumNum = 6;
 
-              Vector4 tmpVec = new Vector4();
+            Vector4 tmpVec = new Vector4();
             Vector4 otherVec = new Vector4();
             tmpVec[0] = finalMatrix[3, 0];
             tmpVec[1] = finalMatrix[3, 1];

@@ -89,8 +89,7 @@ namespace DoomSRP
             AABB aabb = new AABB();
             aabb.Min = new Vector4(aabbMin.x, aabbMin.y, aabbMin.z, 1.0f);
             aabb.Max = new Vector4(aabbMax.x, aabbMax.y, aabbMax.z, 1.0f);
-            aabb.m = GetCenter(aabb.Min, aabb.Max);
-            aabb.extent = GetExtent(aabb.Min, aabb.Max);
+            aabb.GenerateCenterAndExtent();
             ResultClusterAABBS[i] = aabb;
         }
 
@@ -202,14 +201,6 @@ namespace DoomSRP
             //return zNear * Mathf.Pow(zFar / zNear, slice / (float)(ClusterCB_GridDimZ - 1));
         }
 
-        Vector3 GetCenter(Vector3 min, Vector3 max)
-        {
-            return (min + max) * 0.5f;
-        }
-        Vector3 GetExtent(Vector3 min, Vector3 max)
-        {
-            return new Vector3(Mathf.Abs(min.x - max.x) / 2.0f, Mathf.Abs(min.y - max.y) / 2.0f, Mathf.Abs(min.z - max.z) / 2.0f);
-        }
         #endregion
     }
 }

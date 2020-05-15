@@ -62,6 +62,12 @@ namespace DoomSRP
         public Vector4 Max;
         public Vector3 m;
         public Vector3 extent;
+
+        public void GenerateCenterAndExtent()
+        {
+            m = (Min + Max) * 0.5f; 
+            extent = new Vector3(Mathf.Abs(Min.x - Max.x) / 2.0f, Mathf.Abs(Min.y - Max.y) / 2.0f, Mathf.Abs(Min.z - Max.z) / 2.0f);
+        }
     };
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct SPlanes
@@ -103,6 +109,13 @@ namespace DoomSRP
             }
         }
     }
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Sphere
+    {
+        public Vector3 Center;
+        public float R;
+        public float R2;//pow(R,2)
+    };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct SFiniteLightBound
@@ -110,10 +123,8 @@ namespace DoomSRP
         //public Vector3 center;
         //public float radius;
 
-#if UNITY_EDITOR
-        public Matrix4x4 frustumMatrix;
-#endif
         public SPlanes planes;//解决了数组问题。。。
+        public AABB aabb;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
