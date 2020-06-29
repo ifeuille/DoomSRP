@@ -13,7 +13,7 @@ namespace DoomSRP.FG
         protected List<ResourceBase> creates = new List<ResourceBase>();
         protected List<ResourceBase> reads = new List<ResourceBase>();
         protected List<ResourceBase> writes = new List<ResourceBase>();
-        protected UInt32 refCount = 0;
+        protected uint refCount = 0;
 
         public string Name { get { return this.name; } set { this.name = value; } }
         public bool CullImmune { get { return this.cullImmune; } set { this.cullImmune = value; } }
