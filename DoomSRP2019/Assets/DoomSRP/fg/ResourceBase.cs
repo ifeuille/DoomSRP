@@ -15,13 +15,19 @@ namespace DoomSRP.FG
         protected List<RenderTaskBase> writers = new List<RenderTaskBase>();
         protected uint refCount = 0;
 
+        public RenderTaskBase Creator { get { return creator; } }
+        public List<RenderTaskBase> Readers { get { return readers; } }
+        public List<RenderTaskBase> Writers { get { return writers; } }
+        public uint ReferenceCount { get { return refCount; } set { refCount = value; } }
+
         public virtual void realize() { }
         public virtual void derealize() { }
 
         public uint Id { get { return this.id; } }
         public string Name { get { return name; } set { name = value; } }
         public bool Transient() { return creator != null; }
-        public ResourceBase(string name, RenderTaskBase creator)
+        public ResourceBase() { }
+        public void Init(string name, RenderTaskBase creator)
         {
             this.name = name;
             this.creator = creator;

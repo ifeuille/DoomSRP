@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DoomSRP.FG
 {
-    public class Realize
+    public partial class Realize
     {
         static Realize ins = new Realize();
         public static Realize Instance { get { return ins; } }
@@ -17,7 +17,5 @@ namespace DoomSRP.FG
             Debug.AssertFormat(false, "Missing realize implementation for description-type pair");
             return null;
         }
-
-
     }
 }
