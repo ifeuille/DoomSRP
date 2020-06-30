@@ -11,12 +11,12 @@ namespace DoomSRP.FG
         protected uint id;
         protected string name;
         protected RenderTaskBase creator;
-        protected List<RenderTaskBase> readers;
-        protected List<RenderTaskBase> writers;
-        protected uint refCount;
+        protected List<RenderTaskBase> readers = new List<RenderTaskBase>();
+        protected List<RenderTaskBase> writers = new List<RenderTaskBase>();
+        protected uint refCount = 0;
 
-        protected virtual void realize() { }
-        protected virtual void derealize() { }
+        public virtual void realize() { }
+        public virtual void derealize() { }
 
         public uint Id { get { return this.id; } }
         public string Name { get { return name; } set { name = value; } }
@@ -33,6 +33,11 @@ namespace DoomSRP.FG
         {
             ID.returnID(this.id);
         }
+        public void UpdateReferenceCount()
+        {
+            refCount = (uint)(readers.Count);
+        }
+
 
     }
 }

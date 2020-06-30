@@ -27,11 +27,11 @@ namespace DoomSRP.FG
             }
         }
 
-        protected override void realize()
+        public override void realize()
         {
             if(Transient()) this.actual = Realize.Instance.realize<DescriptionType, ActualType>(description);
         }
-        protected override void derealize()
+        public override void derealize()
         {
             if (Transient()) this.actual = null;
         }

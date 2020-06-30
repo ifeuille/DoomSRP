@@ -23,7 +23,12 @@ namespace DoomSRP.FG
         {
             this.name = name;
         }
-
+        public virtual void Setup(RenderTaskBuilder builder) { }
+        public virtual void Execute() { }
+        public void UpdateReferenceCount()
+        {
+            refCount = (uint)(creates.Count + writes.Count);
+        }
         
     }
 }

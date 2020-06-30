@@ -12,6 +12,12 @@ namespace DoomSRP.FG
         protected FrameGraph framegraph;
         protected RenderTaskBase renderTask;
 
+        public RenderTaskBuilder(FrameGraph framgGrph, RenderTaskBase rendreTask)
+        {
+            this.framegraph = framgGrph;
+            this.renderTask = rendreTask
+        }
+
         ResourceType create<ResourceType, DescriptionType>(string name, DescriptionType description) where ResourceType : class
         {
             //TODO
