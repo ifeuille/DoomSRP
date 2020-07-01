@@ -88,10 +88,10 @@ namespace DoomSRP.FG
                 "Render Task 1",
                 (render_task_1_data data,RenderTaskBuilder builder) => 
                 {
-                    data.output1 = builder.Create<texture_2d_resource, glr.texture_description>("Resource 1", new glr.texture_description());
-                    data.output2 = builder.Create<texture_2d_resource, glr.texture_description>("Resource 2", new glr.texture_description());
-                    data.output3 = builder.Create<texture_2d_resource, glr.texture_description>("Resource 3", new glr.texture_description());
-                    data.output4 = builder.Create<texture_2d_resource, glr.texture_description>("Resource 4", new glr.texture_description());
+                    data.output1 = builder.Create< glr.texture_description, gl.texture_2d>("Resource 1", new glr.texture_description());
+                    data.output2 = builder.Create<glr.texture_description, gl.texture_2d>("Resource 2", new glr.texture_description());
+                    data.output3 = builder.Create<glr.texture_description, gl.texture_2d>("Resource 3", new glr.texture_description());
+                    data.output4 = builder.Create<glr.texture_description, gl.texture_2d>("Resource 4", new glr.texture_description());
                 },
                 (render_task_1_data data) => 
                 {
@@ -113,7 +113,7 @@ namespace DoomSRP.FG
                     data.input1 = builder.Read(data_1.output1);// how to share data cross render task?
                     data.input2 = builder.Read(data_1.output2);
                     data.output1 = builder.Write(data_1.output3);
-                    data.output2 = builder.Create<texture_2d_resource, glr.texture_description>("Resource 4", new glr.texture_description());
+                    data.output2 = builder.Create<glr.texture_description, gl.texture_2d>("Resource 4", new glr.texture_description());
                 },
                 (render_task_2_data data) =>
                 {

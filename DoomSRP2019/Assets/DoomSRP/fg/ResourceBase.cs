@@ -26,8 +26,7 @@ namespace DoomSRP.FG
         public uint Id { get { return this.id; } }
         public string Name { get { return name; } set { name = value; } }
         public bool Transient() { return creator != null; }
-        public ResourceBase() { }
-        public void Init(string name, RenderTaskBase creator)
+        public ResourceBase(string name, RenderTaskBase creator)
         {
             this.name = name;
             this.creator = creator;

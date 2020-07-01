@@ -13,15 +13,12 @@ namespace DoomSRP.FG
 
         public DescriptionType Description { get { return description; } }
         public ActualType Actual { get { return actual; } }
-        public Resource(){ }
-        public void Init(string name, RenderTaskBase creator, DescriptionType description)
+        public Resource(string name, RenderTaskBase creator, DescriptionType description) : base(name, creator)
         {
-            base.Init(name, creator);
             this.actual = new ActualType();//?
         }
-        public void Init(string name, DescriptionType description, ActualType act)
+        public Resource(string name, DescriptionType description, ActualType act) : base(name, null)
         {
-            base.Init(name, creator);
             this.actual = act;
             if (act == null)
             {

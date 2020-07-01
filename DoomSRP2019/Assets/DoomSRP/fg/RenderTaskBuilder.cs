@@ -18,24 +18,26 @@ namespace DoomSRP.FG
             this.renderTask = rendreTask;
         }
 
-        public ResourceType Create<ResourceType, DescriptionType>(string name, DescriptionType description) where ResourceType : ResourceBase,new()
+        public Resource<DescriptionType, ActualType> Create<DescriptionType, ActualType>(string name, DescriptionType description) 
+            where ActualType : class, new()
         {
-            var res = new ResourceType();
+            var res = new Resource<DescriptionType, ActualType>(name, renderTask, description);
             framegraph.Resources.Add(res);
-            res.Init(name, renderTask, description);
-            //TODO
-            return null;
+            renderTask.Creates.Add(res);
+            return res;
         }
 
-        public ResourceType Read<ResourceType>(ResourceType resource)
+        public ResourceType Read<ResourceType>(ResourceType resource) where ResourceType : ResourceBase
         {
-            //TODO
+            resource.Readers.Add(renderTask);
+            renderTask.Reads.Add(resource);
             return resource;
         }
 
-        public ResourceType Write<ResourceType>(ResourceType resource)
+        public ResourceType Write<ResourceType>(ResourceType resource) where ResourceType : ResourceBase
         {
-            //TODO
+            resource.Writers.Add(renderTask);
+            renderTask.Writes.Add(resource);
             return resource;
         }
     }

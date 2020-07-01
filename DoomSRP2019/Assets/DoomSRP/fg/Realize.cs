@@ -15,7 +15,7 @@ namespace DoomSRP.FG
         public ActualType realize<DescriptionType, ActualType>(DescriptionType description) where ActualType : class
         {
             Debug.AssertFormat(false, "Missing realize implementation for description-type pair");
-            return null;
+            return default;
         }
     }
 }
