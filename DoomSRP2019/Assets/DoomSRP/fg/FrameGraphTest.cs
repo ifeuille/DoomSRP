@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoomSRP.FG.glr;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,7 +58,7 @@ namespace DoomSRP.FG
         //    }
         //}
     }
-
+    [ExecuteAlways]
     public class FrameGraphTest:MonoBehaviour
     {
         struct render_task_1_data
@@ -149,20 +150,36 @@ namespace DoomSRP.FG
             framegraph.Clear();
 
         }
+
+        public bool test = false;
+        private void Update()
+        {
+            if(test)
+            {
+                Test();
+                test = false;
+            }
+        }
     }
 }
 
 namespace DoomSRP.FG
 {
-    public partial class Realize
+    //https://stackoverflow.com/questions/600978/how-to-do-template-specialization-in-c-sharp
+    public partial class Realize : 
+        IRealize<glr.buffer_description, gl.buffer>, 
+        IRealize<glr.texture_description, gl.texture_2d>
     {
-        gl.buffer realize(glr.buffer_description description)
+        gl.buffer IRealize<glr.buffer_description, gl.buffer>.RealizeDes(glr.buffer_description description)
         {
             return new gl.buffer { value = description.size };
         }
-        gl.texture_2d realize(glr.texture_description description)
+
+        gl.texture_2d IRealize<glr.texture_description, gl.texture_2d>.RealizeDes(glr.texture_description description)
         {
             return new gl.texture_2d { value = description.levels };
         }
+
     }
 }
+

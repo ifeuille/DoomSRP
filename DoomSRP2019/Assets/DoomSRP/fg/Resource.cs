@@ -22,13 +22,13 @@ namespace DoomSRP.FG
             this.actual = act;
             if (act == null)
             {
-                this.actual = Realize.Instance.realize<DescriptionType, ActualType>(description);
+                this.actual = Realize.Instance.RealizeDes(description);
             }
         }
 
         public override void realize()
         {
-            if(Transient()) this.actual = Realize.Instance.realize<DescriptionType, ActualType>(description);
+            if(Transient()) this.actual = Realize.Instance.RealizeDes<DescriptionType, ActualType>(description);
         }
         public override void derealize()
         {

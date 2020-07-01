@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -170,9 +172,39 @@ namespace DoomSRP.FG
             renderTasks.Clear();
             resources.Clear();
         }
+
         public void ExportGraphviz(string filePath)
         {
+            //https://blog.csdn.net/yenange/article/details/7940043
 
+            ProcessStartInfo info = new ProcessStartInfo()
+            {
+                FileName = "dot.exe",
+                WorkingDirectory = Path.GetDirectoryName(@"D:\workspace\mine\DoomSRP\DoomSRP2019\Assets"),
+                Arguments = string.Concat("-Tpng -o ", "abc.pnng", " ", "abc.dot"),
+                RedirectStandardInput = false,
+                RedirectStandardOutput = false,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            using (Process exe = Process.Start(info))
+            {
+                exe.WaitForExit();
+                if (0 == exe.ExitCode)
+                {
+                    //System.Web.HttpContext.Current.Response.Write(pngFile);
+                }
+                else
+                {
+                    string errMsg;
+                    using (StreamReader stdErr = exe.StandardError)
+                    {
+                        errMsg = stdErr.ReadToEnd();
+                    }
+                    //System.Web.HttpContext.Current.Response.Write(errMsg);
+                }
+            }
         }
 
 
