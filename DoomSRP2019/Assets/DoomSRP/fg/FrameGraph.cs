@@ -31,7 +31,7 @@ namespace DoomSRP.FG
 
         protected Stack<ResourceBase> unreferencedResources = new Stack<ResourceBase>();//todo no gc
         //===============
-        public RenderTask<DataType> AddRenderTask<DataType>(string name, Action<DataType, RenderTaskBuilder> setupAc, Action<DataType> exeAc)
+        public RenderTask<DataType> AddRenderTask<DataType>(string name, Action<DataType, RenderTaskBuilder> setupAc, Action<DataType> exeAc) where DataType:class,new()
         {
             var renderTask = new RenderTask<DataType>(name, setupAc, exeAc);
             renderTasks.Add(renderTask);
@@ -175,36 +175,82 @@ namespace DoomSRP.FG
 
         public void ExportGraphviz(string filePath)
         {
-            //https://blog.csdn.net/yenange/article/details/7940043
+            using(FileStream F = new FileStream(filePath, FileMode.OpenOrCreate))
+            {
+                F.SetLength(0);
+                using (StreamWriter stream = new StreamWriter(F))
+                {
+                    stream.WriteLine("digraph framegraph \n{\n");
 
-            ProcessStartInfo info = new ProcessStartInfo()
-            {
-                FileName = "dot.exe",
-                WorkingDirectory = Path.GetDirectoryName(@"D:\workspace\mine\DoomSRP\DoomSRP2019\Assets"),
-                Arguments = string.Concat("-Tpng -o ", "abc.pnng", " ", "abc.dot"),
-                RedirectStandardInput = false,
-                RedirectStandardOutput = false,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-            using (Process exe = Process.Start(info))
-            {
-                exe.WaitForExit();
-                if (0 == exe.ExitCode)
-                {
-                    //System.Web.HttpContext.Current.Response.Write(pngFile);
-                }
-                else
-                {
-                    string errMsg;
-                    using (StreamReader stdErr = exe.StandardError)
+                    stream.WriteLine("rankdir = LR\n");
+                    stream.WriteLine("bgcolor = black\n\n");
+                    stream.WriteLine("node [shape=rectangle, fontname=\"helvetica\", fontsize=12]\n\n");
+
+                    foreach (var  render_task in renderTasks)
+                        stream.WriteLine("\"" + render_task.Name + "\" [label=\"" + render_task.Name + "\\nRefs: " + render_task.ReferenceCount + "\", style=filled, fillcolor=darkorange]\n");
+                    stream.WriteLine("\n");
+
+                    foreach (var  resource in resources   )
+                        stream.WriteLine("\"" + resource.Name + "\" [label=\"" + resource.Name + "\\nRefs: " + resource.ReferenceCount + "\\nID: " + resource.Id + "\", style=filled, fillcolor= " + (resource.Transient() ? "skyblue" : "steelblue") + "]\n");
+                    stream.WriteLine("\n");
+
+                    foreach (var  render_task in renderTasks)
                     {
-                        errMsg = stdErr.ReadToEnd();
+                        stream.WriteLine("\"" + render_task.Name + "\" -> { ");
+                        foreach (var  resource in render_task.Creates)
+                            stream.WriteLine( "\"" + resource.Name + "\" ");
+                        stream.WriteLine("} [color=seagreen]\n");
+
+                        stream.WriteLine("\"" + render_task.Name + "\" -> { ");
+                        foreach (var  resource in render_task.Writes)
+                            stream.WriteLine("\"" + resource.Name + "\" ");
+                        stream.WriteLine("} [color=gold]\n");
                     }
-                    //System.Web.HttpContext.Current.Response.Write(errMsg);
+                    stream.WriteLine("\n");
+
+                    foreach (var  resource in resources)
+                    {
+                        stream.WriteLine("\"" + resource.Name + "\" -> { ");
+                        foreach (var  render_task in resource.Readers)
+                            stream.WriteLine("\"" + render_task.Name + "\" ");
+                        stream.WriteLine("} [color=firebrick]\n");
+                    }
+                    stream.WriteLine("}");
                 }
             }
+
+         
+
+            ////https://blog.csdn.net/yenange/article/details/7940043
+
+            //ProcessStartInfo info = new ProcessStartInfo()
+            //{
+            //    FileName = "dot.exe",
+            //    WorkingDirectory = Path.GetDirectoryName(@"D:\workspace\mine\DoomSRP\DoomSRP2019\Assets"),
+            //    Arguments = string.Concat("-Tpng -o ", "abc.pnng", " ", "abc.dot"),
+            //    RedirectStandardInput = false,
+            //    RedirectStandardOutput = false,
+            //    RedirectStandardError = true,
+            //    UseShellExecute = false,
+            //    CreateNoWindow = true
+            //};
+            //using (Process exe = Process.Start(info))
+            //{
+            //    exe.WaitForExit();
+            //    if (0 == exe.ExitCode)
+            //    {
+            //        //System.Web.HttpContext.Current.Response.Write(pngFile);
+            //    }
+            //    else
+            //    {
+            //        string errMsg;
+            //        using (StreamReader stdErr = exe.StandardError)
+            //        {
+            //            errMsg = stdErr.ReadToEnd();
+            //        }
+            //        //System.Web.HttpContext.Current.Response.Write(errMsg);
+            //    }
+            //}
         }
 
 

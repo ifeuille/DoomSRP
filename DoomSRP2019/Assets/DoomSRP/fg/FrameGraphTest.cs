@@ -23,6 +23,7 @@ namespace DoomSRP.FG
     }
     namespace glr
     {
+
         public struct buffer_description
         {
             public uint size;
@@ -33,49 +34,26 @@ namespace DoomSRP.FG
             public int formats;
             public Vector3Int size;
         }
-        //public class buffer_resource: Resource<buffer_description, gl.buffer>
-        //{
-        //    public buffer_resource(string name, RenderTaskBase creator, buffer_description description) : base(name, creator, description)
-        //    {
-        //    }
-        //}
-        //public class texture_1d_resource : Resource<texture_description, gl.texture_1d>
-        //{
-        //    public texture_1d_resource(string name, RenderTaskBase creator, texture_description description) : base(name, creator, description)
-        //    {
-        //    }
-        //}
-        //public class texture_2d_resource : Resource<texture_description, gl.texture_2d>
-        //{
-        //    public texture_2d_resource(string name, RenderTaskBase creator, texture_description description) : base(name, creator, description)
-        //    {
-        //    }
-        //}
-        //public class texture_3d_resource : Resource<texture_description, gl.texture_3d>
-        //{
-        //    public texture_3d_resource(string name, RenderTaskBase creator, texture_description description) : base(name, creator, description)
-        //    {
-        //    }
-        //}
+
     }
     [ExecuteAlways]
     public class FrameGraphTest:MonoBehaviour
     {
-        struct render_task_1_data
+        class render_task_1_data
         {
             public texture_2d_resource output1;
             public texture_2d_resource output2;
             public texture_2d_resource output3;
             public texture_2d_resource output4;
         }
-        struct render_task_2_data
+        class render_task_2_data
         {
             public texture_2d_resource input1;
             public texture_2d_resource input2;
             public texture_2d_resource output1;
             public texture_2d_resource output2;
         }
-        struct render_task_3_data
+        class render_task_3_data
         {
             public texture_2d_resource input1;
             public texture_2d_resource input2;
@@ -103,9 +81,9 @@ namespace DoomSRP.FG
                 }
             );
             var data_1 = render_task_1.Data;
-            Debug.Assert(data_1.output1.Id == 1);
-            Debug.Assert(data_1.output2.Id == 2);
-            Debug.Assert(data_1.output3.Id == 3);
+            //Debug.Assert(data_1.output1.Id == 1);
+            //Debug.Assert(data_1.output2.Id == 2);
+            //Debug.Assert(data_1.output3.Id == 3);
 
             var render_task_2 = framegraph.AddRenderTask<render_task_2_data>(
                 "Render Task 2",
@@ -125,7 +103,7 @@ namespace DoomSRP.FG
                 }
             );
             var data_2 = render_task_2.Data;
-            Debug.Assert(data_2.output2.Id == 4);
+            //Debug.Assert(data_2.output2.Id == 4);
             var render_task_3 = framegraph.AddRenderTask<render_task_3_data>(
                 "Render Task 3",
                 (render_task_3_data data, RenderTaskBuilder builder) =>
@@ -166,8 +144,8 @@ namespace DoomSRP.FG
 namespace DoomSRP.FG
 {
     //https://stackoverflow.com/questions/600978/how-to-do-template-specialization-in-c-sharp
-    public partial class Realize : 
-        IRealize<glr.buffer_description, gl.buffer>, 
+    public partial class Realize :
+        IRealize<glr.buffer_description, gl.buffer>,
         IRealize<glr.texture_description, gl.texture_2d>
     {
         gl.buffer IRealize<glr.buffer_description, gl.buffer>.RealizeDes(glr.buffer_description description)

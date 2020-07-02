@@ -18,7 +18,7 @@ namespace DoomSRP.FG
         public List<ResourceBase> Creates { get { return creates; } }
         public List<ResourceBase> Reads { get { return reads; } }
         public List<ResourceBase> Writes { get { return writes; } }
-        public uint ReferenceCount { get { return refCount; } set { ReferenceCount = value; } }
+        public uint ReferenceCount { get { return refCount; } set { refCount = value; } }
         public string Name { get { return this.name; } set { this.name = value; } }
         public bool CullImmune { get { return this.cullImmune; } set { this.cullImmune = value; } }
 

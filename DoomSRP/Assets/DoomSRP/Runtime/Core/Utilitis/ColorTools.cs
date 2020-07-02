@@ -6,6 +6,37 @@ namespace DoomSRP
 {
     public static class ColorTools
     {
+		public static float ToTemperature(Color color)
+        {
+            Matrix4x4 mat = new Matrix4x4(
+                new Vector4(3.2404542f, -1.5371385f, -0.4985314f, 0.0f),
+                new Vector4(-0.9692660f, 1.8760108f, 0.0415560f, 0.0f),
+                new Vector4(0.0556434f, -0.2040259f, 1.0572252f, 0.0f),
+                new Vector4(0, 0, 0, 1.0f)
+            );
+            var invMat = mat.inverse;
+
+            Vector4 XYZ = invMat * color.ToVector4();
+            float Y = XYZ.y;
+            float X = XYZ.x/ Y;
+            float Z = XYZ.z/ Y;
+
+            float y = 1.0f / (X + Y + 1);
+            float x = y * X;
+
+            float v = 6.0f * y / (3.0f - 2.0f * x + 12.0f * y);
+            float u = (8.0f * x * v - 4.0f * x) / (2.0f * x - 3.0f);
+
+            float a = u * 7.08145163e-7f - 1.28641212e-7f;
+            float b = u * 8.42420235e-4f - 1.54118254e-4f;
+            float c = u - 0.860117757f;
+            float delta = b * b - 4.0f * a * c;
+            float sqrtDelta = Mathf.Sqrt(Mathf.Abs(delta));
+            float t1 = (-b + sqrtDelta) / 2.0f * a;
+            if (t1 > 0) return t1;
+            float t2 = (-b - sqrtDelta) / 2.0f * a;
+            return t2;
+        }
         public static Color MakeFromColorTemperature(float Temp)
         {
             Temp = Mathf.Clamp(Temp, 1000.0f, 15000.0f);
