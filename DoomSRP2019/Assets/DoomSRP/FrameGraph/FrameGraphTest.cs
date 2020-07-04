@@ -9,6 +9,7 @@ using buffer_resource = DoomSRP.FG.Resource<DoomSRP.FG.glr.buffer_description, D
 using texture_1d_resource = DoomSRP.FG.Resource<DoomSRP.FG.glr.texture_description, DoomSRP.FG.gl.texture_1d>;
 using texture_2d_resource = DoomSRP.FG.Resource<DoomSRP.FG.glr.texture_description, DoomSRP.FG.gl.texture_2d>;
 using texture_3d_resource = DoomSRP.FG.Resource<DoomSRP.FG.glr.texture_description, DoomSRP.FG.gl.texture_3d>;
+using UnityEngine.Rendering;
 
 
 namespace DoomSRP.FG
@@ -137,6 +138,11 @@ namespace DoomSRP.FG
                 Test();
                 test = false;
             }
+        }
+
+        private void Unused()
+        {
+             
         }
     }
 }

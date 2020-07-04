@@ -163,6 +163,7 @@ namespace DoomSRP.FG
             foreach(var step in timeline)
             {
                 foreach (var resource in step.relizedResources) resource.realize();
+                step.renderTask.Execute();
                 foreach (var resource in step.derealizedResources) resource.derealize();
             }
 
