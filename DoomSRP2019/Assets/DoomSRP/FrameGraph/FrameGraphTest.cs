@@ -142,7 +142,7 @@ namespace DoomSRP.FG
 
         private void Unused()
         {
-             
+            RenderTexture.GetTemporary
         }
     }
 }

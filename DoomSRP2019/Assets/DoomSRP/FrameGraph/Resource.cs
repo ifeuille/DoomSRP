@@ -32,7 +32,10 @@ namespace DoomSRP.FG
         }
         public override void derealize()
         {
-            if (Transient()) this.actual = null;
+            if (Transient())
+            {
+                GlobalRealize.DealizeDes<DescriptionType, ActualType>(ref this.actual, description);
+            }
         }
     }
 }

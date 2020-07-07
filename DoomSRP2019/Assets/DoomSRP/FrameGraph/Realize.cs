@@ -10,6 +10,7 @@ namespace DoomSRP.FG
     public interface IRealize<DescriptionType, ActualType>
     {
         ActualType RealizeDes(DescriptionType description);
+        void Derealize(ref ActualType actual, DescriptionType des);
     }
     public class Realize<DescriptionType, ActualType> : IRealize<DescriptionType, ActualType>
     {
@@ -20,6 +21,10 @@ namespace DoomSRP.FG
         {
             Debug.AssertFormat(false, "Missing realize implementation for description-type pair");
             return default;
+        }
+        void IRealize<DescriptionType, ActualType>.Derealize(ref ActualType actual, DescriptionType des)
+        {
+            Debug.AssertFormat(false, "Missing realize implementation for description-type pair");
         }
     }
 
@@ -34,7 +39,10 @@ namespace DoomSRP.FG
         {
             return Realize<DescriptionType, ActualType>.Instance.RealizeDes(description);
         }
-
+        public static void DealizeDes<DescriptionType,ActualType>(ref ActualType actual, DescriptionType des)
+        {
+            Realize<DescriptionType,ActualType>.Instance.Derealize(ref actual, des);
+        }
     }
 
 }
