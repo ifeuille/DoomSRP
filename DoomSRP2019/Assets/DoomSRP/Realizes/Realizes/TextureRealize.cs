@@ -10,7 +10,7 @@ namespace DoomSRP.FG
     public partial class Realize :
         IRealize<DES.Texture2DDescriptor, Texture2D>
     {
-        public void Derealize(ref Texture2D actual, DES.Texture2DDescriptor des)
+        void IRealize<DES.Texture2DDescriptor, Texture2D>.Derealize(ref Texture2D actual, DES.Texture2DDescriptor des)
         {
             RuntimeUtilities.Destroy(actual);
             actual = null;
@@ -27,7 +27,7 @@ namespace DoomSRP.FG
     public partial class Realize :
         IRealize<DES.Texture2DArrayDescriptior, Texture2DArray>
     {
-        public void Derealize(ref Texture2DArray actual, DES.Texture2DArrayDescriptior des)
+        void IRealize<DES.Texture2DArrayDescriptior, Texture2DArray>.Derealize(ref Texture2DArray actual, DES.Texture2DArrayDescriptior des)
         {
             RuntimeUtilities.Destroy(actual);
             actual = null;
@@ -44,7 +44,7 @@ namespace DoomSRP.FG
     public partial class Realize :
         IRealize<DES.Texture3DDescriptior, Texture3D>
     {
-        public void Derealize(ref Texture3D actual, DES.Texture3DDescriptior des)
+        void IRealize<DES.Texture3DDescriptior, Texture3D>.Derealize(ref Texture3D actual, DES.Texture3DDescriptior des)
         {
             RuntimeUtilities.Destroy(actual);
             actual = null;
@@ -61,7 +61,7 @@ namespace DoomSRP.FG
     public partial class Realize :
     IRealize<DES.CubemapDescriptor, Cubemap>
     {
-        public void Derealize(ref Cubemap actual, DES.CubemapDescriptor des)
+        void IRealize<DES.CubemapDescriptor, Cubemap>.Derealize(ref Cubemap actual, DES.CubemapDescriptor des)
         {
             RuntimeUtilities.Destroy(actual);
             actual = null;

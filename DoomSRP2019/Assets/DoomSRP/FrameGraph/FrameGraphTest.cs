@@ -10,7 +10,7 @@ using texture_1d_resource = DoomSRP.FG.Resource<DoomSRP.FG.glr.texture_descripti
 using texture_2d_resource = DoomSRP.FG.Resource<DoomSRP.FG.glr.texture_description, DoomSRP.FG.gl.texture_2d>;
 using texture_3d_resource = DoomSRP.FG.Resource<DoomSRP.FG.glr.texture_description, DoomSRP.FG.gl.texture_3d>;
 using UnityEngine.Rendering;
-
+using DoomSRP.FG.gl;
 
 namespace DoomSRP.FG
 {
@@ -142,7 +142,7 @@ namespace DoomSRP.FG
 
         private void Unused()
         {
-            RenderTexture.GetTemporary
+            
         }
     }
 }
@@ -154,11 +154,18 @@ namespace DoomSRP.FG
         IRealize<glr.buffer_description, gl.buffer>,
         IRealize<glr.texture_description, gl.texture_2d>
     {
+        void IRealize<glr.buffer_description, gl.buffer>.Derealize(ref gl.buffer actual, glr.buffer_description des)
+        {
+            actual = null;
+        }
         gl.buffer IRealize<glr.buffer_description, gl.buffer>.RealizeDes(glr.buffer_description description)
         {
             return new gl.buffer { value = description.size };
         }
-
+        void IRealize<glr.texture_description, gl.texture_2d>.Derealize(ref gl.texture_2d actual, glr.texture_description des)
+        {
+            actual = null;
+        }
         gl.texture_2d IRealize<glr.texture_description, gl.texture_2d>.RealizeDes(glr.texture_description description)
         {
             return new gl.texture_2d { value = description.levels };
