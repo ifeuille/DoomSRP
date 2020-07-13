@@ -10,7 +10,7 @@ namespace DoomSRP.FG
     public partial class Realize :
         IRealize<DES.TemporaryRenderTextureDescriptor, RenderTexture>
     {
-        public void Derealize(ref RenderTexture actual, DES.TemporaryRenderTextureDescriptor des)
+        void IRealize<DES.TemporaryRenderTextureDescriptor, RenderTexture>.Derealize(ref RenderTexture actual, DES.TemporaryRenderTextureDescriptor des)
         {
             if (actual != null)
             {
@@ -30,7 +30,7 @@ namespace DoomSRP.FG
     public partial class Realize :
     IRealize<DES.RenderTextureDescriptor, RenderTexture>
     {
-        public void Derealize(ref RenderTexture actual, DES.RenderTextureDescriptor des)
+        void IRealize<DES.RenderTextureDescriptor, RenderTexture>.Derealize(ref RenderTexture actual, DES.RenderTextureDescriptor des)
         {
             if (actual != null)
             {

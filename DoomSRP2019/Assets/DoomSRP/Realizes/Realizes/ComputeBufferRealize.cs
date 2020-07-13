@@ -10,7 +10,7 @@ namespace DoomSRP.FG
     public partial class Realize :
         IRealize<DES.ComputeBufferDescriptor, ComputeBuffer>
     {
-        public void Derealize(ref ComputeBuffer actual, DES.ComputeBufferDescriptor des)
+        void IRealize<DES.ComputeBufferDescriptor, ComputeBuffer>.Derealize(ref ComputeBuffer actual, DES.ComputeBufferDescriptor des)
         {
             if (actual != null)
             {
